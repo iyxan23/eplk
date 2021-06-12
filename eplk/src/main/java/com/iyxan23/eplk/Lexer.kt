@@ -5,9 +5,8 @@ import java.lang.StringBuilder
 class Lexer(private val code: String) {
 
     private val spaces = arrayOf(' ', '\t', '\n')
-    private var charIndex = 0
+    private var charIndex = -1
     private var currentChar: Char? = null
-    private val reader = StringBuilder()
 
     private var errorThrown: Error? = null
 
@@ -21,6 +20,7 @@ class Lexer(private val code: String) {
     fun doLexicalAnalysis(): LexerResult {
         val tokens: ArrayList<Token> = ArrayList()
 
+        advance()
         while (currentChar != null) {
             // Ignore spaces
             if (spaces.contains(currentChar)) continue
