@@ -48,8 +48,16 @@ class Lexer(private val code: String) {
                 }
 
                 currentChar!!.isDigit() -> {
-                    val int = parseIntLiteral()
-                    tokens.add(Token(Tokens.INT_LITERAL, int))
+                    val result = parseNumberLiteral()
+
+                    val number = result.first
+                    val isFloat = result.second
+
+                    if (isFloat) {
+                        tokens.add(Token(Tokens.FLOAT_LITERAL, number))
+                    } else {
+                        tokens.add(Token(Tokens.INT_LITERAL, number))
+                    }
                 }
 
                 else -> {
@@ -66,18 +74,31 @@ class Lexer(private val code: String) {
     // "Utilities"
     private fun throwError(error: Error) { errorThrown = error }
 
-    private fun parseIntLiteral(): String {
+    //                                  int     is float?
+    private fun parseNumberLiteral(): Pair<String, Boolean> {
         val builder = StringBuilder()
+        var dotCount = 0
 
         while (true) {
             // Return the number if we're at the end of the file
-            if (currentChar == null) return builder.toString()
+            if (currentChar == null) break
+
+            // Check if this is a dot (floating point)
+            else if (currentChar == '.') {
+                builder.append(currentChar)
+                dotCount++
+            }
+
             // or if it's not a digit or it's a space
-            else if (!currentChar!!.isDigit() || spaces.contains(currentChar)) return builder.toString()
+            else if (!currentChar!!.isDigit() || spaces.contains(currentChar)) break
+
+            // else, just add the character
             else builder.append(currentChar)
 
             advance()
         }
+
+        return Pair(builder.toString(), dotCount != 0)
     }
 
     private val escapeCharacters = mapOf(

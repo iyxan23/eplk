@@ -6,4 +6,5 @@ enum class Tokens {
     PAREN_CLOSE,
     STRING_LITERAL,
     INT_LITERAL,
+    FLOAT_LITERAL,
 }
