@@ -1,32 +1,39 @@
 package com.iyxan23.eplk
 
 import org.junit.Test
-import org.junit.Assert.*
 
 class LexerTest {
-    @Test
-    fun stringTest() {
-        val code = "\"Hello World\""
+
+    private fun expectTokens(code: String, shouldBe: ArrayList<Token>) {
         val result = Lexer(code).doLexicalAnalysis()
 
-        val shouldBe = arrayListOf(Token(Tokens.STRING_LITERAL, "Hello World"))
-
-        println(result.error)
+        println("Error: ${result.error}")
         assert(result.error == null)
-        println(result.tokens)
+        println("Returned Tokens: ${result.tokens}\n")
         assert(result.tokens == shouldBe)
     }
 
     @Test
+    fun stringTest() {
+        expectTokens(
+                "\"Hello World\"",
+                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello World"))
+        )
+    }
+
+    @Test
     fun stringTest2() {
-        val code = " \n    \t\"Hello \\\"World\"\n    \t\n"
-        val result = Lexer(code).doLexicalAnalysis()
+        expectTokens(
+                " \n    \t\"Hello \\\"World\"\n    \t\n",
+                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello \"World"))
+        )
+    }
 
-        val shouldBe = arrayListOf(Token(Tokens.STRING_LITERAL, "Hello \"World"))
-
-        println(result.error)
-        assert(result.error == null)
-        println(result.tokens)
-        assert(result.tokens == shouldBe)
+    @Test
+    fun intTest() {
+        expectTokens(
+                "10",
+                arrayListOf(Token(Tokens.INT_LITERAL, "10"))
+        )
     }
 }
