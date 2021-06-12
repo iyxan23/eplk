@@ -83,7 +83,7 @@ class Lexer(private val code: String) {
         val builder = StringBuilder()
 
         // Now start looping
-        while (currentChar != '"' && currentChar != null) {
+        while (currentChar != null) {
             if (escape) {
                 builder.append(currentChar)
                 escape = false
