@@ -11,6 +11,7 @@ class Lexer(private val code: String) {
 
     private var errorThrown: Error? = null
 
+    // What this function does is to jump one char
     private fun advance() {
         charIndex++
         currentChar =   if (charIndex >= code.length) null
@@ -25,17 +26,28 @@ class Lexer(private val code: String) {
             if (spaces.contains(currentChar)) continue
 
             // Now let's do the tokenization
-            if (currentChar == '(') {
-                tokens.add(Token(Tokens.PAREN_OPEN, null))
-            } else if (currentChar == ')') {
-                tokens.add(Token(Tokens.PAREN_CLOSE, null))
-            } else if (currentChar == '"') {
-                // Parse the string, if parseStringLiteral returns null, return an error
-                val string = parseStringLiteral() ?: return LexerResult(null, errorThrown)
-                tokens.add(Token(Tokens.STRING_LITERAL, string))
-            }
+            when {
+                currentChar == '(' -> {
+                    tokens.add(Token(Tokens.PAREN_OPEN, null))
+                    advance()
+                }
 
-            advance()
+                currentChar == ')' -> {
+                    tokens.add(Token(Tokens.PAREN_CLOSE, null))
+                    advance()
+                }
+
+                currentChar == '"' -> {
+                    // Parse the string, if parseStringLiteral returns null, return an error
+                    val string = parseStringLiteral() ?: return LexerResult(null, errorThrown)
+                    tokens.add(Token(Tokens.STRING_LITERAL, string))
+                }
+
+                currentChar!!.isDigit() -> {
+                    val int = parseIntLiteral()
+                    tokens.add(Token(Tokens.INT_LITERAL, int))
+                }
+            }
         }
 
         // Tokenization successful
@@ -44,6 +56,20 @@ class Lexer(private val code: String) {
 
     // "Utilities"
     private fun throwError(error: Error) { errorThrown = error }
+
+    private fun parseIntLiteral(): String {
+        val builder = StringBuilder()
+
+        while (true) {
+            // Return the number if we're at the end of the file
+            if (currentChar == null) return builder.toString()
+            // or if it's not a digit or it's a space
+            else if (!currentChar!!.isDigit() || spaces.contains(currentChar)) return builder.toString()
+            else builder.append(currentChar)
+
+            advance()
+        }
+    }
 
     private fun parseStringLiteral(): String? {
         val stringPosition = charIndex

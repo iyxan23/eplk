@@ -5,5 +5,5 @@ enum class Tokens {
     PAREN_OPEN,
     PAREN_CLOSE,
     STRING_LITERAL,
-    NUMBER_LITERAL,
+    INT_LITERAL,
 }
