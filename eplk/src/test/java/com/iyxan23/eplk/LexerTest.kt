@@ -13,6 +13,15 @@ class LexerTest {
         assert(result.tokens == shouldBe)
     }
 
+    private fun expectError(code: String, errorName: String) {
+        val result = Lexer(code).doLexicalAnalysis()
+
+        println("Error: ${result.error}")
+        println("Returned Tokens: ${result.tokens}\n")
+        assert(result.error != null)
+        assert(result.error!!.name == errorName)
+    }
+
     @Test
     fun stringTest() {
         expectTokens(
@@ -34,6 +43,23 @@ class LexerTest {
         expectTokens(
                 "10",
                 arrayListOf(Token(Tokens.INT_LITERAL, "10"))
+        )
+    }
+
+    @Test
+    fun intTest2() {
+        expectTokens(
+                "   \n\n \t  1234567890 \t\n    \t\t",
+                arrayListOf(Token(Tokens.INT_LITERAL, "1234567890"))
+        )
+    }
+
+    @Test
+    fun illegalCharacterError() {
+        // TODO: 6/12/21 change this to some character we wont use in future implementation
+        expectError(
+                ":",
+                "IllegalCharacter"
         )
     }
 }

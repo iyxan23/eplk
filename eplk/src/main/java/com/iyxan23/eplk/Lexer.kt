@@ -51,6 +51,11 @@ class Lexer(private val code: String) {
                     val int = parseIntLiteral()
                     tokens.add(Token(Tokens.INT_LITERAL, int))
                 }
+
+                else -> {
+                    throwError(Error("IllegalCharacter", "Unknown character/token: $currentChar"))
+                    return LexerResult(null, errorThrown)
+                }
             }
         }
 
