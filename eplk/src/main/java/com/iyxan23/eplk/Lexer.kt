@@ -80,6 +80,11 @@ class Lexer(private val code: String) {
         }
     }
 
+    private val escapeCharacters = mapOf(
+        'n' to '\n',
+        't' to '\t',
+    )
+
     private fun parseStringLiteral(): String? {
         val stringPosition = charIndex
         advance() // We want to skip the first "
@@ -91,7 +96,11 @@ class Lexer(private val code: String) {
         // Now start looping
         while (currentChar != null) {
             if (escape) {
-                builder.append(currentChar)
+                builder.append(
+                    if (escapeCharacters.containsKey(currentChar)) escapeCharacters[currentChar]
+                    else currentChar
+                )
+
                 escape = false
 
                 advance()
@@ -108,7 +117,7 @@ class Lexer(private val code: String) {
         }
 
         // wat? the string doesn't end? throw an error
-        throwError(Error("NoStringEndError", "The string at $stringPosition doesn't seem to end"))
+        throwError(Error("SyntaxError", "The string at $stringPosition doesn't seem to end"))
 
         return null
     }

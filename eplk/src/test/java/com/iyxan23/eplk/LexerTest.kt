@@ -39,6 +39,14 @@ class LexerTest {
     }
 
     @Test
+    fun stringTest3() {
+        expectTokens(
+                "\"Hello \\n World\"",
+                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello \n World"))
+        )
+    }
+
+    @Test
     fun intTest() {
         expectTokens(
                 "10",
