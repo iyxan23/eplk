@@ -1,0 +1,3 @@
+include ':eplk'
+include ':app'
+rootProject.name = "Eplk Programming Language"
