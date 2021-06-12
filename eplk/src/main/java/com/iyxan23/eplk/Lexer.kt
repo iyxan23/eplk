@@ -44,6 +44,7 @@ class Lexer(private val code: String) {
                     // Parse the string, if parseStringLiteral returns null, return an error
                     val string = parseStringLiteral() ?: return LexerResult(null, errorThrown)
                     tokens.add(Token(Tokens.STRING_LITERAL, string))
+                    advance()
                 }
 
                 currentChar!!.isDigit() -> {
@@ -87,13 +88,14 @@ class Lexer(private val code: String) {
             if (escape) {
                 builder.append(currentChar)
                 escape = false
+
+                advance()
+                continue
             }
 
             when (currentChar) {
-                '"' -> return builder.toString() // We're done
-
+                '"' -> return builder.toString() // Alright we're done
                 '\\' -> escape = true
-
                 else -> builder.append(currentChar) // append the char to build the string
             }
 
