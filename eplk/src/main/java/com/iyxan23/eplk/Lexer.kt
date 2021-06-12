@@ -30,6 +30,31 @@ class Lexer(private val code: String) {
 
             // Now let's do the tokenization
             when {
+                currentChar == '+' -> {
+                    tokens.add(Token(Tokens.PLUS, null))
+                    advance()
+                }
+
+                currentChar == '-' -> {
+                    tokens.add(Token(Tokens.MINUS, null))
+                    advance()
+                }
+
+                currentChar == '*' -> {
+                    tokens.add(Token(Tokens.MUL, null))
+                    advance()
+                }
+
+                currentChar == '/' -> {
+                    tokens.add(Token(Tokens.DIV, null))
+                    advance()
+                }
+
+                currentChar == '^' -> {
+                    tokens.add(Token(Tokens.POW, null))
+                    advance()
+                }
+
                 currentChar == '(' -> {
                     tokens.add(Token(Tokens.PAREN_OPEN, null))
                     advance()

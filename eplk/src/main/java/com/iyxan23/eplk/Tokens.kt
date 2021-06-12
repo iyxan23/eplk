@@ -1,7 +1,12 @@
 package com.iyxan23.eplk
 
 enum class Tokens {
-    FUNC_CALL,
+    PLUS,
+    MINUS,
+    MUL,
+    DIV,
+    POW,
+
     PAREN_OPEN,
     PAREN_CLOSE,
     STRING_LITERAL,

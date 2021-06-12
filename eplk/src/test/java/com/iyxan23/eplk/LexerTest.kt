@@ -22,6 +22,8 @@ class LexerTest {
         assert(result.error!!.name == errorName)
     }
 
+// =================================================================================================
+
     @Test
     fun stringTest() {
         expectTokens(
@@ -84,6 +86,14 @@ class LexerTest {
         expectTokens(
                 "0.5.5",
                 arrayListOf(Token(Tokens.FLOAT_LITERAL, "0.5.5"))
+        )
+    }
+
+    @Test
+    fun charactersTest() {
+        expectTokens(
+                "+-*/^() + - * / ^ ( ) \n+\n-\n*\n/\n^\n(\n)\n",
+                arrayListOf(Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null), Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null), Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null))
         )
     }
 
