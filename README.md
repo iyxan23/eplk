@@ -1,2 +1,2 @@
-# eplk
-Epic programming language named Eplk, Extensible Programming Language in Kotlin; for-fun project
+# EPLK
+Epic programming language named Eplk, short for Extensible Programming Language in Kotlin
