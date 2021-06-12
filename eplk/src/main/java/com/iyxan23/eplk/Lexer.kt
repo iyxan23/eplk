@@ -23,7 +23,10 @@ class Lexer(private val code: String) {
         advance()
         while (currentChar != null) {
             // Ignore spaces
-            if (spaces.contains(currentChar)) continue
+            if (spaces.contains(currentChar)) {
+                advance()
+                continue
+            }
 
             // Now let's do the tokenization
             when {
