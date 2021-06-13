@@ -2,7 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.errors.IllegalCharacterError
 import com.iyxan23.eplk.errors.SyntaxError
-import com.iyxan23.eplk.errors.Error
+import com.iyxan23.eplk.errors.EplkError
 import java.lang.StringBuilder
 
 class Lexer(
@@ -14,7 +14,7 @@ class Lexer(
     private val position = Position(-1, 0, 0, filename)
     private var currentChar: Char? = null
 
-    private var errorThrown: Error? = null
+    private var errorThrown: EplkError? = null
 
     // What this function does is to jump one char
     private fun advance() {
@@ -103,7 +103,7 @@ class Lexer(
     }
 
     // "Utilities"
-    private fun throwError(error: com.iyxan23.eplk.errors.Error) { errorThrown = error }
+    private fun throwError(error: com.iyxan23.eplk.errors.EplkError) { errorThrown = error }
 
     //                                     int     is float?
     private fun parseNumberLiteral(): Pair<String, Boolean> {

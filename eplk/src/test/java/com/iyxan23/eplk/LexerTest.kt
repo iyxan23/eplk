@@ -1,7 +1,7 @@
 package com.iyxan23.eplk
 
 import com.iyxan23.eplk.errors.IllegalCharacterError
-import com.iyxan23.eplk.errors.Error
+import com.iyxan23.eplk.errors.EplkError
 import org.junit.Test
 
 class LexerTest {
@@ -17,7 +17,7 @@ class LexerTest {
         assert(result.tokens == shouldBe)
     }
 
-    private fun expectError(code: String, expectedError: Error) {
+    private fun expectError(code: String, expectedError: EplkError) {
         val result = Lexer(filename, code).doLexicalAnalysis()
 
         println("Error: ${result.error}")
