@@ -1,20 +1,26 @@
 package com.iyxan23.eplk
 
+import com.iyxan23.eplk.errors.IllegalCharacterError
+import com.iyxan23.eplk.errors.SyntaxError
+import com.iyxan23.eplk.errors.Error
 import java.lang.StringBuilder
 
-class Lexer(private val code: String) {
+class Lexer(
+    private val filename: String,
+    private val code: String
+) {
 
     private val spaces = arrayOf(' ', '\t', '\n')
-    private var charIndex = -1
+    private val position = Position(-1, 0, 0, filename)
     private var currentChar: Char? = null
 
     private var errorThrown: Error? = null
 
     // What this function does is to jump one char
     private fun advance() {
-        charIndex++
-        currentChar =   if (charIndex >= code.length) null
-                        else code[charIndex]
+        position.advance(currentChar)
+        currentChar =   if (position.index >= code.length) null
+                        else code[position.index]
     }
 
     fun doLexicalAnalysis(): LexerResult {
@@ -86,7 +92,7 @@ class Lexer(private val code: String) {
                 }
 
                 else -> {
-                    throwError(Error("IllegalCharacter", "Unknown character/token: $currentChar"))
+                    throwError(IllegalCharacterError(currentChar!!, position))
                     return LexerResult(null, errorThrown)
                 }
             }
@@ -97,9 +103,9 @@ class Lexer(private val code: String) {
     }
 
     // "Utilities"
-    private fun throwError(error: Error) { errorThrown = error }
+    private fun throwError(error: com.iyxan23.eplk.errors.Error) { errorThrown = error }
 
-    //                                  int     is float?
+    //                                     int     is float?
     private fun parseNumberLiteral(): Pair<String, Boolean> {
         val builder = StringBuilder()
         var dotCount = 0
@@ -132,7 +138,7 @@ class Lexer(private val code: String) {
     )
 
     private fun parseStringLiteral(): String? {
-        val stringPosition = charIndex
+        val stringStartPosition = position.copy()
         advance() // We want to skip the first "
 
         // Used to indicate an escape like \"
@@ -163,7 +169,7 @@ class Lexer(private val code: String) {
         }
 
         // wat? the string doesn't end? throw an error
-        throwError(Error("SyntaxError", "The string at $stringPosition doesn't seem to end"))
+        throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position))
 
         return null
     }

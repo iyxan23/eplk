@@ -1,11 +1,15 @@
 package com.iyxan23.eplk
 
+import com.iyxan23.eplk.errors.IllegalCharacterError
+import com.iyxan23.eplk.errors.Error
 import org.junit.Test
 
 class LexerTest {
 
+    private val filename = "<TEST>"
+
     private fun expectTokens(code: String, shouldBe: ArrayList<Token>) {
-        val result = Lexer(code).doLexicalAnalysis()
+        val result = Lexer(filename, code).doLexicalAnalysis()
 
         println("Error: ${result.error}")
         assert(result.error == null)
@@ -13,13 +17,13 @@ class LexerTest {
         assert(result.tokens == shouldBe)
     }
 
-    private fun expectError(code: String, errorName: String) {
-        val result = Lexer(code).doLexicalAnalysis()
+    private fun expectError(code: String, expectedError: Error) {
+        val result = Lexer(filename, code).doLexicalAnalysis()
 
         println("Error: ${result.error}")
         println("Returned Tokens: ${result.tokens}\n")
         assert(result.error != null)
-        assert(result.error!!.name == errorName)
+        assert(result.error!! == expectedError)
     }
 
 // =================================================================================================
@@ -102,7 +106,7 @@ class LexerTest {
         // TODO: 6/12/21 change this to some character we wont use in future implementation
         expectError(
                 ":",
-                "IllegalCharacter"
+                IllegalCharacterError(':', Position(0, 1, 0, filename))
         )
     }
 }
