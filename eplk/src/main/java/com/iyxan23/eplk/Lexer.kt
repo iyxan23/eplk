@@ -103,7 +103,7 @@ class Lexer(
     }
 
     // "Utilities"
-    private fun throwError(error: com.iyxan23.eplk.errors.EplkError) { errorThrown = error }
+    private fun throwError(error: EplkError) { errorThrown = error }
 
     //                                     int     is float?
     private fun parseNumberLiteral(): Pair<String, Boolean> {
