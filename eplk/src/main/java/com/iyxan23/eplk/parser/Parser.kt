@@ -17,7 +17,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = expression()
 
         // Check if we're not at the end of the file
-        if (result.error == null && currentToken.token != Tokens.EOF) {
+        if (!result.hasError && currentToken.token != Tokens.EOF) {
             // Looks like theres some code after this, but those code doesn't get parsed for some reason
             // there must be a syntax error
             result.failure(SyntaxError(
@@ -43,48 +43,71 @@ class Parser(private val tokens: ArrayList<Token>) {
     private val numberLiterals = arrayOf(Tokens.INT_LITERAL, Tokens.FLOAT_LITERAL)
     private val unaryTokens = arrayOf(Tokens.PLUS, Tokens.MINUS)
 
-    // [INT|FLOAT]|[[PLUS|MINUS] factor]
+    // factor = [INT|FLOAT]|[[PLUS|MINUS] factor]
     private fun factor(): ParseResult {
         val result = ParseResult()
-        val curToken = currentToken
+        val oldToken = currentToken
 
         // Check if the current token contains a unary operator (+ and -)
-        if (unaryTokens.contains(curToken.token)) {
-            result.register(advance())
-            val factor = result.register(factor())
+        when {
+            unaryTokens.contains(oldToken.token) -> {
+                result.register(advance())
+                val factor = result.register(factor())
 
-            if (result.error != null) return result
+                if (result.hasError) return result
 
-            return result.success(UnaryOpNode(curToken, factor as Node))
-        }
-        // check if the current token is a number (int or float)
-        else if (numberLiterals.contains(curToken.token)) {
-            result.register(advance())
-            return result.success(NumberNode(curToken))
+                return result.success(UnaryOpNode(oldToken, factor as Node))
+            }
+
+            // Check if the current token is a number (int or float)
+            numberLiterals.contains(oldToken.token) -> {
+                result.register(advance())
+                return result.success(NumberNode(oldToken))
+            }
+
+            // Check if the current token is an open parentheses
+            oldToken.token == Tokens.PAREN_OPEN -> {
+                result.register(advance())
+                val expression = result.register(expression())
+
+                if (result.hasError) return result
+
+                // Check if the parentheses is closed
+                return if (currentToken.token == Tokens.PAREN_CLOSE) {
+                    result.register(advance())
+                    result.success(expression as Node)
+                } else {
+                    result.failure(SyntaxError(
+                        "Expected an integer or a float literal",
+                        currentToken.startPosition,
+                        currentToken.endPosition,
+                    ))
+                }
+            }
         }
 
         return result.failure(SyntaxError(
             "Expected an integer or a float literal",
-            curToken.startPosition,
-            curToken.endPosition,
+            oldToken.startPosition,
+            oldToken.endPosition,
         ))
     }
 
     private val termOperators = arrayOf(Tokens.MUL, Tokens.DIV)
 
-    // factor ((MUL|DIV) factor)*
+    // term = factor [[MUL|DIV) factor]*
     private fun term(): ParseResult {
         val result = ParseResult()
         var leftNode = result.register(factor()) as Node
 
-        if (result.error != null) return result
+        if (result.hasError) return result
 
         while (termOperators.contains(currentToken.token)) {
             val operatorToken = currentToken
             result.register(advance())
             val rightNode = result.register(factor()) as Node
 
-            if (result.error != null) return result
+            if (result.hasError) return result
 
             leftNode = BinOpNode(leftNode, operatorToken, rightNode)
         }
@@ -94,19 +117,19 @@ class Parser(private val tokens: ArrayList<Token>) {
 
     private val expressionOperators = arrayOf(Tokens.PLUS, Tokens.MINUS)
 
-    // term ((PLUS|MINUS) term)*
+    // expression = term [[PLUS|MINUS] term]*
     private fun expression(): ParseResult {
         val result = ParseResult()
         var leftNode = result.register(term()) as Node
 
-        if (result.error != null) return result
+        if (result.hasError) return result
 
         while (expressionOperators.contains(currentToken.token)) {
             val operatorToken = currentToken
             result.register(advance())
             val rightNode = result.register(term()) as Node
 
-            if (result.error != null) return result
+            if (result.hasError) return result
 
             leftNode =  BinOpNode(leftNode, operatorToken, rightNode)
         }
