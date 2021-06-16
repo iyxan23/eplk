@@ -6,6 +6,7 @@ import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.parser.nodes.BinOpNode
 import com.iyxan23.eplk.parser.nodes.Node
 import com.iyxan23.eplk.parser.nodes.NumberNode
+import com.iyxan23.eplk.parser.nodes.UnaryOpNode
 
 class Parser(private val tokens: ArrayList<Token>) {
 
@@ -40,13 +41,24 @@ class Parser(private val tokens: ArrayList<Token>) {
     }
 
     private val numberLiterals = arrayOf(Tokens.INT_LITERAL, Tokens.FLOAT_LITERAL)
+    private val unaryTokens = arrayOf(Tokens.PLUS, Tokens.MINUS)
 
-    // INT|FLOAT
+    // [INT|FLOAT]|[[PLUS|MINUS] factor]
     private fun factor(): ParseResult {
         val result = ParseResult()
         val curToken = currentToken
 
-        if (numberLiterals.contains(curToken.token)) {
+        // Check if the current token contains a unary operator (+ and -)
+        if (unaryTokens.contains(curToken.token)) {
+            result.register(advance())
+            val factor = result.register(factor())
+
+            if (result.error != null) return result
+
+            return result.success(UnaryOpNode(curToken, factor as Node))
+        }
+        // check if the current token is a number (int or float)
+        else if (numberLiterals.contains(curToken.token)) {
             result.register(advance())
             return result.success(NumberNode(curToken))
         }
