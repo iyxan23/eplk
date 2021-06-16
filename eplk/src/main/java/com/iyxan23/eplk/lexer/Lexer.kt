@@ -9,7 +9,7 @@ import com.iyxan23.eplk.errors.EplkError
 import java.lang.StringBuilder
 
 class Lexer(
-    private val filename: String,
+    filename: String,
     private val code: String
 ) {
 
