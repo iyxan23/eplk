@@ -16,7 +16,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = expression()
 
         // Check if we're not at the end of the file
-        if (result.error == null && currentToken.token == Tokens.EOF) {
+        if (result.error == null && currentToken.token != Tokens.EOF) {
             // Looks like theres some code after this, but those code doesn't get parsed for some reason
             // there must be a syntax error
             result.failure(SyntaxError(
@@ -65,12 +65,15 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = ParseResult()
         var leftNode = result.register(factor()) as Node
 
-        if (result.error == null) return result
+        if (result.error != null) return result
 
         while (termOperators.contains(currentToken.token)) {
             val operatorToken = currentToken
             result.register(advance())
             val rightNode = result.register(factor()) as Node
+
+            if (result.error != null) return result
+
             leftNode = BinOpNode(leftNode, operatorToken, rightNode)
         }
 
@@ -84,10 +87,15 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = ParseResult()
         var leftNode = result.register(term()) as Node
 
+        if (result.error != null) return result
+
         while (expressionOperators.contains(currentToken.token)) {
             val operatorToken = currentToken
             result.register(advance())
             val rightNode = result.register(term()) as Node
+
+            if (result.error != null) return result
+
             leftNode =  BinOpNode(leftNode, operatorToken, rightNode)
         }
 
