@@ -2,6 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.errors.IllegalCharacterError
 import com.iyxan23.eplk.errors.EplkError
+import com.iyxan23.eplk.lexer.Lexer
 import org.junit.Test
 
 class LexerTest {

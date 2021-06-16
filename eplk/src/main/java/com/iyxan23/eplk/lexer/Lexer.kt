@@ -1,5 +1,8 @@
-package com.iyxan23.eplk
+package com.iyxan23.eplk.lexer
 
+import com.iyxan23.eplk.Position
+import com.iyxan23.eplk.Token
+import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.IllegalCharacterError
 import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.errors.EplkError
