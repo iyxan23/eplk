@@ -9,6 +9,15 @@ class ParserTest {
     fun test1() {
         val code = "1 + 2"
         val tokens = Lexer("TEST", code).doLexicalAnalysis().tokens!!
-        assert(Parser(tokens).parse().error == null)
+        val result = Parser(tokens).parse()
+        assert(result.error == null)
+    }
+
+    @Test
+    fun test2() {
+        val code = "1 2 3 /"
+        val tokens = Lexer("TEST", code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+        assert(result.error != null)
     }
 }
