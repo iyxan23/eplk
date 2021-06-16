@@ -7,7 +7,7 @@ import com.iyxan23.eplk.parser.nodes.BinOpNode
 import com.iyxan23.eplk.parser.nodes.Node
 import com.iyxan23.eplk.parser.nodes.NumberNode
 
-class Parser(val tokens: ArrayList<Token>) {
+class Parser(private val tokens: ArrayList<Token>) {
 
     private var currentToken: Token = tokens[0]
     private var indexToken = 0
@@ -39,9 +39,9 @@ class Parser(val tokens: ArrayList<Token>) {
         }
 
         return result.failure(SyntaxError(
-            "Expected integer or float literals",
-            TODO(),
-            TODO()
+            "Expected an integer or a float literal",
+            curToken.startPosition,
+            curToken.endPosition,
         ))
     }
 
