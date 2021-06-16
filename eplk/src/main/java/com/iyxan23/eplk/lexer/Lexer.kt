@@ -78,6 +78,7 @@ class Lexer(
                 currentChar == '"' -> {
                     // Parse the string, if parseStringLiteral returns null, return an error
                     parseStringLiteral() ?: return LexerResult(null, errorThrown)
+                    advance()
                 }
 
                 currentChar!!.isDigit() -> {
