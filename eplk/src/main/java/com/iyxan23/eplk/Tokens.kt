@@ -12,4 +12,6 @@ enum class Tokens {
     STRING_LITERAL,
     INT_LITERAL,
     FLOAT_LITERAL,
+
+    EOF, // End Of File
 }

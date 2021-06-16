@@ -91,6 +91,9 @@ class Lexer(
             }
         }
 
+        // Don't forget the EOF (End Of File) token
+        tokens.add(Token(Tokens.EOF, null, position))
+
         // Tokenization successful
         return LexerResult(tokens, null)
     }
