@@ -1,4 +1,4 @@
-package com.iyxan23.eplk
+package com.iyxan23.eplk.lexer.models
 
 /**
  * This data class stores the position where the lexer / interpreter / parser is doing stuff

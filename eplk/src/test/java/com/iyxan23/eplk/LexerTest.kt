@@ -3,6 +3,8 @@ package com.iyxan23.eplk
 import com.iyxan23.eplk.errors.IllegalCharacterError
 import com.iyxan23.eplk.errors.EplkError
 import com.iyxan23.eplk.lexer.Lexer
+import com.iyxan23.eplk.lexer.models.Position
+import com.iyxan23.eplk.lexer.models.Token
 import org.junit.Test
 
 class LexerTest {
@@ -30,7 +32,7 @@ class LexerTest {
     private fun checkTokens(tokens: ArrayList<Token>, expect: ArrayList<Any>) {
         var index = 0
         tokens.forEach { token ->
-            assert(token.token == expect[index] as Tokens )
+            assert(token.token == expect[index] as Tokens)
             index++
 
             assert(token.value == expect[index] as String?)

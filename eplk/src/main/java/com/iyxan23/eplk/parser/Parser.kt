@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.parser
 
-import com.iyxan23.eplk.Token
+import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.parser.nodes.BinOpNode

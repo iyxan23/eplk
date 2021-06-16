@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.parser.nodes
 
-import com.iyxan23.eplk.Token
+import com.iyxan23.eplk.lexer.models.Token
 
 // A 2 number operation, example: 1 + 1
 data class BinOpNode(
