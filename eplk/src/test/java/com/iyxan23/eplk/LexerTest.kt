@@ -9,13 +9,13 @@ class LexerTest {
 
     private val filename = "<TEST>"
 
-    private fun expectTokens(code: String, shouldBe: ArrayList<Token>) {
+    private fun expectTokens(code: String, shouldBe: ArrayList<Any>) {
         val result = Lexer(filename, code).doLexicalAnalysis()
 
         println("Error: ${result.error}")
         assert(result.error == null)
         println("Returned Tokens: ${result.tokens}\n")
-        assert(result.tokens == shouldBe)
+        checkTokens(result.tokens!!, shouldBe)
     }
 
     private fun expectError(code: String, expectedError: EplkError) {
@@ -27,13 +27,27 @@ class LexerTest {
         assert(result.error!! == expectedError)
     }
 
+    private fun checkTokens(tokens: ArrayList<Token>, expect: ArrayList<Any>) {
+        var index = 0
+        tokens.forEach { token ->
+            assert(token.token == expect[index] as Tokens )
+            index++
+
+            assert(token.value == expect[index] as String?)
+            index++
+        }
+    }
+
 // =================================================================================================
 
     @Test
     fun stringTest() {
         expectTokens(
                 "\"Hello World\"",
-                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello World"))
+                arrayListOf(
+                    Tokens.STRING_LITERAL, "Hello World",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -41,7 +55,10 @@ class LexerTest {
     fun stringTest2() {
         expectTokens(
                 " \n    \t\"Hello \\\"World\"\n    \t\n",
-                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello \"World"))
+                arrayListOf(
+                    Tokens.STRING_LITERAL, "Hello \"World",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -49,7 +66,10 @@ class LexerTest {
     fun stringTest3() {
         expectTokens(
                 "\"Hello \\n World\"",
-                arrayListOf(Token(Tokens.STRING_LITERAL, "Hello \n World"))
+                arrayListOf(
+                    Tokens.STRING_LITERAL, "Hello \n World",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -57,7 +77,10 @@ class LexerTest {
     fun intTest() {
         expectTokens(
                 "10",
-                arrayListOf(Token(Tokens.INT_LITERAL, "10"))
+                arrayListOf(
+                    Tokens.INT_LITERAL, "10",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -65,7 +88,10 @@ class LexerTest {
     fun intTest2() {
         expectTokens(
                 "   \n\n \t  1234567890 \t\n    \t\t",
-                arrayListOf(Token(Tokens.INT_LITERAL, "1234567890"))
+                arrayListOf(
+                    Tokens.INT_LITERAL, "1234567890",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -73,7 +99,10 @@ class LexerTest {
     fun floatTest() {
         expectTokens(
                 "1.5",
-                arrayListOf(Token(Tokens.FLOAT_LITERAL, "1.5"))
+                arrayListOf(
+                    Tokens.FLOAT_LITERAL, "1.5",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -81,7 +110,10 @@ class LexerTest {
     fun floatTest2() {
         expectTokens(
                 "  \t \t \n\n  12312302433.51434234\n\n  ",
-                arrayListOf(Token(Tokens.FLOAT_LITERAL, "12312302433.51434234"))
+                arrayListOf(
+                    Tokens.FLOAT_LITERAL, "12312302433.51434234",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
@@ -90,15 +122,27 @@ class LexerTest {
         // This should be normal, the parsing will be done by the interpreter later
         expectTokens(
                 "0.5.5",
-                arrayListOf(Token(Tokens.FLOAT_LITERAL, "0.5.5"))
+                arrayListOf(
+                    Tokens.FLOAT_LITERAL, "0.5.5",
+                    Tokens.EOF, null
+                ) as ArrayList<Any>
         )
     }
 
     @Test
     fun charactersTest() {
         expectTokens(
-                "+-*/^() + - * / ^ ( ) \n+\n-\n*\n/\n^\n(\n)\n",
-                arrayListOf(Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null), Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null), Token(Tokens.PLUS, null), Token(Tokens.MINUS, null), Token(Tokens.MUL, null), Token(Tokens.DIV, null), Token(Tokens.POW, null), Token(Tokens.PAREN_OPEN, null), Token(Tokens.PAREN_CLOSE, null))
+                "+-*/^()",
+                arrayListOf(
+                    Tokens.PLUS, null,
+                    Tokens.MINUS, null,
+                    Tokens.MUL, null,
+                    Tokens.DIV, null,
+                    Tokens.POW, null,
+                    Tokens.PAREN_OPEN, null,
+                    Tokens.PAREN_CLOSE, null,
+                    Tokens.EOF, null,
+                ) as ArrayList<Any>
         )
     }
 
