@@ -19,6 +19,8 @@ class Lexer(
 
     private var errorThrown: EplkError? = null
 
+    private val tokens: ArrayList<Token> = ArrayList()
+
     // What this function does is to jump one char
     private fun advance() {
         position.advance(currentChar)
@@ -27,9 +29,8 @@ class Lexer(
     }
 
     fun doLexicalAnalysis(): LexerResult {
-        val tokens: ArrayList<Token> = ArrayList()
-
         advance()
+
         while (currentChar != null) {
             // Ignore spaces
             if (spaces.contains(currentChar)) {
@@ -40,58 +41,47 @@ class Lexer(
             // Now let's do the tokenization
             when {
                 currentChar == '+' -> {
-                    tokens.add(Token(Tokens.PLUS, null))
+                    tokens.add(Token(Tokens.PLUS, null, position))
                     advance()
                 }
 
                 currentChar == '-' -> {
-                    tokens.add(Token(Tokens.MINUS, null))
+                    tokens.add(Token(Tokens.MINUS, null, position))
                     advance()
                 }
 
                 currentChar == '*' -> {
-                    tokens.add(Token(Tokens.MUL, null))
+                    tokens.add(Token(Tokens.MUL, null, position))
                     advance()
                 }
 
                 currentChar == '/' -> {
-                    tokens.add(Token(Tokens.DIV, null))
+                    tokens.add(Token(Tokens.DIV, null, position))
                     advance()
                 }
 
                 currentChar == '^' -> {
-                    tokens.add(Token(Tokens.POW, null))
+                    tokens.add(Token(Tokens.POW, null, position))
                     advance()
                 }
 
                 currentChar == '(' -> {
-                    tokens.add(Token(Tokens.PAREN_OPEN, null))
+                    tokens.add(Token(Tokens.PAREN_OPEN, null, position))
                     advance()
                 }
 
                 currentChar == ')' -> {
-                    tokens.add(Token(Tokens.PAREN_CLOSE, null))
+                    tokens.add(Token(Tokens.PAREN_CLOSE, null, position))
                     advance()
                 }
 
                 currentChar == '"' -> {
                     // Parse the string, if parseStringLiteral returns null, return an error
-                    val string = parseStringLiteral() ?: return LexerResult(null, errorThrown)
-                    tokens.add(Token(Tokens.STRING_LITERAL, string))
-                    advance()
+                    parseStringLiteral() ?: return LexerResult(null, errorThrown)
                 }
 
                 currentChar!!.isDigit() -> {
-                    val result = parseNumberLiteral()
-
-                    val number = result.first
-                    val isFloat = result.second
-
-                    if (isFloat) {
-                        tokens.add(Token(Tokens.FLOAT_LITERAL, number))
-                    } else {
-                        tokens.add(Token(Tokens.INT_LITERAL, number))
-                    }
+                    parseNumberLiteral()
                 }
 
                 else -> {
@@ -108,8 +98,8 @@ class Lexer(
     // "Utilities"
     private fun throwError(error: EplkError) { errorThrown = error }
 
-    //                                     int     is float?
-    private fun parseNumberLiteral(): Pair<String, Boolean> {
+    private fun parseNumberLiteral() {
+        val numberStartPosition = position.copy()
         val builder = StringBuilder()
         var dotCount = 0
 
@@ -132,7 +122,15 @@ class Lexer(
             advance()
         }
 
-        return Pair(builder.toString(), dotCount != 0)
+        // Alright we're done parsing
+
+        val isFloat = dotCount != 0
+
+        if (isFloat) {
+            tokens.add(Token(Tokens.FLOAT_LITERAL, builder.toString(), numberStartPosition, position))
+        } else {
+            tokens.add(Token(Tokens.INT_LITERAL, builder.toString(), numberStartPosition, position))
+        }
     }
 
     private val escapeCharacters = mapOf(
@@ -163,7 +161,11 @@ class Lexer(
             }
 
             when (currentChar) {
-                '"' -> return builder.toString() // Alright we're done
+                '"' -> {
+                    // Add the string literal token
+                    tokens.add(Token(Tokens.STRING_LITERAL, builder.toString(), stringStartPosition, position))
+                    return builder.toString()
+                } // Alright we're done
                 '\\' -> escape = true
                 else -> builder.append(currentChar) // append the char to build the string
             }
