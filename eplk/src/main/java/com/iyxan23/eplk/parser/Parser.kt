@@ -12,8 +12,21 @@ class Parser(private val tokens: ArrayList<Token>) {
     private var currentToken: Token = tokens[0]
     private var indexToken = 0
 
-    fun parse(): Node {
-        return expression().node!!
+    fun parse(): ParseResult {
+        val result = expression()
+
+        // Check if we're not at the end of the file
+        if (result.error == null && currentToken.token == Tokens.EOF) {
+            // Looks like theres some code after this, but those code doesn't get parsed for some reason
+            // there must be a syntax error
+            result.failure(SyntaxError(
+                "Expected '+', '-', '*', or '/'",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        return result
     }
 
     private fun advance(): Token {
