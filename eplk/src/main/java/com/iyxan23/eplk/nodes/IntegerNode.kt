@@ -8,8 +8,7 @@ import com.iyxan23.eplk.lexer.models.Token
 data class IntegerNode(
     val number: Token
 ) : Node() {
-    override fun visit(node: Node, scope: Scope): RealtimeResult {
-        if (node !is BinOpNode) throw IllegalArgumentException("Visited with a different node")
+    override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }
 }

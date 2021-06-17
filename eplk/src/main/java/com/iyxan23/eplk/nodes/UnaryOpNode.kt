@@ -9,8 +9,7 @@ data class UnaryOpNode(
     val tokenOperator: Token,
     val node: Node,
 ) : Node() {
-    override fun visit(node: Node, scope: Scope): RealtimeResult {
-        if (node !is BinOpNode) throw IllegalArgumentException("Visited with a different node")
+    override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }
 }
