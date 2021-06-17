@@ -1,7 +1,9 @@
 package com.iyxan23.eplk.interpreter
 
-import com.iyxan23.eplk.parser.nodes.Node
+import com.iyxan23.eplk.parser.nodes.*
 
-class Interpreter(private val syntaxTree: Node) {
-
+object Interpreter {
+    fun visitNode(node: Node, scope: Scope) {
+        node.visit(node, scope)
+    }
 }
