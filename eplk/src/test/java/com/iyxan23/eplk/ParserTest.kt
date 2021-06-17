@@ -2,9 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.parser.Parser
-import com.iyxan23.eplk.parser.nodes.BinOpNode
 import com.iyxan23.eplk.parser.nodes.Node
-import com.iyxan23.eplk.parser.nodes.NumberNode
 import org.junit.Test
 
 class ParserTest {
@@ -18,7 +16,7 @@ class ParserTest {
         // TODO: 6/16/21
         //  don't put the entire node tree as the truth data, make a new function that
         //  checks the important part of the node
-        assert(result == expectation)
+        assert(result.node == expectation)
     }
 
     @Test
@@ -45,7 +43,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        println(result.node)
+        assert(!result.hasError)
     }
 
     @Test
@@ -54,6 +52,6 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError)
+        assert(result.hasError)
     }
 }

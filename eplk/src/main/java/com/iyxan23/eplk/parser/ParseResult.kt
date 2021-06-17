@@ -3,7 +3,7 @@ package com.iyxan23.eplk.parser
 import com.iyxan23.eplk.errors.EplkError
 import com.iyxan23.eplk.parser.nodes.Node
 
-open class ParseResult() {
+class ParseResult() {
 
     private var error: EplkError? = null
     var node: Node? = null

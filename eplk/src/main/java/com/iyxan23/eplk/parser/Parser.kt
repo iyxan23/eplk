@@ -3,10 +3,7 @@ package com.iyxan23.eplk.parser
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
-import com.iyxan23.eplk.parser.nodes.BinOpNode
-import com.iyxan23.eplk.parser.nodes.Node
-import com.iyxan23.eplk.parser.nodes.NumberNode
-import com.iyxan23.eplk.parser.nodes.UnaryOpNode
+import com.iyxan23.eplk.parser.nodes.*
 
 class Parser(private val tokens: ArrayList<Token>) {
 
@@ -40,7 +37,6 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
-    private val numberLiterals = arrayOf(Tokens.INT_LITERAL, Tokens.FLOAT_LITERAL)
     private val unaryTokens = arrayOf(Tokens.PLUS, Tokens.MINUS)
 
     // factor = [INT|FLOAT]|[[PLUS|MINUS] factor]
@@ -48,8 +44,8 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = ParseResult()
         val oldToken = currentToken
 
-        // Check if the current token contains a unary operator (+ and -)
         when {
+            // Check if the current token contains a unary operator (+ and -)
             unaryTokens.contains(oldToken.token) -> {
                 result.register(advance())
                 val factor = result.register(factor())
@@ -59,10 +55,16 @@ class Parser(private val tokens: ArrayList<Token>) {
                 return result.success(UnaryOpNode(oldToken, factor as Node))
             }
 
-            // Check if the current token is a number (int or float)
-            numberLiterals.contains(oldToken.token) -> {
+            // Check if the current token is an int
+            oldToken.token == Tokens.INT_LITERAL -> {
                 result.register(advance())
-                return result.success(NumberNode(oldToken))
+                return result.success(IntegerNode(oldToken))
+            }
+
+            // Check if the current token is a float
+            oldToken.token == Tokens.FLOAT_LITERAL -> {
+                result.register(advance())
+                return result.success(FloatNode(oldToken))
             }
 
             // Check if the current token is an open parentheses
