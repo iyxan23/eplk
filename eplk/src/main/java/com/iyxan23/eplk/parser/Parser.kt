@@ -1,9 +1,9 @@
 package com.iyxan23.eplk.parser
 
-import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
-import com.iyxan23.eplk.parser.nodes.*
+import com.iyxan23.eplk.lexer.models.Token
+import com.iyxan23.eplk.nodes.*
 
 class Parser(private val tokens: ArrayList<Token>) {
 

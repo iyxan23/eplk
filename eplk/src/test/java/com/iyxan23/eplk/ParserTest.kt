@@ -2,7 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.parser.Parser
-import com.iyxan23.eplk.parser.nodes.Node
+import com.iyxan23.eplk.nodes.Node
 import org.junit.Test
 
 class ParserTest {
