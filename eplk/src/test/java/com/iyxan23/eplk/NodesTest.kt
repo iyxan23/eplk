@@ -28,4 +28,19 @@ class NodesTest {
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == -1)
     }
+
+    @Test
+    fun testUnaryOpNode2() {
+        val lexerResult = Lexer(filename, "-(-(-(-1)))").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as UnaryOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 1)
+    }
 }

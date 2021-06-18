@@ -21,14 +21,13 @@ data class UnaryOpNode(
     override fun visit(scope: Scope): RealtimeResult {
         val result = RealtimeResult()
 
-        // Check if the node is a integer or a float
-        when (node) {
-            // this is an integer node
-            is IntegerNode -> {
-                // get the integer
-                val visitResult = node.visit(scope)
-                if (visitResult.hasError) return result
+        val visitResult = node.visit(scope)
+        if (visitResult.hasError) return result
 
+        // Check if the node is a integer or a float
+        when (visitResult.value) {
+            // this is an integer
+            is EplkInteger -> {
                 val integerNumber = visitResult.value as EplkInteger
 
                 // check the operator if it's a plus or minus
@@ -55,12 +54,8 @@ data class UnaryOpNode(
                 }
             }
 
-            // this is a float node
-            is FloatNode -> {
-                // get the float
-                val visitResult = node.visit(scope)
-                if (visitResult.hasError) return result
-
+            // this is a float
+            is EplkFloat -> {
                 val floatNumber = visitResult.value as EplkFloat
 
                 // check the operator
@@ -87,13 +82,9 @@ data class UnaryOpNode(
                 }
             }
 
-            // not an integer or float? this is an error!
+            // not float or integer? weird, this shouldn't happen
             else -> {
-                return result.failure(SyntaxError(
-                    "Expected an Integer or Float",
-                    startPosition,
-                    endPosition
-                ))
+                throw RuntimeException("${visitResult.value!!.javaClass.canonicalName} object doesn't exist")
             }
         }
     }
