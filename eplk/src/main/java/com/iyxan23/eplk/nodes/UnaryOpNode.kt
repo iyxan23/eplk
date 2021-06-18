@@ -26,8 +26,10 @@ data class UnaryOpNode(
             // this is an integer node
             is IntegerNode -> {
                 // get the integer
-                val integerNumber = result.register(node.visit(scope)) as EplkInteger
-                if (result.hasError) return result
+                val visitResult = node.visit(scope)
+                if (visitResult.hasError) return result
+
+                val integerNumber = visitResult.value as EplkInteger
 
                 // check the operator if it's a plus or minus
                 return when (tokenOperator.token) {
@@ -56,8 +58,10 @@ data class UnaryOpNode(
             // this is a float node
             is FloatNode -> {
                 // get the float
-                val floatNumber = result.register(node.visit(scope)) as EplkFloat
-                if (result.hasError) return result
+                val visitResult = node.visit(scope)
+                if (visitResult.hasError) return result
+
+                val floatNumber = visitResult.value as EplkFloat
 
                 // check the operator
                 return when (tokenOperator.token) {
