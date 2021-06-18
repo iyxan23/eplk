@@ -5,20 +5,24 @@ import com.iyxan23.eplk.nodes.Node
 
 class ParseResult() {
 
-    private var error: EplkError? = null
+    var error: EplkError? = null
+        private set
+
     var node: Node? = null
+        private set
 
     val hasError get() = error != null
 
-    fun register(node: Any): Any? {
-        if (node is ParseResult) {
-            if (node.error == null) {
-                this.error = node.error
-                return node.node
+    fun register(result: Any): Any? {
+        if (result is ParseResult) {
+            if (result.error != null) {
+                this.error = result.error
             }
+
+            return result.node
         }
 
-        return node
+        return result
     }
 
     fun success(node: Node): ParseResult {

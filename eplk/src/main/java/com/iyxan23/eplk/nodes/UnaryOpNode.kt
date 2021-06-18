@@ -24,7 +24,7 @@ data class UnaryOpNode(
         val visitResult = node.visit(scope)
         if (visitResult.hasError) return result
 
-        // Check if the node is a integer or a float
+        // Check if the node result is a integer or a float
         when (visitResult.value) {
             // this is an integer
             is EplkInteger -> {
