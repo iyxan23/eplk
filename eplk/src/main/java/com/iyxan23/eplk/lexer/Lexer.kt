@@ -40,37 +40,37 @@ class Lexer(
             // Now let's do the tokenization
             when {
                 currentChar == '+' -> {
-                    tokens.add(Token(Tokens.PLUS, null, position))
+                    tokens.add(Token(Tokens.PLUS, null, position.copy()))
                     advance()
                 }
 
                 currentChar == '-' -> {
-                    tokens.add(Token(Tokens.MINUS, null, position))
+                    tokens.add(Token(Tokens.MINUS, null, position.copy()))
                     advance()
                 }
 
                 currentChar == '*' -> {
-                    tokens.add(Token(Tokens.MUL, null, position))
+                    tokens.add(Token(Tokens.MUL, null, position.copy()))
                     advance()
                 }
 
                 currentChar == '/' -> {
-                    tokens.add(Token(Tokens.DIV, null, position))
+                    tokens.add(Token(Tokens.DIV, null, position.copy()))
                     advance()
                 }
 
                 currentChar == '^' -> {
-                    tokens.add(Token(Tokens.POW, null, position))
+                    tokens.add(Token(Tokens.POW, null, position.copy()))
                     advance()
                 }
 
                 currentChar == '(' -> {
-                    tokens.add(Token(Tokens.PAREN_OPEN, null, position))
+                    tokens.add(Token(Tokens.PAREN_OPEN, null, position.copy()))
                     advance()
                 }
 
                 currentChar == ')' -> {
-                    tokens.add(Token(Tokens.PAREN_CLOSE, null, position))
+                    tokens.add(Token(Tokens.PAREN_CLOSE, null, position.copy()))
                     advance()
                 }
 
@@ -92,7 +92,7 @@ class Lexer(
         }
 
         // Don't forget the EOF (End Of File) token
-        tokens.add(Token(Tokens.EOF, null, position))
+        tokens.add(Token(Tokens.EOF, null, position.copy()))
 
         // Tokenization successful
         return LexerResult(tokens, null)
@@ -130,9 +130,9 @@ class Lexer(
         val isFloat = dotCount != 0
 
         if (isFloat) {
-            tokens.add(Token(Tokens.FLOAT_LITERAL, builder.toString(), numberStartPosition, position))
+            tokens.add(Token(Tokens.FLOAT_LITERAL, builder.toString(), numberStartPosition, position.copy()))
         } else {
-            tokens.add(Token(Tokens.INT_LITERAL, builder.toString(), numberStartPosition, position))
+            tokens.add(Token(Tokens.INT_LITERAL, builder.toString(), numberStartPosition, position.copy()))
         }
     }
 
@@ -166,7 +166,7 @@ class Lexer(
             when (currentChar) {
                 '"' -> {
                     // Add the string literal token
-                    tokens.add(Token(Tokens.STRING_LITERAL, builder.toString(), stringStartPosition, position))
+                    tokens.add(Token(Tokens.STRING_LITERAL, builder.toString(), stringStartPosition, position.copy()))
                     return builder.toString()
                 } // Alright we're done
                 '\\' -> escape = true
@@ -177,7 +177,7 @@ class Lexer(
         }
 
         // wat? the string doesn't end? throw an error
-        throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position))
+        throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position.copy()))
 
         return null
     }

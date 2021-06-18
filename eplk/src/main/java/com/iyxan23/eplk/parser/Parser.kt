@@ -42,7 +42,7 @@ class Parser(private val tokens: ArrayList<Token>) {
     // factor = [INT|FLOAT]|[[PLUS|MINUS] factor]
     private fun factor(): ParseResult {
         val result = ParseResult()
-        val oldToken = currentToken
+        val oldToken = currentToken.copy()
 
         when {
             // Check if the current token contains a unary operator (+ and -)
@@ -97,7 +97,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
     private val termOperators = arrayOf(Tokens.MUL, Tokens.DIV)
 
-    // term = factor [[MUL|DIV) factor]*
+    // term = factor [[MUL|DIV] factor]*
     private fun term(): ParseResult {
         val result = ParseResult()
         var leftNode = result.register(factor()) as Node
@@ -105,7 +105,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         if (result.hasError) return result
 
         while (termOperators.contains(currentToken.token)) {
-            val operatorToken = currentToken
+            val operatorToken = currentToken.copy()
             result.register(advance())
             val rightNode = result.register(factor()) as Node
 
@@ -127,13 +127,13 @@ class Parser(private val tokens: ArrayList<Token>) {
         if (result.hasError) return result
 
         while (expressionOperators.contains(currentToken.token)) {
-            val operatorToken = currentToken
+            val operatorToken = currentToken.copy()
             result.register(advance())
             val rightNode = result.register(term()) as Node
 
             if (result.hasError) return result
 
-            leftNode =  BinOpNode(leftNode, operatorToken, rightNode)
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode)
         }
 
         return result.success(leftNode)
