@@ -8,6 +8,10 @@ import com.iyxan23.eplk.lexer.models.Token
 data class FloatNode(
     val float: Token
 ) : Node() {
+
+    override val startPosition get() = float.startPosition
+    override val endPosition get() = float.endPosition
+
     override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }

@@ -9,6 +9,10 @@ data class UnaryOpNode(
     val tokenOperator: Token,
     val node: Node,
 ) : Node() {
+
+    override val startPosition get() = tokenOperator.startPosition
+    override val endPosition get() = node.endPosition
+
     override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }

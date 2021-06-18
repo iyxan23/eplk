@@ -10,6 +10,10 @@ data class BinOpNode(
     val operatorToken: Token,
     val rightNode: Node,
 ) : Node() {
+
+    override val startPosition get() = leftNode.startPosition
+    override val endPosition get() = rightNode.endPosition
+
     override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }

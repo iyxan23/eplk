@@ -8,6 +8,10 @@ import com.iyxan23.eplk.lexer.models.Token
 data class IntegerNode(
     val number: Token
 ) : Node() {
+
+    override val startPosition get() = number.startPosition
+    override val endPosition get() = number.endPosition
+
     override fun visit(scope: Scope): RealtimeResult {
         TODO("Not yet implemented")
     }
