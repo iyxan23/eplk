@@ -30,9 +30,33 @@ abstract class EplkObject {
         return this
     }
 
-    fun operatorPlus(other: EplkObject): RealtimeResult<EplkObject> {
+    open fun operatorPlus(other: EplkObject): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "+ operator is not implemented by $objectName",
+            startPosition!!,
+            endPosition!!
+        ))
+    }
+
+    open fun operatorMinus(other: EplkObject): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+            "- operator is not implemented by $objectName",
+            startPosition!!,
+            endPosition!!
+        ))
+    }
+
+    open fun operatorMultiply(other: EplkObject): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+            "* operator is not implemented by $objectName",
+            startPosition!!,
+            endPosition!!
+        ))
+    }
+
+    open fun operatorDivide(other: EplkObject): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+            "/ operator is not implemented by $objectName",
             startPosition!!,
             endPosition!!
         ))
