@@ -3,6 +3,7 @@ package com.iyxan23.eplk.nodes
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
+import com.iyxan23.eplk.objects.EplkFloat
 
 // Simply a float value, example: 0.1
 data class FloatNode(
@@ -13,6 +14,6 @@ data class FloatNode(
     override val endPosition get() = float.endPosition
 
     override fun visit(scope: Scope): RealtimeResult {
-        TODO("Not yet implemented")
+        return RealtimeResult().success(EplkFloat(float.value!!.toFloat()))
     }
 }
