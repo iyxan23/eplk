@@ -11,8 +11,9 @@ class RealtimeResult<T>() {
 
     val hasError get() = error != null
 
-    fun register(result: RealtimeResult<T>): Any? {
+    fun register(result: RealtimeResult<T>): T? {
         if (result.hasError) error = result.error
+        value = result.value
         return value
     }
 
