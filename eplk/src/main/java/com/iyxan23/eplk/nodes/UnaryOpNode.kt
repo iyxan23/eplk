@@ -1,7 +1,6 @@
 package com.iyxan23.eplk.nodes
 
 import com.iyxan23.eplk.Tokens
-import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token

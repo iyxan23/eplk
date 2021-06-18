@@ -1,9 +1,11 @@
 package com.iyxan23.eplk.nodes
 
+import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkObject
+import java.lang.RuntimeException
 
 // A 2 number operation, example: 1 + 1
 data class BinOpNode(
@@ -16,5 +18,26 @@ data class BinOpNode(
     override val endPosition get() = rightNode.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
+        val result = RealtimeResult<EplkObject>()
+
+        val leftResult = result.register(leftNode.visit(scope))
+        if (result.hasError) return result
+
+        val rightResult = result.register(rightNode.visit(scope))
+        if (result.hasError) return result
+
+        val leftObject = leftResult as EplkObject
+        val rightObject = rightResult as EplkObject
+
+        return when (operatorToken.token) {
+            Tokens.PLUS     -> leftObject.operatorPlus(rightObject)
+            Tokens.MINUS    -> leftObject.operatorMinus(rightObject)
+            Tokens.MUL      -> leftObject.operatorMultiply(rightObject)
+            Tokens.DIV      -> leftObject.operatorDivide(rightObject)
+
+            else -> {
+                throw RuntimeException("Operator token is neither plus, minus, multiply, nor divide")
+            }
+        }
     }
 }
