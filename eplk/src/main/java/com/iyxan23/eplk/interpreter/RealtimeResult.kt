@@ -3,10 +3,13 @@ package com.iyxan23.eplk.interpreter
 import com.iyxan23.eplk.errors.EplkError
 
 class RealtimeResult() {
-    private var error: EplkError? = null
-    private var value: Any? = null
+    var error: EplkError? = null
+        private set
 
-    val hasError get() = error == null
+    var value: Any? = null
+        private set
+
+    val hasError get() = error != null
 
     fun register(result: RealtimeResult): Any? {
         if (result.hasError) error = result.error
