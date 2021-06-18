@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.iyxan23.eplk.fragments.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_lexerFragment"
+            app:destination="@id/lexerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lexerFragment"
+        android:name="com.iyxan23.eplk.fragments.LexerFragment"
+        android:label="lexer_fragment"
+        tools:layout="@layout/lexer_fragment" >
+        <action
+            android:id="@+id/action_lexerFragment_to_parserFragment"
+            app:destination="@id/parserFragment" />
+        <argument
+            android:name="code"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/parserFragment"
+        android:name="com.iyxan23.eplk.fragments.ParserFragment"
+        android:label="parser_fragment"
+        tools:layout="@layout/parser_fragment" >
+        <action
+            android:id="@+id/action_parserFragment_to_interpreterFragment"
+            app:destination="@id/interpreterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/interpreterFragment"
+        android:name="com.iyxan23.eplk.fragments.InterpreterFragment"
+        android:label="interpreter_fragment"
+        tools:layout="@layout/interpreter_fragment" />
+</navigation>
