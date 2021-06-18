@@ -100,18 +100,20 @@ class Parser(private val tokens: ArrayList<Token>) {
     // term = factor [[MUL|DIV] factor]*
     private fun term(): ParseResult {
         val result = ParseResult()
-        var leftNode = result.register(factor()) as Node
+        val leftNodeResult = result.register(factor()) as Node?
 
         if (result.hasError) return result
+
+        var leftNode = leftNodeResult as Node
 
         while (termOperators.contains(currentToken.token)) {
             val operatorToken = currentToken.copy()
             result.register(advance())
-            val rightNode = result.register(factor()) as Node
+            val rightNode = result.register(factor()) as Node?
 
             if (result.hasError) return result
 
-            leftNode = BinOpNode(leftNode, operatorToken, rightNode)
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
         }
 
         return result.success(leftNode)
@@ -122,18 +124,20 @@ class Parser(private val tokens: ArrayList<Token>) {
     // expression = term [[PLUS|MINUS] term]*
     private fun expression(): ParseResult {
         val result = ParseResult()
-        var leftNode = result.register(term()) as Node
+        val leftNodeResult = result.register(term()) as Node?
 
         if (result.hasError) return result
+
+        var leftNode = leftNodeResult as Node
 
         while (expressionOperators.contains(currentToken.token)) {
             val operatorToken = currentToken.copy()
             result.register(advance())
-            val rightNode = result.register(term()) as Node
+            val rightNode = result.register(term()) as Node?
 
             if (result.hasError) return result
 
-            leftNode = BinOpNode(leftNode, operatorToken, rightNode)
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
         }
 
         return result.success(leftNode)

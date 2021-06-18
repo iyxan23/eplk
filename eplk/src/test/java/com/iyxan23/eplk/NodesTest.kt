@@ -21,7 +21,6 @@ class NodesTest {
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
 
-        assert(parseResult.tokenOperator == Token(Tokens.MINUS, null, Position(0, 1, 0, filename)))
         val resultVisit = parseResult.visit(Scope(filename))
 
         assert(!resultVisit.hasError)

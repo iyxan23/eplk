@@ -54,4 +54,13 @@ class ParserTest {
 
         assert(result.hasError)
     }
+
+    @Test
+    fun syntaxErrorTest2() {
+        val code = "-(-1"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(result.hasError)
+    }
 }
