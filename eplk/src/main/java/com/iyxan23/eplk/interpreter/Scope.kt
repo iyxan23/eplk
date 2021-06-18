@@ -4,6 +4,6 @@ import com.iyxan23.eplk.lexer.models.Position
 
 data class Scope(
     val name: String,
-    val parent: Scope?,
-    val parentPosition: Position,
+    val parent: Scope? = null,
+    val parentPosition: Position? = null,
 )
