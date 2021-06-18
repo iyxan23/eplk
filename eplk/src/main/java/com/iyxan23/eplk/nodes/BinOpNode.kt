@@ -30,10 +30,10 @@ data class BinOpNode(
         val rightObject = rightResult as EplkObject
 
         return when (operatorToken.token) {
-            Tokens.PLUS     -> leftObject.operatorPlus(rightObject)
-            Tokens.MINUS    -> leftObject.operatorMinus(rightObject)
-            Tokens.MUL      -> leftObject.operatorMultiply(rightObject)
-            Tokens.DIV      -> leftObject.operatorDivide(rightObject)
+            Tokens.PLUS     -> leftObject.operatorPlus      (rightObject, startPosition, endPosition)
+            Tokens.MINUS    -> leftObject.operatorMinus     (rightObject, startPosition, endPosition)
+            Tokens.MUL      -> leftObject.operatorMultiply  (rightObject, startPosition, endPosition)
+            Tokens.DIV      -> leftObject.operatorDivide    (rightObject, startPosition, endPosition)
 
             else -> {
                 throw RuntimeException("Operator token is neither plus, minus, multiply, nor divide")

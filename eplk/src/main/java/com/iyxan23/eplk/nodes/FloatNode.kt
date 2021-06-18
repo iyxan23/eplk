@@ -15,6 +15,6 @@ data class FloatNode(
     override val endPosition get() = float.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        return RealtimeResult<EplkObject>().success(EplkFloat(float.value!!.toFloat()))
+        return RealtimeResult<EplkObject>().success(EplkFloat(float.value!!.toFloat(), scope))
     }
 }

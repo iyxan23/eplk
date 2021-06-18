@@ -15,6 +15,6 @@ data class IntegerNode(
     override val endPosition get() = number.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        return RealtimeResult<EplkObject>().success(EplkInteger(number.value!!.toInt()))
+        return RealtimeResult<EplkObject>().success(EplkInteger(number.value!!.toInt(), scope))
     }
 }

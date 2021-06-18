@@ -2,74 +2,100 @@ package com.iyxan23.eplk.objects
 
 import com.iyxan23.eplk.errors.EplkNotImplementedError
 import com.iyxan23.eplk.interpreter.RealtimeResult
+import com.iyxan23.eplk.interpreter.Scope
+import com.iyxan23.eplk.lexer.models.Position
 
-class EplkFloat(val value: Float) : EplkObject() {
+class EplkFloat(
+    val value: Float,
+    override val scope: Scope
+) : EplkObject(scope) {
+
     override val objectName = "Float"
 
-    override fun operatorPlus(other: EplkObject): RealtimeResult<EplkObject> {
+    override fun operatorPlus(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+
         return when (other) {
             is EplkInteger ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value + other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value + other.value, scope))
 
             is EplkFloat ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value + other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value + other.value, scope))
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
-                    startPosition!!,
-                    endPosition!!
+                    startPosition,
+                    endPosition
                 ))
         }
     }
 
-    override fun operatorMinus(other: EplkObject): RealtimeResult<EplkObject> {
+    override fun operatorMinus(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+
         return when (other) {
             is EplkInteger ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value - other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value - other.value, scope))
 
             is EplkFloat ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value - other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value - other.value, scope))
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
-                    startPosition!!,
-                    endPosition!!
+                    startPosition,
+                    endPosition
                 ))
         }
     }
 
-    override fun operatorMultiply(other: EplkObject): RealtimeResult<EplkObject> {
+    override fun operatorMultiply(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+
         return when (other) {
             is EplkInteger ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value * other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value * other.value, scope))
 
             is EplkFloat ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value * other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value * other.value, scope))
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
-                    startPosition!!,
-                    endPosition!!
+                    startPosition,
+                    endPosition
                 ))
         }
     }
 
-    override fun operatorDivide(other: EplkObject): RealtimeResult<EplkObject> {
+    override fun operatorDivide(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+
         return when (other) {
             is EplkInteger ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value / other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value / other.value, scope))
 
             is EplkFloat ->
-                RealtimeResult<EplkObject>().success(EplkFloat(value / other.value))
+                RealtimeResult<EplkObject>().success(EplkFloat(value / other.value, scope))
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
-                    startPosition!!,
-                    endPosition!!
+                    startPosition,
+                    endPosition
                 ))
         }
     }

@@ -5,60 +5,38 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 
-abstract class EplkObject {
+abstract class EplkObject(open val scope: Scope) {
     abstract val objectName: String
 
-    var startPosition: Position? = null
-        private set
-
-    var endPosition: Position? = null
-        private set
-
-    var scope: Scope? = null
-        private set
-
-    fun setPosition(startPosition: Position, endPosition: Position): EplkObject {
-        this.startPosition = startPosition
-        this.endPosition = endPosition
-
-        return this
-    }
-
-    fun setScope(scope: Scope): EplkObject {
-        this.scope = scope
-
-        return this
-    }
-
-    open fun operatorPlus(other: EplkObject): RealtimeResult<EplkObject> {
+    open fun operatorPlus(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "+ operator is not implemented by $objectName",
-            startPosition!!,
-            endPosition!!
+            startPosition,
+            endPosition
         ))
     }
 
-    open fun operatorMinus(other: EplkObject): RealtimeResult<EplkObject> {
+    open fun operatorMinus(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "- operator is not implemented by $objectName",
-            startPosition!!,
-            endPosition!!
+            startPosition,
+            endPosition
         ))
     }
 
-    open fun operatorMultiply(other: EplkObject): RealtimeResult<EplkObject> {
+    open fun operatorMultiply(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "* operator is not implemented by $objectName",
-            startPosition!!,
-            endPosition!!
+            startPosition,
+            endPosition
         ))
     }
 
-    open fun operatorDivide(other: EplkObject): RealtimeResult<EplkObject> {
+    open fun operatorDivide(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "/ operator is not implemented by $objectName",
-            startPosition!!,
-            endPosition!!
+            startPosition,
+            endPosition
         ))
     }
 }

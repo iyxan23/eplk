@@ -61,6 +61,7 @@ class NodesTest {
     }
 
     // FIXME: 6/19/21 This shouldn't return 2
+    //  Apparently, there is something wrong with the AST
     @Test
     fun testBinOpNode2() {
         val lexerResult = Lexer(filename, "1 + 2 * 3 / 4").doLexicalAnalysis()

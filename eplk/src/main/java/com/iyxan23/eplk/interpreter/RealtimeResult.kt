@@ -26,4 +26,8 @@ class RealtimeResult<T>() {
         this.error = error
         return this
     }
+
+    override fun toString(): String {
+        return if (hasError) { "Error: $error" } else { "Success: $value" }
+    }
 }

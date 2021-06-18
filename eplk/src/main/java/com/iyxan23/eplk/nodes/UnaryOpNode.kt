@@ -34,7 +34,7 @@ data class UnaryOpNode(
                 return when (tokenOperator.token) {
                     // This is a minus, multiply it by -1
                     Tokens.MINUS -> {
-                        result.success(EplkInteger(integerNumber.value * -1))
+                        result.success(EplkInteger(integerNumber.value * -1, scope))
                     }
 
                     // this is a plus
@@ -42,7 +42,8 @@ data class UnaryOpNode(
                     Tokens.PLUS -> {
                         result.success(
                             EplkInteger(
-                                integerNumber.value * ( if (integerNumber.value < 0) -1 else 1 )
+                                integerNumber.value * ( if (integerNumber.value < 0) -1 else 1 ),
+                                scope
                             )
                         )
                     }
@@ -62,7 +63,7 @@ data class UnaryOpNode(
                 return when (tokenOperator.token) {
                     // this is a minus, multiply it by -1
                     Tokens.MINUS -> {
-                        result.success(EplkFloat(floatNumber.value * -1))
+                        result.success(EplkFloat(floatNumber.value * -1, scope))
                     }
 
                     // this is a plus
@@ -70,7 +71,8 @@ data class UnaryOpNode(
                     Tokens.PLUS -> {
                         result.success(
                             EplkFloat(
-                                floatNumber.value * ( if (floatNumber.value < 0) 1 else -1 )
+                                floatNumber.value * ( if (floatNumber.value < 0) 1 else -1 ),
+                                scope
                             )
                         )
                     }
