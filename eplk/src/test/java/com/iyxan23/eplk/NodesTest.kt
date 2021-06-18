@@ -26,5 +26,6 @@ class NodesTest {
 
         assert(!resultVisit.hasError)
         assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == -1)
     }
 }
