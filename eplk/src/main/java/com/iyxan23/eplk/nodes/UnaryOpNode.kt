@@ -7,6 +7,7 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
+import com.iyxan23.eplk.objects.EplkObject
 import java.lang.RuntimeException
 
 // A single number operation, example: -1
@@ -18,8 +19,8 @@ data class UnaryOpNode(
     override val startPosition get() = tokenOperator.startPosition
     override val endPosition get() = node.endPosition
 
-    override fun visit(scope: Scope): RealtimeResult {
-        val result = RealtimeResult()
+    override fun visit(scope: Scope): RealtimeResult<EplkObject> {
+        val result = RealtimeResult<EplkObject>()
 
         val visitResult = node.visit(scope)
         if (visitResult.hasError) return result
