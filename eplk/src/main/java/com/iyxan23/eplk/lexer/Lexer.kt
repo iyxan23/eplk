@@ -89,6 +89,13 @@ class Lexer(
                     parseNumberLiteral()
                 }
 
+                currentChar in 'a'..'z' ||
+                currentChar in 'A'..'Z' -> {
+                    parseIdentifier()
+
+                    if (errorThrown != null) return LexerResult(null, errorThrown)
+                }
+
                 else -> {
                     throwError(IllegalCharacterError(currentChar!!, position))
                     return LexerResult(null, errorThrown)
@@ -189,7 +196,33 @@ class Lexer(
 
         // wat? the string doesn't end? throw an error
         throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position.copy()))
+    }
 
-        return null
+    private fun parseIdentifier() {
+        val identifierStartPosition = position.copy()
+        val identifierBuilder = StringBuilder()
+
+        while (currentChar != null) {
+            if (currentChar in 'a'..'z' ||
+                currentChar in 'A'..'Z' ||
+                currentChar in '0'..'9' ||
+                currentChar == '_'      ) {
+
+                identifierBuilder.append(currentChar)
+
+            } else {
+                throwError(SyntaxError(
+                    "Unexpected character when creating an identifier: $currentChar, identifier __must__ be alphanumeric",
+                    identifierStartPosition,
+                    position.copy()
+                ))
+
+                return
+            }
+
+            advance()
+        }
+
+        tokens.add(Token(Tokens.IDENTIFIER, identifierBuilder.toString(), identifierStartPosition, position.copy()))
     }
 }
