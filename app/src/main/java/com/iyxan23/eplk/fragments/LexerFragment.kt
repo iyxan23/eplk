@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iyxan23.eplk.R
 import com.iyxan23.eplk.adapters.TokensRecyclerViewAdapter
@@ -21,7 +23,9 @@ class LexerFragment : Fragment() {
 
     private lateinit var viewModel: LexerViewModel
     private var tokensAdapter: TokensRecyclerViewAdapter
-                = TokensRecyclerViewAdapter(emptyList<Token>() as ArrayList<Token>, "")
+                = TokensRecyclerViewAdapter(ArrayList(), "")
+
+    private lateinit var progressBarLexer: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,25 +34,31 @@ class LexerFragment : Fragment() {
         val root = inflater.inflate(R.layout.lexer_fragment, container, false)
 
         val tokensRecyclerView = root.findViewById<RecyclerView>(R.id.tokens_rv)
+        tokensRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         tokensRecyclerView.adapter = tokensAdapter
 
         val runParserButton = root.findViewById<Button>(R.id.run_parser_button)
-        val progressBarLexer = root.findViewById<Button>(R.id.progress_lexer)
+        progressBarLexer = root.findViewById<ProgressBar>(R.id.progress_lexer)
         runParserButton.setOnClickListener {
             TODO("Implement ParseFragment")
         }
-
-        viewModel.tokens.observe(viewLifecycleOwner, { tokens ->
-            progressBarLexer.visibility = View.VISIBLE
-            tokensAdapter.update(tokens)
-        })
 
         return root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel = ViewModelProvider(this).get(LexerViewModel::class.java)
-        viewModel.runLexer(arguments?.getString("code")!!)
+
+        val code = arguments?.getString("code")!!
+
+        viewModel.runLexer(code)
+        tokensAdapter.code = code
+
+        viewModel.tokens.observe(viewLifecycleOwner, { tokens ->
+            progressBarLexer.visibility = View.GONE
+            tokensAdapter.update(tokens)
+        })
     }
 }
