@@ -217,22 +217,26 @@ class Lexer(
         val identifierStartPosition = position.copy()
         val identifierBuilder = StringBuilder()
 
+        loop@
         while (currentChar != null) {
-            if (currentChar in 'a'..'z' ||
+            when {
+                currentChar in 'a'..'z' ||
                 currentChar in 'A'..'Z' ||
                 currentChar in '0'..'9' ||
-                currentChar == '_'      ) {
+                currentChar == '_' ->
+                    identifierBuilder.append(currentChar)
 
-                identifierBuilder.append(currentChar)
+                spaces.contains(currentChar) -> break@loop
 
-            } else {
-                throwError(SyntaxError(
-                    "Unexpected character when creating an identifier: $currentChar, identifier __must__ be alphanumeric",
-                    identifierStartPosition,
-                    position.copy()
-                ))
+                else -> {
+                    throwError(SyntaxError(
+                        "Unexpected character when creating an identifier: $currentChar, identifier __must__ be alphanumeric",
+                        identifierStartPosition,
+                        position.copy()
+                    ))
 
-                return
+                    return
+                }
             }
 
             advance()

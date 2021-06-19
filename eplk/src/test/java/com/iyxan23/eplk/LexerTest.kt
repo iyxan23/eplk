@@ -170,6 +170,22 @@ class LexerTest {
     }
 
     @Test
+    fun variableTest() {
+        expectTokens(
+            "var hello_world = 1 + 1",
+            arrayListOf(
+                Tokens.KEYWORD, "var",
+                Tokens.IDENTIFIER, "hello_world",
+                Tokens.EQUAL, null,
+                Tokens.INT_LITERAL, "1",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "1",
+                Tokens.EOF, null
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun illegalCharacterError() {
         // TODO: 6/12/21 change this to some character we wont use in future implementation
         expectError(
