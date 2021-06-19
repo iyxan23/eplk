@@ -1,5 +1,6 @@
 # Welcome to the Source Code!
 Here are some details of these class(es)/packages:
+ - `Utils.kt` just utilities outside the eplk language, like node pretty print, nothing much
  - `Tokens.kt` is simply a list of tokens
  - `errors/` is a package that contains custom errors used by the lexer/parser/interpreter to "throw" an error in EPLK
  - `lexer` is a package that contains the Lexer, a part of an interpreted language that converts a code into a list of tokens, that will later be fed into the Parser
