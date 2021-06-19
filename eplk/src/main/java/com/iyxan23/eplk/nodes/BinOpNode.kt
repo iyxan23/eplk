@@ -7,7 +7,9 @@ import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkObject
 import java.lang.RuntimeException
 
-// A 2 number operation, example: 1 + 1
+/**
+ * A simple 2 number operation, example: 1 + 1
+ */
 data class BinOpNode(
     val leftNode: Node,
     val operatorToken: Token,

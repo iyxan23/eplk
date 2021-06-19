@@ -9,7 +9,9 @@ import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.objects.EplkObject
 import java.lang.RuntimeException
 
-// A single number operation, example: -1
+/**
+ * A single number operation, example: -1
+ */
 data class UnaryOpNode(
     val tokenOperator: Token,
     val node: Node,

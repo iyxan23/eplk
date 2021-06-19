@@ -5,6 +5,9 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 
+/**
+ * An Integer object in EPLK
+ */
 class EplkInteger(
     val value: Int,
     override val scope: Scope

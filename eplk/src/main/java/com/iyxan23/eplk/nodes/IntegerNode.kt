@@ -6,7 +6,9 @@ import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.objects.EplkObject
 
-// Simply a number, example: 1
+/**
+ * Simply a number, example: 1
+ */
 data class IntegerNode(
     val number: Token
 ) : Node() {

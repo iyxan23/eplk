@@ -5,6 +5,9 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 
+/**
+ * A float object in EPLK
+ */
 class EplkFloat(
     val value: Float,
     override val scope: Scope

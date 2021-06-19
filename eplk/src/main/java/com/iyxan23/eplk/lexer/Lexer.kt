@@ -7,6 +7,11 @@ import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.lexer.models.Token
 
+/**
+ * This class turns a string code into a list of tokens
+ *
+ * @see doLexicalAnalysis
+ */
 class Lexer(
     filename: String,
     private val code: String

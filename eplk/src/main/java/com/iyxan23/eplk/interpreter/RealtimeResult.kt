@@ -2,7 +2,12 @@ package com.iyxan23.eplk.interpreter
 
 import com.iyxan23.eplk.errors.EplkError
 
-class RealtimeResult<T>() {
+/**
+ * This class is used to:
+ * 1. Represent a result in interpreting
+ * 2. Fail-early when an error occurred
+ */
+class RealtimeResult<T> {
     var error: EplkError? = null
         private set
 

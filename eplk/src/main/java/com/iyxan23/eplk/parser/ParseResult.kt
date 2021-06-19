@@ -3,6 +3,13 @@ package com.iyxan23.eplk.parser
 import com.iyxan23.eplk.errors.EplkError
 import com.iyxan23.eplk.nodes.Node
 
+/**
+ * This class is used to:
+ * 1. Represent a result
+ * 2. Fail-early when there is an error
+ *
+ * @see Parser
+ */
 class ParseResult() {
 
     var error: EplkError? = null
