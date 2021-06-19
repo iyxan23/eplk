@@ -77,6 +77,38 @@ class NodesTest {
     }
 
     @Test
+    fun testBinOpNode3() {
+        val lexerResult = Lexer(filename, "3 ^ 3").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkFloat)
+        println((resultVisit.value as EplkFloat).value)
+        assert((resultVisit.value as EplkFloat).value == 27f)
+    }
+
+    @Test
+    fun testBinOpNode4() {
+        val lexerResult = Lexer(filename, "3 ^ (1 + 2)").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkFloat)
+        println((resultVisit.value as EplkFloat).value)
+        assert((resultVisit.value as EplkFloat).value == 27f)
+    }
+
+    @Test
     fun testBinOpNodeParentheses() {
         val lexerResult = Lexer(filename, "(1 + 2) * 3").doLexicalAnalysis()
         val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode

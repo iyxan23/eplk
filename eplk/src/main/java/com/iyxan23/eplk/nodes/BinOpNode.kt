@@ -36,6 +36,7 @@ data class BinOpNode(
             Tokens.MINUS    -> leftObject.operatorMinus     (rightObject, startPosition, endPosition)
             Tokens.MUL      -> leftObject.operatorMultiply  (rightObject, startPosition, endPosition)
             Tokens.DIV      -> leftObject.operatorDivide    (rightObject, startPosition, endPosition)
+            Tokens.POW      -> leftObject.operatorPow       (rightObject, startPosition, endPosition)
 
             else -> {
                 throw RuntimeException("Operator token is neither plus, minus, multiply, nor divide")

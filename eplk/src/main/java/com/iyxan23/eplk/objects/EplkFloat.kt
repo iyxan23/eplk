@@ -4,6 +4,7 @@ import com.iyxan23.eplk.errors.EplkNotImplementedError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
+import kotlin.math.pow
 
 /**
  * A float object in EPLK
@@ -53,7 +54,7 @@ class EplkFloat(
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
-                    "+ operator with ${other.objectName} is not supported",
+                    "- operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope
@@ -76,7 +77,7 @@ class EplkFloat(
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
-                    "+ operator with ${other.objectName} is not supported",
+                    "* operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition, scope
                 ))
@@ -98,7 +99,30 @@ class EplkFloat(
 
             else ->
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
-                    "+ operator with ${other.objectName} is not supported",
+                    "/ operator with ${other.objectName} is not supported",
+                    startPosition,
+                    endPosition,
+                    scope
+                ))
+        }
+    }
+
+    override fun operatorPow(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+
+        return when (other) {
+            is EplkInteger ->
+                RealtimeResult<EplkObject>().success(EplkFloat(value.pow(other.value), scope))
+
+            is EplkFloat ->
+                RealtimeResult<EplkObject>().success(EplkFloat(value.pow(other.value), scope))
+
+            else ->
+                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                    "^ operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope

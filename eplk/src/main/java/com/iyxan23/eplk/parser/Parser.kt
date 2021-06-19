@@ -42,38 +42,27 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
-    private val unaryTokens = arrayOf(Tokens.PLUS, Tokens.MINUS)
-
-    // factor = [INT|FLOAT]|[[PLUS|MINUS] factor]
-    private fun factor(): ParseResult {
+    // atom = [INT|FLOAT] | [PAREN_OPEN expression* PAREN_CLOSE]
+    private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
 
-        when {
-            // Check if the current token contains a unary operator (+ and -)
-            unaryTokens.contains(oldToken.token) -> {
-                result.register(advance())
-                val factor = result.register(factor())
-
-                if (result.hasError) return result
-
-                return result.success(UnaryOpNode(oldToken, factor as Node))
-            }
+        when (oldToken.token) {
 
             // Check if the current token is an int
-            oldToken.token == Tokens.INT_LITERAL -> {
+            Tokens.INT_LITERAL -> {
                 result.register(advance())
                 return result.success(IntegerNode(oldToken))
             }
 
             // Check if the current token is a float
-            oldToken.token == Tokens.FLOAT_LITERAL -> {
+            Tokens.FLOAT_LITERAL -> {
                 result.register(advance())
                 return result.success(FloatNode(oldToken))
             }
 
             // Check if the current token is an open parentheses
-            oldToken.token == Tokens.PAREN_OPEN -> {
+            Tokens.PAREN_OPEN -> {
                 result.register(advance())
                 val expression = result.register(expression())
 
@@ -91,13 +80,57 @@ class Parser(private val tokens: ArrayList<Token>) {
                     ))
                 }
             }
+
+            else -> {
+                return result.failure(SyntaxError(
+                    "Expected an integer literal, float literal, '+', '-', or '('",
+                    oldToken.startPosition,
+                    oldToken.endPosition,
+                ))
+            }
+        }
+    }
+
+    // power = atom [POW factor]*
+    private fun power(): ParseResult {
+        val result = ParseResult()
+        val leftNodeResult = result.register(atom()) as Node?
+
+        if (result.hasError) return result
+
+        var leftNode = leftNodeResult as Node
+
+        while (currentToken.token == Tokens.POW) {
+            val operatorToken = currentToken.copy()
+            result.register(advance())
+            val rightNode = result.register(factor()) as Node?
+
+            if (result.hasError) return result
+
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
         }
 
-        return result.failure(SyntaxError(
-            "Expected an integer or a float literal",
-            oldToken.startPosition,
-            oldToken.endPosition,
-        ))
+        return result.success(leftNode)
+    }
+
+    private val unaryTokens = arrayOf(Tokens.PLUS, Tokens.MINUS)
+
+    // factor = [[PLUS|MINUS] factor] | power
+    private fun factor(): ParseResult {
+        val result = ParseResult()
+        val oldToken = currentToken.copy()
+
+        // Check if the current token contains a unary operator (+ and -)
+        if (unaryTokens.contains(oldToken.token)) {
+            result.register(advance())
+            val factor = result.register(factor())
+
+            if (result.hasError) return result
+
+            return result.success(UnaryOpNode(oldToken, factor as Node))
+        } else {
+            return power()
+        }
     }
 
     private val termOperators = arrayOf(Tokens.MUL, Tokens.DIV)

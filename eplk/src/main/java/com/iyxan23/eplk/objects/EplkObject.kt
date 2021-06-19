@@ -46,4 +46,13 @@ abstract class EplkObject(open val scope: Scope) {
             scope
         ))
     }
+
+    open fun operatorPow(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+            "^ operator is not implemented by $objectName",
+            startPosition,
+            endPosition,
+            scope
+        ))
+    }
 }
