@@ -92,7 +92,7 @@ class EplkInteger(
 
         return when (other) {
             is EplkInteger ->
-                RealtimeResult<EplkObject>().success(EplkFloat((value / other.value).toFloat(), scope))
+                RealtimeResult<EplkObject>().success(EplkFloat(value.toFloat() / other.value.toFloat(), scope))
 
             is EplkFloat ->
                 RealtimeResult<EplkObject>().success(EplkFloat(value / other.value, scope))

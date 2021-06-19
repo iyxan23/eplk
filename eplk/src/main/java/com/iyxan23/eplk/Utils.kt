@@ -7,7 +7,7 @@ object Utils {
     fun prettyPrintNode(node: Node, indentation: Int = 0, indentationAmount: Int = 2): String {
         val result = StringBuilder()
 
-        repeat(indentation) { result.append(" ") }
+        result.append(" ".repeat(indentation))
 
         when (node) {
             is IntegerNode -> {
