@@ -7,6 +7,8 @@ enum class Tokens {
     DIV,
     POW,
 
+    EQUAL,
+
     PAREN_OPEN,
     PAREN_CLOSE,
     STRING_LITERAL,

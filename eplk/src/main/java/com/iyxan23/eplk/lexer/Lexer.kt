@@ -69,6 +69,11 @@ class Lexer(
                     advance()
                 }
 
+                currentChar == '=' -> {
+                    tokens.add(Token(Tokens.EQUAL, null, position.copy()))
+                    advance()
+                }
+
                 currentChar == '(' -> {
                     tokens.add(Token(Tokens.PAREN_OPEN, null, position.copy()))
                     advance()
