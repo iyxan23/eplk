@@ -121,11 +121,10 @@ class LexerTest {
 
     @Test
     fun floatTest3() {
-        // This should be normal, the parsing will be done by the interpreter later
         expectTokens(
-                "0.5.5",
+                "0.5",
                 arrayListOf(
-                    Tokens.FLOAT_LITERAL, "0.5.5",
+                    Tokens.FLOAT_LITERAL, "0.5",
                     Tokens.EOF, null
                 ) as ArrayList<Any>
         )

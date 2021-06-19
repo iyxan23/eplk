@@ -132,9 +132,15 @@ class Lexer(
 
         // Alright we're done parsing
 
-        val isFloat = dotCount != 0
+        if (dotCount > 1) {
+            throwError(SyntaxError(
+                "A number cannot contain more than 1 dot",
+                numberStartPosition,
+                position
+            ))
+        }
 
-        if (isFloat) {
+        if (dotCount == 1) {
             tokens.add(Token(Tokens.FLOAT_LITERAL, builder.toString(), numberStartPosition, position.copy()))
         } else {
             tokens.add(Token(Tokens.INT_LITERAL, builder.toString(), numberStartPosition, position.copy()))
