@@ -81,12 +81,17 @@ class Lexer(
 
                 currentChar == '"' -> {
                     // Parse the string, if parseStringLiteral returns null, return an error
-                    parseStringLiteral() ?: return LexerResult(null, errorThrown)
+                    parseStringLiteral()
+
+                    if (errorThrown != null) return LexerResult(null, errorThrown)
+
                     advance()
                 }
 
                 currentChar!!.isDigit() -> {
                     parseNumberLiteral()
+
+                    if (errorThrown != null) return LexerResult(null, errorThrown)
                 }
 
                 currentChar in 'a'..'z' ||
@@ -159,7 +164,7 @@ class Lexer(
         't' to '\t',
     )
 
-    private fun parseStringLiteral(): String? {
+    private fun parseStringLiteral() {
         val stringStartPosition = position.copy()
         advance() // We want to skip the first "
 
@@ -185,7 +190,8 @@ class Lexer(
                 '"' -> {
                     // Add the string literal token
                     tokens.add(Token(Tokens.STRING_LITERAL, builder.toString(), stringStartPosition, position.copy()))
-                    return builder.toString()
+                    return
+
                 } // Alright we're done
                 '\\' -> escape = true
                 else -> builder.append(currentChar) // append the char to build the string
