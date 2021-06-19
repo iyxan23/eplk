@@ -5,7 +5,6 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkObject
-import java.lang.RuntimeException
 
 /**
  * A simple 2 number operation, example: 1 + 1

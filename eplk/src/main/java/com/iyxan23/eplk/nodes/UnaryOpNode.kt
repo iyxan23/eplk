@@ -7,7 +7,6 @@ import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.objects.EplkObject
-import java.lang.RuntimeException
 
 /**
  * A single number operation, example: -1

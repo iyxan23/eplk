@@ -64,6 +64,17 @@ class ParserTest {
     }
 
     @Test
+    fun variableTest() {
+        val code = "var hello_world = 1 + 1"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        println(Utils.prettyPrintNode(result.node!!))
+
+        assert(!result.hasError)
+    }
+
+    @Test
     fun syntaxErrorTest() {
         val code = "1 2 3 /"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!

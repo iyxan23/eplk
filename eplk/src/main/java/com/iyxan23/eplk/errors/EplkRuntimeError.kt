@@ -2,7 +2,6 @@ package com.iyxan23.eplk.errors
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
-import java.lang.StringBuilder
 
 open class EplkRuntimeError(
     override val name: String,
