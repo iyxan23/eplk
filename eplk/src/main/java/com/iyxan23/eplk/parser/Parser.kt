@@ -4,6 +4,7 @@ import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.*
+import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
 /**
@@ -43,7 +44,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
-    // atom = [INT|FLOAT] | [PAREN_OPEN expression* PAREN_CLOSE]
+    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE]
     private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
@@ -60,6 +61,16 @@ class Parser(private val tokens: ArrayList<Token>) {
             Tokens.FLOAT_LITERAL -> {
                 result.register(advance())
                 return result.success(FloatNode(oldToken))
+            }
+
+            // Check if the current token is an identifier (variable)
+            Tokens.IDENTIFIER -> {
+                result.register(advance())
+                return result.success(VarAccessNode(
+                    oldToken.value!!,
+                    oldToken.startPosition,
+                    oldToken.endPosition
+                ))
             }
 
             // Check if the current token is an open parentheses
