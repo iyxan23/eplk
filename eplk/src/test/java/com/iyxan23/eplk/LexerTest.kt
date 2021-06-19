@@ -159,6 +159,17 @@ class LexerTest {
     }
 
     @Test
+    fun keywordTest() {
+        expectTokens(
+            "var",
+            arrayListOf(
+                Tokens.KEYWORD, "var",
+                Tokens.EOF, null
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun illegalCharacterError() {
         // TODO: 6/12/21 change this to some character we wont use in future implementation
         expectError(

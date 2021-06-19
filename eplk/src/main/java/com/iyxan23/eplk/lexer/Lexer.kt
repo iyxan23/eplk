@@ -204,6 +204,15 @@ class Lexer(
         throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position.copy()))
     }
 
+    companion object {
+        /**
+         * A list of keywords
+         */
+        val keywords = arrayOf(
+            "var"
+        )
+    }
+
     private fun parseIdentifier() {
         val identifierStartPosition = position.copy()
         val identifierBuilder = StringBuilder()
@@ -229,6 +238,15 @@ class Lexer(
             advance()
         }
 
-        tokens.add(Token(Tokens.IDENTIFIER, identifierBuilder.toString(), identifierStartPosition, position.copy()))
+        val identifier = identifierBuilder.toString()
+
+        tokens.add(
+            Token(
+                if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER,
+                identifier,
+                identifierStartPosition,
+                position.copy()
+            )
+        )
     }
 }
