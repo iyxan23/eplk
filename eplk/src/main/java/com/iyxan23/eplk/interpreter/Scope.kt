@@ -7,6 +7,9 @@ import com.iyxan23.eplk.lexer.models.Position
  */
 data class Scope(
     val name: String,
+    val symbolTable: SymbolTable = SymbolTable(),
     val parent: Scope? = null,
     val parentPosition: Position? = null,
 )
+
+// TODO: 6/19/21 Implement searching for variables / objects / etc for the parent scope

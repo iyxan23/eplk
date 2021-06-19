@@ -7,8 +7,8 @@ import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.EplkObject
 
 class VarDeclarationNode(
-    val variableName: String,
-    val variableValue: Node,
+    private val variableName: String,
+    private val variableValue: Node,
     override val startPosition: Position
 ) : Node() {
 
@@ -16,6 +16,13 @@ class VarDeclarationNode(
         get() = variableValue.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        TODO("Not yet implemented")
+        val result = RealtimeResult<EplkObject>()
+        val visitValue = result.register(variableValue.visit(scope))
+
+        if (result.hasError) return result
+
+        scope.symbolTable.variables[variableName] = visitValue as EplkObject
+
+        return result.success(visitValue)
     }
 }
