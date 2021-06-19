@@ -29,7 +29,8 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
                     startPosition,
-                    endPosition
+                    endPosition,
+                    scope
                 ))
         }
     }
@@ -51,7 +52,8 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
                     startPosition,
-                    endPosition
+                    endPosition,
+                    scope
                 ))
         }
     }
@@ -73,7 +75,7 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
                     startPosition,
-                    endPosition
+                    endPosition, scope
                 ))
         }
     }
@@ -95,7 +97,8 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
                     startPosition,
-                    endPosition
+                    endPosition,
+                    scope
                 ))
         }
     }

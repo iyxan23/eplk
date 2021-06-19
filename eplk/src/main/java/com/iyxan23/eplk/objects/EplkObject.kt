@@ -12,7 +12,8 @@ abstract class EplkObject(open val scope: Scope) {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "+ operator is not implemented by $objectName",
             startPosition,
-            endPosition
+            endPosition,
+            scope
         ))
     }
 
@@ -20,7 +21,8 @@ abstract class EplkObject(open val scope: Scope) {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "- operator is not implemented by $objectName",
             startPosition,
-            endPosition
+            endPosition,
+            scope
         ))
     }
 
@@ -28,7 +30,8 @@ abstract class EplkObject(open val scope: Scope) {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "* operator is not implemented by $objectName",
             startPosition,
-            endPosition
+            endPosition,
+            scope
         ))
     }
 
@@ -36,7 +39,8 @@ abstract class EplkObject(open val scope: Scope) {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "/ operator is not implemented by $objectName",
             startPosition,
-            endPosition
+            endPosition,
+            scope
         ))
     }
 }
