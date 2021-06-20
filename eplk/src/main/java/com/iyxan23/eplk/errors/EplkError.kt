@@ -12,7 +12,7 @@ open class EplkError(
     open val startPosition: Position,
     open val endPosition: Position,
 ) {
-    fun toString(code: String): String {
+    open fun toString(code: String, withPosition: Boolean = true): String {
         val lineCode = code.split("\n")[startPosition.line]
         val error = StringBuilder()
 
@@ -21,7 +21,9 @@ open class EplkError(
         error.append(" ".repeat(startPosition.column - 1))
         error.append("^".repeat(endPosition.column - startPosition.column))
         error.appendLine()
-        error.append("$name: $detail\n at filename ${startPosition.filename} line ${startPosition.line}\n")
+        error.append("$name: $detail\n")
+
+        if (withPosition) error.append("at filename ${startPosition.filename} line ${startPosition.line}\n")
 
         return error.toString()
     }
