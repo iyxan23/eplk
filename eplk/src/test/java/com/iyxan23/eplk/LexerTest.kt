@@ -221,7 +221,7 @@ class LexerTest {
     fun expectedOrErrorTest() {
         expectError(
             "|",
-            SyntaxError("Expected '|'", Position(0, 1, 0, filename))
+            SyntaxError("Expected another '|'", Position(1, 2, 0, filename))
         )
     }
 
@@ -229,7 +229,7 @@ class LexerTest {
     fun expectedAndErrorTest() {
         expectError(
             "&",
-            SyntaxError("Expected '&'", Position(0, 1, 0, filename))
+            SyntaxError("Expected another '&'", Position(1, 2, 0, filename))
         )
     }
 

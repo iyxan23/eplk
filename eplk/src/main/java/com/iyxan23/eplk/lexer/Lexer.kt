@@ -91,7 +91,7 @@ class Lexer(
                     if (currentChar == '&') {
                         tokens.add(Token(Tokens.AND, null, beforePosition))
                     } else {
-                        throwError(SyntaxError("Expected '&'", beforePosition))
+                        throwError(SyntaxError("Expected another '&'", position.copy()))
                         return LexerResult(null, errorThrown)
                     }
                 }
@@ -104,7 +104,7 @@ class Lexer(
                     if (currentChar == '|') {
                         tokens.add(Token(Tokens.OR, null, beforePosition))
                     } else {
-                        throwError(SyntaxError("Expected '|'", beforePosition))
+                        throwError(SyntaxError("Expected another '|'", position.copy()))
                         return LexerResult(null, errorThrown)
                     }
                 }
