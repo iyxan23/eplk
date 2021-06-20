@@ -16,6 +16,8 @@ class EplkInteger(
 
     override val objectName = "Integer"
 
+    override fun toString(): String = value.toString()
+
     override fun operatorPlus(
         other: EplkObject,
         startPosition: Position,

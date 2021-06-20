@@ -8,5 +8,4 @@ class EplkNotDefinedError(
     override val startPosition: Position,
     override val endPosition: Position,
     override val scope: Scope,
-) : EplkRuntimeError("NotDefinedError", detail, startPosition, endPosition, scope) {
-}
+) : EplkRuntimeError("NotDefinedError", detail, startPosition, endPosition, scope)

@@ -9,7 +9,7 @@ open class EplkRuntimeError(
     override val startPosition: Position,
     override val endPosition: Position,
     open val scope: Scope
-): EplkError("Runtime Error", detail, startPosition, endPosition) {
+) : EplkError("Runtime Error", detail, startPosition, endPosition) {
 
     /**
      * This function generates a traceback from the scope provided in the constructor
@@ -20,7 +20,7 @@ open class EplkRuntimeError(
 
         val result = StringBuilder()
 
-        result.append("Traceback: ")
+        result.append("Traceback: \n")
 
         while (currentScope != null) {
             result.appendLine(" - Filename ${currentPosition!!.filename} inside ${currentScope.name} at line ${currentPosition.line}")
@@ -33,6 +33,6 @@ open class EplkRuntimeError(
     }
 
     override fun toString(): String {
-        return "Error $name: $detail\n" + generateTraceback()
+        return "$name: $detail\n" + generateTraceback()
     }
 }

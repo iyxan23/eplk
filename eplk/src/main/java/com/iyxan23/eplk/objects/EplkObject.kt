@@ -11,6 +11,8 @@ import com.iyxan23.eplk.lexer.models.Position
 abstract class EplkObject(open val scope: Scope) {
     abstract val objectName: String
 
+    abstract override fun toString(): String
+
     open fun operatorPlus(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "+ operator is not implemented by $objectName",

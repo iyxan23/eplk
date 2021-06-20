@@ -16,6 +16,8 @@ class EplkFloat(
 
     override val objectName = "Float"
 
+    override fun toString(): String = value.toString()
+
     override fun operatorPlus(
         other: EplkObject,
         startPosition: Position,
