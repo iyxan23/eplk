@@ -5,7 +5,7 @@ import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.parser.Parser
 
 fun main() {
-    println("Welcome to EPLK Shell!")
+    println("Welcome to the EPLK Shell!")
 
     val scope = Scope("<SHELL>")
 
