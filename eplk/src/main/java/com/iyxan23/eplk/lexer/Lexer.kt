@@ -130,7 +130,7 @@ class Lexer(
 
                     // Check for >=
                     if (currentChar == '=') {
-                        tokenToAdd = Tokens.GREATER_AND_EQUAL_THAN
+                        tokenToAdd = Tokens.GREATER_OR_EQUAL_THAN
                         advance()
                     }
 
@@ -144,7 +144,7 @@ class Lexer(
 
                     // Check for <=
                     if (currentChar == '=') {
-                        tokenToAdd = Tokens.LESSER_AND_EQUAL_THAN
+                        tokenToAdd = Tokens.LESSER_OR_EQUAL_THAN
                         advance()
                     }
 

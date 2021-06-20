@@ -209,8 +209,8 @@ class LexerTest {
                 Tokens.NOT_EQUAL, null,
                 Tokens.GREATER_THAN, null,
                 Tokens.LESSER_THAN, null,
-                Tokens.GREATER_AND_EQUAL_THAN, null,
-                Tokens.LESSER_AND_EQUAL_THAN, null,
+                Tokens.GREATER_OR_EQUAL_THAN, null,
+                Tokens.LESSER_OR_EQUAL_THAN, null,
                 Tokens.NOT, null,
                 Tokens.EOF, null,
             ) as ArrayList<Any>

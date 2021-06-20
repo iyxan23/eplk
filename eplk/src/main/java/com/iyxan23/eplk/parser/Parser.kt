@@ -218,8 +218,8 @@ class Parser(private val tokens: ArrayList<Token>) {
         Tokens.NOT_EQUAL,
         Tokens.GREATER_THAN,
         Tokens.LESSER_THAN,
-        Tokens.GREATER_AND_EQUAL_THAN,
-        Tokens.LESSER_AND_EQUAL_THAN
+        Tokens.GREATER_OR_EQUAL_THAN,
+        Tokens.LESSER_OR_EQUAL_THAN
     )
 
     // comparison-expression = NOT comparison-expression | arithmetic-expression [[comparison operators] arithmetic-expression]*
