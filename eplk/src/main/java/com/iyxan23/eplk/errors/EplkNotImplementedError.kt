@@ -4,8 +4,8 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 
 class EplkNotImplementedError(
-    details: String,
+    override val detail: String,
     override val startPosition: Position,
     override val endPosition: Position,
     override val scope: Scope,
-) : EplkRuntimeError("NotImplementedError", startPosition, endPosition, scope)
+) : EplkRuntimeError("NotImplementedError", detail, startPosition, endPosition, scope)
