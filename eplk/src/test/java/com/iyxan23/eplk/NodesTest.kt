@@ -132,10 +132,37 @@ class NodesTest {
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
 
-        val resultVisit = parseResult.visit(Scope(filename))
+        val scope = Scope(filename)
+
+        val resultVisit = parseResult.visit(scope)
+
+        // Check if the variable hello_world is in the scope's symbol table
+        assert(scope.symbolTable.variables.containsKey("hello_world"))
+        assert(scope.symbolTable.variables["hello_world"] is EplkFloat)
+        assert((scope.symbolTable.variables["hello_world"] as EplkFloat).value == 11f)
 
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkFloat)
         assert((resultVisit.value as EplkFloat).value == 11f)
+    }
+
+    @Test
+    fun variableAccessTest() {
+        val lexerResult = Lexer(filename, "5 + hello_world").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        // Set the variable hello_world to be 15
+        scope.symbolTable.variables["hello_world"] = EplkInteger(15, scope)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 20)
     }
 }
