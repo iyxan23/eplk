@@ -6,6 +6,7 @@ import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.BinOpNode
 import com.iyxan23.eplk.nodes.UnaryOpNode
+import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.parser.Parser
@@ -121,5 +122,20 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 9)
+    }
+
+    @Test
+    fun variableDeclarationTest() {
+        val lexerResult = Lexer(filename, "var hello_world = 10 + 10 / 10").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as VarDeclarationNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkFloat)
+        assert((resultVisit.value as EplkFloat).value == 11f)
     }
 }

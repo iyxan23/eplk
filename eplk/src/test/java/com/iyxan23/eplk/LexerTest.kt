@@ -186,6 +186,19 @@ class LexerTest {
     }
 
     @Test
+    fun variableAccessTest() {
+        expectTokens(
+            "1 + hello_world",
+            arrayListOf(
+                Tokens.INT_LITERAL, "1",
+                Tokens.PLUS, null,
+                Tokens.IDENTIFIER, "hello_world",
+                Tokens.EOF, null
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun illegalCharacterError() {
         // TODO: 6/12/21 change this to some character we wont use in future implementation
         expectError(

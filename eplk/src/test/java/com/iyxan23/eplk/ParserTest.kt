@@ -25,9 +25,9 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        println(Utils.prettyPrintNode(result.node!!))
-
         assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
     }
 
     @Test
@@ -36,9 +36,9 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        println(Utils.prettyPrintNode(result.node!!))
-
         assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
     }
 
     @Test
@@ -47,9 +47,9 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        println(Utils.prettyPrintNode(result.node!!))
-
         assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
     }
 
     @Test
@@ -58,20 +58,31 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        println(Utils.prettyPrintNode(result.node!!))
-
         assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
     }
 
     @Test
-    fun variableTest() {
+    fun variableDeclarationTest() {
         val code = "var hello_world = 1 + 1"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
+        assert(!result.hasError)
+
         println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
+    fun variableAccessTest() {
+        val code = "1 + hello_world"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
 
         assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
     }
 
     @Test
