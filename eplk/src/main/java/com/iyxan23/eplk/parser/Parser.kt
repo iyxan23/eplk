@@ -205,6 +205,8 @@ class Parser(private val tokens: ArrayList<Token>) {
                     ))
                 }
 
+                result.register(advance())
+
                 // Ok, now we're setup, let's parse the expression
                 val expressionResult = result.register(expression()) as Node?
                 if (result.hasError) return result
