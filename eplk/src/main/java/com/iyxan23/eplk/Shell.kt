@@ -17,14 +17,14 @@ fun main() {
         val lexerResult = Lexer("<SHELL>", code).doLexicalAnalysis()
 
         if (lexerResult.error != null) {
-            println(lexerResult.error)
+            println(lexerResult.error.toString(code))
             continue
         }
 
         val parseResult = Parser(lexerResult.tokens!!).parse()
 
         if (parseResult.hasError) {
-            println(parseResult.error)
+            println(parseResult.error!!.toString(code))
             continue
         }
 
