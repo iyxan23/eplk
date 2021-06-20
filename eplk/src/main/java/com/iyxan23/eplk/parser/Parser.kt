@@ -53,19 +53,25 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             // Check if the current token is an int
             Tokens.INT_LITERAL -> {
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
+
                 return result.success(IntegerNode(oldToken))
             }
 
             // Check if the current token is a float
             Tokens.FLOAT_LITERAL -> {
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
+
                 return result.success(FloatNode(oldToken))
             }
 
             // Check if the current token is an identifier (variable)
             Tokens.IDENTIFIER -> {
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
+
                 return result.success(VarAccessNode(
                     oldToken.value!!,
                     oldToken.startPosition,
@@ -75,14 +81,17 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             // Check if the current token is an open parentheses
             Tokens.PAREN_OPEN -> {
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
+
                 val expression = result.register(expression())
 
                 if (result.hasError) return result
 
                 // Check if the parentheses is closed
                 return if (currentToken.token == Tokens.PAREN_CLOSE) {
-                    result.register(advance())
+                    result.registerAdvancement()
+                    advance()
                     result.success(expression as Node)
                 } else {
                     result.failure(SyntaxError(
@@ -95,7 +104,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             else -> {
                 return result.failure(SyntaxError(
-                    "Expected an integer literal, float literal, '+', '-', or '('",
+                    "Expected an integer literal, float literal, identifier, '+', '-', or '('",
                     oldToken.startPosition,
                     oldToken.endPosition,
                 ))
@@ -114,7 +123,10 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         while (currentToken.token == Tokens.POW) {
             val operatorToken = currentToken.copy()
-            result.register(advance())
+
+            result.registerAdvancement()
+            advance()
+
             val rightNode = result.register(factor()) as Node?
 
             if (result.hasError) return result
@@ -134,7 +146,9 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         // Check if the current token contains a unary operator (+ and -)
         if (unaryTokens.contains(oldToken.token)) {
-            result.register(advance())
+            result.registerAdvancement()
+            advance()
+
             val factor = result.register(factor())
 
             if (result.hasError) return result
@@ -158,7 +172,10 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         while (termOperators.contains(currentToken.token)) {
             val operatorToken = currentToken.copy()
-            result.register(advance())
+
+            result.registerAdvancement()
+            advance()
+
             val rightNode = result.register(factor()) as Node?
 
             if (result.hasError) return result
@@ -181,7 +198,8 @@ class Parser(private val tokens: ArrayList<Token>) {
             if (currentToken.value == "var") {
                 val varToken = currentToken.copy()
 
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
 
                 val identifierToken = currentToken.copy()
 
@@ -194,7 +212,8 @@ class Parser(private val tokens: ArrayList<Token>) {
                     ))
                 }
 
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
 
                 // And the next one an equal
                 if (currentToken.token != Tokens.EQUAL) {
@@ -205,7 +224,8 @@ class Parser(private val tokens: ArrayList<Token>) {
                     ))
                 }
 
-                result.register(advance())
+                result.registerAdvancement()
+                advance()
 
                 // Ok, now we're setup, let's parse the expression
                 val expressionResult = result.register(expression()) as Node?
@@ -235,7 +255,10 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             while (expressionOperators.contains(currentToken.token)) {
                 val operatorToken = currentToken.copy()
-                result.register(advance())
+
+                result.registerAdvancement()
+                advance()
+
                 val rightNode = result.register(term()) as Node?
 
                 if (result.hasError) return result

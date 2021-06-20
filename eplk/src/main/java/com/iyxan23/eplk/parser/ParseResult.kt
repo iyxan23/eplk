@@ -20,16 +20,18 @@ class ParseResult() {
 
     val hasError get() = error != null
 
-    fun register(result: Any): Any? {
-        if (result is ParseResult) {
-            if (result.error != null) {
-                this.error = result.error
-            }
+    var advancementCount = 0
 
-            return result.node
+    fun registerAdvancement() {
+        advancementCount++
+    }
+
+    fun register(result: ParseResult): Any? {
+        if (result.error != null) {
+            this.error = result.error
         }
 
-        return result
+        return result.node
     }
 
     fun success(node: Node): ParseResult {
@@ -38,7 +40,7 @@ class ParseResult() {
     }
 
     fun failure(error: EplkError): ParseResult {
-        this.error = error
+        if (!hasError || advancementCount == 0) this.error = error
         return this
     }
 
