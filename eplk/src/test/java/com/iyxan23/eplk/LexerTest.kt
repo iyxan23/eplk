@@ -2,6 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.errors.IllegalCharacterError
 import com.iyxan23.eplk.errors.EplkError
+import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.lexer.models.Token
@@ -195,6 +196,40 @@ class LexerTest {
                 Tokens.IDENTIFIER, "hello_world",
                 Tokens.EOF, null
             ) as ArrayList<Any>
+        )
+    }
+
+    @Test
+    fun comparisonOperatorsTest() {
+        expectTokens(
+            "= == != > < >= <= !",
+            arrayListOf(
+                Tokens.EQUAL, null,
+                Tokens.DOUBLE_EQUALS, null,
+                Tokens.NOT_EQUAL, null,
+                Tokens.GREATER_THAN, null,
+                Tokens.LESSER_THAN, null,
+                Tokens.GREATER_AND_EQUAL_THAN, null,
+                Tokens.LESSER_AND_EQUAL_THAN, null,
+                Tokens.NOT, null,
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
+    fun expectedOrErrorTest() {
+        expectError(
+            "|",
+            SyntaxError("Expected '|'", Position(0, 1, 0, filename))
+        )
+    }
+
+    @Test
+    fun expectedAndErrorTest() {
+        expectError(
+            "&",
+            SyntaxError("Expected '&'", Position(0, 1, 0, filename))
         )
     }
 

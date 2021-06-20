@@ -69,9 +69,86 @@ class Lexer(
                     advance()
                 }
 
-                currentChar == '=' -> {
-                    tokens.add(Token(Tokens.EQUAL, null, position.copy()))
+                currentChar == '!' -> {
+                    var tokenToAdd = Tokens.NOT
+                    val beforePosition = position.copy()
                     advance()
+
+                    // Check for !=
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.NOT_EQUAL
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
+                }
+
+                currentChar == '&' -> {
+                    val beforePosition = position.copy()
+                    advance()
+
+                    // Check for &&
+                    if (currentChar == '&') {
+                        tokens.add(Token(Tokens.AND, null, beforePosition))
+                    } else {
+                        throwError(SyntaxError("Expected '&'", beforePosition))
+                        return LexerResult(null, errorThrown)
+                    }
+                }
+
+                currentChar == '|' -> {
+                    val beforePosition = position.copy()
+                    advance()
+
+                    // Check for ||
+                    if (currentChar == '|') {
+                        tokens.add(Token(Tokens.OR, null, beforePosition))
+                    } else {
+                        throwError(SyntaxError("Expected '|'", beforePosition))
+                        return LexerResult(null, errorThrown)
+                    }
+                }
+
+                currentChar == '=' -> {
+                    var tokenToAdd = Tokens.EQUAL
+                    val beforePosition = position.copy()
+                    advance()
+
+                    // Check for double equals
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.DOUBLE_EQUALS
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
+                }
+
+                currentChar == '>' -> {
+                    var tokenToAdd = Tokens.GREATER_THAN
+                    val beforePosition = position.copy()
+                    advance()
+
+                    // Check for >=
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.GREATER_AND_EQUAL_THAN
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
+                }
+
+                currentChar == '<' -> {
+                    var tokenToAdd = Tokens.LESSER_THAN
+                    val beforePosition = position.copy()
+                    advance()
+
+                    // Check for <=
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.LESSER_AND_EQUAL_THAN
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
                 }
 
                 currentChar == '(' -> {

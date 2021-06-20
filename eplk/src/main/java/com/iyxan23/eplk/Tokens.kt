@@ -1,11 +1,23 @@
 package com.iyxan23.eplk
 
 enum class Tokens {
+    // Arithmetic tokens
     PLUS,
     MINUS,
     MUL,
     DIV,
     POW,
+
+    // Comparison tokens
+    DOUBLE_EQUALS,
+    GREATER_THAN,
+    LESSER_THAN,
+    GREATER_AND_EQUAL_THAN,
+    LESSER_AND_EQUAL_THAN,
+    NOT,
+    NOT_EQUAL,
+    AND,
+    OR,
 
     EQUAL,
 

@@ -188,7 +188,9 @@ class Parser(private val tokens: ArrayList<Token>) {
 
     private val expressionOperators = arrayOf(Tokens.PLUS, Tokens.MINUS)
 
-    // expression = term [[PLUS|MINUS] term]* | KEYWORD:VAR IDENTIFIER EQUAL expression
+    // expression = KEYWORD:VAR IDENTIFIER EQUAL expression | comparison-expression [[AND|OR] comparison-expression]*
+    // comparison-expression = ! comparison-expression | arithmetic-expression [[comparison operators] arithmetic-expression]*
+    // arithmetic-expression = term [[PLUS|MINUS] term]*
     private fun expression(): ParseResult {
         val result = ParseResult()
 
