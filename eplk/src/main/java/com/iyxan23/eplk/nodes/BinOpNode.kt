@@ -4,6 +4,7 @@ import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
+import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 
 /**
@@ -37,8 +38,19 @@ data class BinOpNode(
             Tokens.DIV      -> leftObject.operatorDivide    (rightObject, startPosition, endPosition)
             Tokens.POW      -> leftObject.operatorPow       (rightObject, startPosition, endPosition)
 
+            Tokens.EQUAL, Tokens.NOT_EQUAL,
+            Tokens.GREATER_THAN, Tokens.LESSER_THAN,
+            Tokens.GREATER_OR_EQUAL_THAN, Tokens.LESSER_OR_EQUAL_THAN -> {
+                val comparisonResult = leftObject.comparisonTo(rightObject, startPosition, endPosition)
+                if (comparisonResult.hasError) return RealtimeResult<EplkObject>().failure(comparisonResult.error!!)
+
+                return RealtimeResult<EplkObject>().success(
+                    EplkBoolean(comparisonResult.value!!.contains(operatorToken.token), scope)
+                )
+            }
+
             else -> {
-                throw RuntimeException("Operator token is neither plus, minus, multiply, nor divide")
+                throw RuntimeException("Operator token is neither plus, minus, multiply, divide, nor comparison operators")
             }
         }
     }
