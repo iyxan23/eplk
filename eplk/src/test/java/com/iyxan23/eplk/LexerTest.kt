@@ -218,6 +218,27 @@ class LexerTest {
     }
 
     @Test
+    fun comparisonExpressionTest() {
+        expectTokens(
+            "5 + 12 / variable > 10 + 5 * variable",
+            arrayListOf(
+                Tokens.INT_LITERAL, "5",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "12",
+                Tokens.DIV, null,
+                Tokens.IDENTIFIER, "variable",
+                Tokens.GREATER_THAN, null,
+                Tokens.INT_LITERAL, "10",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "5",
+                Tokens.MUL, null,
+                Tokens.IDENTIFIER, "variable",
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",

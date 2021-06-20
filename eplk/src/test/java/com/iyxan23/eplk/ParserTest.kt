@@ -86,6 +86,17 @@ class ParserTest {
     }
 
     @Test
+    fun comparisonExpressionTest() {
+        val code = "5 + 12 / variable > 10 + 5 * variable"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString(code)) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun syntaxErrorTest() {
         val code = "1 2 3 /"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!

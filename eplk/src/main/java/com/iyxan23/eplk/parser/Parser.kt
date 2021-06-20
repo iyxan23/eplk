@@ -186,11 +186,86 @@ class Parser(private val tokens: ArrayList<Token>) {
         return result.success(leftNode)
     }
 
-    private val expressionOperators = arrayOf(Tokens.PLUS, Tokens.MINUS)
+    private val arithmeticOperators = arrayOf(Tokens.PLUS, Tokens.MINUS)
+
+    // arithmetic-expression = term [[PLUS|MINUS] term]*
+    private fun arithmeticExpression(): ParseResult {
+        val result = ParseResult()
+        val leftNodeResult = result.register(term()) as Node?
+
+        if (result.hasError) return result
+
+        var leftNode = leftNodeResult as Node
+
+        while (arithmeticOperators.contains(currentToken.token)) {
+            val operatorToken = currentToken.copy()
+
+            result.registerAdvancement()
+            advance()
+
+            val rightNode = result.register(term()) as Node?
+
+            if (result.hasError) return result
+
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
+        }
+
+        return result.success(leftNode)
+    }
+
+    private val comparisonOperators = arrayOf(
+        Tokens.DOUBLE_EQUALS,
+        Tokens.NOT_EQUAL,
+        Tokens.GREATER_THAN,
+        Tokens.LESSER_THAN,
+        Tokens.GREATER_AND_EQUAL_THAN,
+        Tokens.LESSER_AND_EQUAL_THAN
+    )
+
+    // comparison-expression = NOT comparison-expression | arithmetic-expression [[comparison operators] arithmetic-expression]*
+    private fun comparisonExpression(): ParseResult {
+        val result = ParseResult()
+
+        // Check if the current token is the NOT token
+        if (currentToken.token == Tokens.NOT) {
+            val notToken = currentToken.copy()
+
+            result.registerAdvancement()
+            advance()
+
+            // then do the comparison expression
+            val comparisonExpression = result.register(comparisonExpression()) as Node?
+
+            if (result.hasError) return result
+
+            return result.success(UnaryOpNode(notToken, comparisonExpression as Node))
+
+        } else {
+            // if no NOT token, let's do an arithmetic expression, very similar to term and factor
+            val arithmeticExpressionResult = result.register(arithmeticExpression()) as Node?
+
+            if (result.hasError) return result
+
+            var leftNode = arithmeticExpressionResult as Node
+
+            while (comparisonOperators.contains(currentToken.token)) {
+                val operatorToken = currentToken.copy()
+
+                result.registerAdvancement()
+                advance()
+
+                val rightNode = result.register(arithmeticExpression()) as Node?
+
+                if (result.hasError) return result
+
+                leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
+            }
+
+            return result.success(leftNode)
+        }
+    }
 
     // expression = KEYWORD:VAR IDENTIFIER EQUAL expression | comparison-expression [[AND|OR] comparison-expression]*
-    // comparison-expression = ! comparison-expression | arithmetic-expression [[comparison operators] arithmetic-expression]*
-    // arithmetic-expression = term [[PLUS|MINUS] term]*
     private fun expression(): ParseResult {
         val result = ParseResult()
 
@@ -249,19 +324,20 @@ class Parser(private val tokens: ArrayList<Token>) {
             }
 
         } else {
-            val leftNodeResult = result.register(term()) as Node?
+            // do a comparison expression, very similar to term and factor
+            val comparisonExpressionResult = result.register(comparisonExpression()) as Node?
 
             if (result.hasError) return result
 
-            var leftNode = leftNodeResult as Node
+            var leftNode = comparisonExpressionResult as Node
 
-            while (expressionOperators.contains(currentToken.token)) {
+            while (currentToken.token == Tokens.AND || currentToken.token == Tokens.OR) {
                 val operatorToken = currentToken.copy()
 
                 result.registerAdvancement()
                 advance()
 
-                val rightNode = result.register(term()) as Node?
+                val rightNode = result.register(comparisonExpression()) as Node?
 
                 if (result.hasError) return result
 
