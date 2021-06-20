@@ -8,7 +8,7 @@ import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.EplkObject
 
 class VarAccessNode(
-    private val variableName: String,
+    val variableName: String,
     override val startPosition: Position,
     override val endPosition: Position,
 ) : Node() {

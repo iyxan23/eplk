@@ -7,8 +7,8 @@ import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.EplkObject
 
 class VarDeclarationNode(
-    private val variableName: String,
-    private val variableValue: Node,
+    val variableName: String,
+    val variableValue: Node,
     override val startPosition: Position
 ) : Node() {
 
