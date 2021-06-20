@@ -310,15 +310,7 @@ class Lexer(
 
                 spaces.contains(currentChar) -> break@loop
 
-                else -> {
-                    throwError(SyntaxError(
-                        "Unexpected character when creating an identifier: $currentChar, identifier __must__ be alphanumeric",
-                        identifierStartPosition,
-                        position.copy()
-                    ))
-
-                    return
-                }
+                else -> break@loop
             }
 
             advance()
