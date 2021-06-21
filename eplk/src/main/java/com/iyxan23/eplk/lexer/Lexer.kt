@@ -317,10 +317,19 @@ class Lexer(
         }
 
         val identifier = identifierBuilder.toString()
+        val tokenToAdd =
+
+        if (identifier == "true") {
+            Tokens.TRUE
+        } else if (identifier == "false") {
+            Tokens.FALSE
+        } else {
+            if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
+        }
 
         tokens.add(
             Token(
-                if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER,
+                tokenToAdd,
                 identifier,
                 identifierStartPosition,
                 position.copy()

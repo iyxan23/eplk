@@ -19,6 +19,9 @@ enum class Tokens {
     AND,
     OR,
 
+    TRUE,
+    FALSE,
+
     EQUAL,
 
     PAREN_OPEN,
