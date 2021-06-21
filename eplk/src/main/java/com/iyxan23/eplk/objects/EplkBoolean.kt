@@ -7,7 +7,7 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 
 class EplkBoolean(
-    private val value: Boolean,
+    val value: Boolean,
     override val scope: Scope,
 ) : EplkObject(scope) {
 

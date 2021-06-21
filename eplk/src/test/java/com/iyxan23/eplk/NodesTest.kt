@@ -7,6 +7,7 @@ import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.BinOpNode
 import com.iyxan23.eplk.nodes.UnaryOpNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
+import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.parser.Parser
@@ -44,6 +45,21 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 1)
+    }
+
+    @Test
+    fun testUnaryOpNode3() {
+        val lexerResult = Lexer(filename, "!!!!false").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as UnaryOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkBoolean)
+        assert(!(resultVisit.value as EplkBoolean).value)
     }
 
     @Test
@@ -107,6 +123,36 @@ class NodesTest {
         assert(resultVisit.value is EplkFloat)
         println((resultVisit.value as EplkFloat).value)
         assert((resultVisit.value as EplkFloat).value == 27f)
+    }
+
+    @Test
+    fun testBinOpNode5() {
+        val lexerResult = Lexer(filename, "true && false || !true").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkBoolean)
+        assert(!(resultVisit.value as EplkBoolean).value)
+    }
+
+    @Test
+    fun testBinOpNode6Comparison() {
+        val lexerResult = Lexer(filename, "true == true && !(false != true)").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkBoolean)
+        assert(!(resultVisit.value as EplkBoolean).value)
     }
 
     @Test
