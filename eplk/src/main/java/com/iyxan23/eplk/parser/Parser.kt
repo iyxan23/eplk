@@ -120,7 +120,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             else -> {
                 return result.failure(SyntaxError(
-                    "Expected an integer literal, float literal, identifier, '+', '-', or '('",
+                    "Expected an integer literal, float literal, identifier, 'true', 'false', '+', '-', or '('",
                     oldToken.startPosition,
                     oldToken.endPosition,
                 ))
