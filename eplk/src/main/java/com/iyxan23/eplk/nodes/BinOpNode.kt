@@ -38,6 +38,9 @@ data class BinOpNode(
             Tokens.DIV      -> leftObject.operatorDivide    (rightObject, startPosition, endPosition)
             Tokens.POW      -> leftObject.operatorPow       (rightObject, startPosition, endPosition)
 
+            Tokens.OR       -> leftObject.orOperator        (rightObject, startPosition, endPosition)
+            Tokens.AND      -> leftObject.andOperator       (rightObject, startPosition, endPosition)
+
             Tokens.DOUBLE_EQUALS, Tokens.NOT_EQUAL,
             Tokens.GREATER_THAN, Tokens.LESSER_THAN,
             Tokens.GREATER_OR_EQUAL_THAN, Tokens.LESSER_OR_EQUAL_THAN -> {

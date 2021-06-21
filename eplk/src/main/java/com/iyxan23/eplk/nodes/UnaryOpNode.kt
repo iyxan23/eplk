@@ -4,6 +4,7 @@ import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Token
+import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.objects.EplkObject
@@ -50,9 +51,7 @@ data class UnaryOpNode(
                     }
 
                     // this shouldn't happen
-                    else -> {
-                        throw RuntimeException("tokenOperator is neither minus or plus")
-                    }
+                    else -> throw RuntimeException("tokenOperator is neither minus or plus")
                 }
             }
 
@@ -79,9 +78,20 @@ data class UnaryOpNode(
                     }
 
                     // this shouldn't happen
-                    else -> {
-                        throw RuntimeException("tokenOperator is neither minus or plus")
+                    else -> throw RuntimeException("tokenOperator is neither minus or plus")
+                }
+            }
+
+            // This is a boolean
+            is EplkBoolean -> {
+                val booleanValue = visitResult.value as EplkBoolean
+
+                when (tokenOperator.token) {
+                    Tokens.NOT -> {
+                        return result.success(booleanValue.notOperator(startPosition, endPosition).value!!)
                     }
+
+                    else -> throw RuntimeException("tokenOperator is not a '!' (not) operator")
                 }
             }
 
