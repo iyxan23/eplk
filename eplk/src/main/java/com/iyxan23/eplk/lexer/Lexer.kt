@@ -331,7 +331,7 @@ class Lexer(
         }
 
         val identifier = identifierBuilder.toString()
-        var addValue = false;
+        var addValue = false
         val tokenToAdd =
 
         if (identifier == "true") {
@@ -347,7 +347,7 @@ class Lexer(
             Tokens.ELSE
 
         } else {
-            addValue = true;
+            addValue = true
             if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
         }
 
