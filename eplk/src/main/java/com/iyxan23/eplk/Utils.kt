@@ -52,13 +52,20 @@ object Utils {
             }
 
             is IfNode -> {
-                result.append(strIndentation + "If Condition: ")
-                result.appendLine()
-                result.append(prettyPrintNode(node.condition, indentation + indentationAmount, indentationAmount))
-                result.appendLine()
-                result.append(strIndentation + "Expression: ")
-                result.appendLine()
-                result.append(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+                node.statements.forEachIndexed { index, pair ->
+                    val condition = pair.first
+                    val expression = pair.second
+
+                    result.append(strIndentation + (if (index == 0) "If Condition: \n" else "Elif Condition: \n"))
+                    result.append(prettyPrintNode(condition, indentation + indentationAmount, indentationAmount))
+                    result.appendLine()
+                    result.append(strIndentation + "Expression: \n")
+                    result.append(prettyPrintNode(expression, indentation + indentationAmount, indentationAmount))
+                    result.appendLine()
+                }
+
+                result.append(strIndentation + "Else Expression: \n")
+                result.append(prettyPrintNode(node.elseExpression, indentation + indentationAmount, indentationAmount))
             }
         }
 

@@ -5,18 +5,52 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.objects.EplkBoolean
-import com.iyxan23.eplk.objects.EplkInteger
 import com.iyxan23.eplk.objects.EplkObject
 
-// TODO: 6/21/21 Implement elif and else
 class IfNode(
-    val condition: Node,
-    val expression: Node,
+    /**
+     * Array<Pair<condition: Node, expression: Node>>
+     */
+    val statements: Array<Pair<Node, Node>>,
+    val elseExpression: Node,
+
     override val startPosition: Position,
     override val endPosition: Position,
 ) : Node() {
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
+        val result = RealtimeResult<EplkObject>()
+
+        statements.forEach {
+            val condition = it.first
+            val expression = it.second
+
+            val conditionResult = result.register(evaluateCondition(scope, condition))
+            if (result.hasError) return result
+
+            val evaluatedCondition = conditionResult as EplkBoolean
+
+            // Now return the expression if the evaluated condition is true
+            if (evaluatedCondition.value) {
+                // then let's evaluate the expression
+                val expressionResult = result.register(expression.visit(scope))
+                if (result.hasError) return result
+
+                return result.success(expressionResult!!)
+            }
+        }
+
+        // Looks like no statements are true, let's evaluate the else block instead
+        val elseResult = result.register(elseExpression.visit(scope))
+        if (result.hasError) return result
+
+        return result.success(elseResult!!)
+    }
+
+    /**
+     * This function evaluates the condition given and returns the EplkBoolean output of it
+     */
+    private fun evaluateCondition(scope: Scope, condition: Node): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
         // First, let's evaluate the condition
@@ -35,17 +69,6 @@ class IfNode(
             ))
         }
 
-        // Now return the expression if the evaluatedCondition is true
-        if (evaluatedCondition.value) {
-            // then let's evaluate the expression
-            val expressionResult = result.register(expression.visit(scope))
-            if (result.hasError) return result
-
-            return result.success(expressionResult!!)
-
-        } else {
-            // TODO: 6/21/21 Make void return type
-            return result.success(EplkInteger(-1, scope))
-        }
+        return result.success(evaluatedCondition)
     }
 }

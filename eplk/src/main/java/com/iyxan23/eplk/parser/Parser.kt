@@ -52,6 +52,12 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         val startPosition = currentToken.startPosition
 
+        val statements = ArrayList<Pair<Node, Node>>()
+
+        //////////////////////////////////////////////////////////////
+        // IF STATEMENT
+        //////////////////////////////////////////////////////////////
+
         if (currentToken.token != Tokens.IF) {
             return result.failure(SyntaxError(
                 "Expected an integer literal, float literal, identifier, 'if', 'true', 'false', '+', '-', or '('",
@@ -60,8 +66,10 @@ class Parser(private val tokens: ArrayList<Token>) {
             ))
         }
 
+        // ===========================================================
         result.registerAdvancement()
         advance()
+        // ===========================================================
 
         if (currentToken.token != Tokens.PAREN_OPEN) {
             return result.failure(SyntaxError(
@@ -71,9 +79,12 @@ class Parser(private val tokens: ArrayList<Token>) {
             ))
         }
 
+        // ===========================================================
         result.registerAdvancement()
         advance()
+        // ===========================================================
 
+        // Parse the condition
         val conditionExpressionResult = result.register(expression())
         if (result.hasError) return result
 
@@ -87,22 +98,123 @@ class Parser(private val tokens: ArrayList<Token>) {
             ))
         }
 
+        // ===========================================================
         result.registerAdvancement()
         advance()
+        // ===========================================================
 
+        // Parse the expression
         val expressionResult = result.register(expression())
         if (result.hasError) return result
 
         val expression = expressionResult as Node
 
+        // Save that to the statements
+        statements.add(Pair(conditionExpression, expression))
+
+        // Now check for elif(s)
+        while (currentToken.token == Tokens.ELIF) {
+            //////////////////////////////////////////////////////////////
+            // ELIF STATEMENT
+            //////////////////////////////////////////////////////////////
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            if (currentToken.token != Tokens.PAREN_OPEN) {
+                return result.failure(SyntaxError(
+                    "Expected an open parentheses '(' after 'elif'",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Parse the condition
+            val conditionExpressionResultElif = result.register(expression())
+            if (result.hasError) return result
+
+            val conditionExpressionElif = conditionExpressionResultElif as Node
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            if (currentToken.token != Tokens.PAREN_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected a close parentheses ')' after an expression",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Parse the expression
+            val expressionResultElif = result.register(expression())
+            if (result.hasError) return result
+
+            val expressionElif = expressionResultElif as Node
+
+            // Save it to statements
+            statements.add(Pair(conditionExpressionElif, expressionElif))
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+        }
+
+        // Finally, check the else statement
+
+        //////////////////////////////////////////////////////////////
+        // ELSE STATEMENT
+        //////////////////////////////////////////////////////////////
+
+        if (currentToken.token != Tokens.ELSE) {
+            return result.failure(SyntaxError(
+                "Expected 'else'. An else block is required in an expression if",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // Parse the expression
+        val expressionResultElse = result.register(expression())
+        if (result.hasError) return result
+
+        val expressionElse = expressionResultElse as Node
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // -----------------------------------------------------------
+        // Done
+        // -----------------------------------------------------------
+
         return result.success(IfNode(
-            conditionExpression,
-            expression,
+            statements.toTypedArray(),
+            expressionElse,
             startPosition,
             expression.endPosition
         ))
-
-        // TODO: 6/21/21 Check for elif(s) and else
     }
 
     // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression

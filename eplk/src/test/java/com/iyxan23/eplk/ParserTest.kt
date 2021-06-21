@@ -98,7 +98,7 @@ class ParserTest {
 
     @Test
     fun ifTest() {
-        val code = "var hello_world = if (1 == 1) 10"
+        val code = "var hello_world = if (1 == 1) 10 else 0"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
