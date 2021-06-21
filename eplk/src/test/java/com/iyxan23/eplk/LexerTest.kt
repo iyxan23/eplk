@@ -241,6 +241,30 @@ class LexerTest {
     }
 
     @Test
+    fun ifTest() {
+        expectTokens(
+            "if (something) { } else { }",
+            arrayListOf(
+                Tokens.IF, null,
+
+                Tokens.PAREN_OPEN, null,
+                Tokens.IDENTIFIER, "something",
+                Tokens.PAREN_CLOSE, null,
+
+                Tokens.BRACKET_OPEN, null,
+                Tokens.BRACKET_CLOSE, null,
+
+                Tokens.ELSE, null,
+
+                Tokens.BRACKET_OPEN, null,
+                Tokens.BRACKET_CLOSE, null,
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",

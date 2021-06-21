@@ -22,6 +22,12 @@ enum class Tokens {
     TRUE,
     FALSE,
 
+    IF,
+    ELIF,
+    ELSE,
+    BRACKET_OPEN,
+    BRACKET_CLOSE,
+
     EQUAL,
 
     PAREN_OPEN,

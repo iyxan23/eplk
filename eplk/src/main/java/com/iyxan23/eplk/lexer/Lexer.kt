@@ -165,6 +165,16 @@ class Lexer(
                     advance()
                 }
 
+                currentChar == '{' -> {
+                    tokens.add(Token(Tokens.BRACKET_OPEN, null, position.copy()))
+                    advance()
+                }
+
+                currentChar == '}' -> {
+                    tokens.add(Token(Tokens.BRACKET_CLOSE, null, position.copy()))
+                    advance()
+                }
+
                 currentChar == '"' -> {
                     // Parse the string, if parseStringLiteral returns null, return an error
                     parseStringLiteral()
@@ -321,20 +331,33 @@ class Lexer(
         }
 
         val identifier = identifierBuilder.toString()
+        var anIdentifier = false;
         val tokenToAdd =
 
         if (identifier == "true") {
             Tokens.TRUE
         } else if (identifier == "false") {
             Tokens.FALSE
+
+        } else if (identifier == "if") {
+            Tokens.IF
+        } else if (identifier == "elif") {
+            Tokens.ELIF
+        } else if (identifier == "else") {
+            Tokens.ELSE
+
         } else {
-            if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
+            if (keywords.contains(identifier)) Tokens.KEYWORD
+            else {
+                anIdentifier = true;
+                Tokens.IDENTIFIER
+            }
         }
 
         tokens.add(
             Token(
                 tokenToAdd,
-                identifier,
+                if (anIdentifier) identifier else null,
                 identifierStartPosition,
                 position.copy()
             )
