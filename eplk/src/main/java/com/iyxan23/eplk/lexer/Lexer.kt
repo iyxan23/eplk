@@ -90,6 +90,8 @@ class Lexer(
                     // Check for &&
                     if (currentChar == '&') {
                         tokens.add(Token(Tokens.AND, null, beforePosition))
+                        advance()
+
                     } else {
                         throwError(SyntaxError("Expected another '&'", position.copy()))
                         return LexerResult(null, errorThrown)
@@ -103,6 +105,8 @@ class Lexer(
                     // Check for ||
                     if (currentChar == '|') {
                         tokens.add(Token(Tokens.OR, null, beforePosition))
+                        advance()
+
                     } else {
                         throwError(SyntaxError("Expected another '|'", position.copy()))
                         return LexerResult(null, errorThrown)

@@ -202,7 +202,7 @@ class LexerTest {
     @Test
     fun comparisonOperatorsTest() {
         expectTokens(
-            "= == != > < >= <= !",
+            "= == != > < >= <= ! || &&",
             arrayListOf(
                 Tokens.EQUAL, null,
                 Tokens.DOUBLE_EQUALS, null,
@@ -212,6 +212,8 @@ class LexerTest {
                 Tokens.GREATER_OR_EQUAL_THAN, null,
                 Tokens.LESSER_OR_EQUAL_THAN, null,
                 Tokens.NOT, null,
+                Tokens.OR, null,
+                Tokens.AND, null,
                 Tokens.EOF, null,
             ) as ArrayList<Any>
         )
