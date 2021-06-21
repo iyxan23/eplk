@@ -38,7 +38,7 @@ data class BinOpNode(
             Tokens.DIV      -> leftObject.operatorDivide    (rightObject, startPosition, endPosition)
             Tokens.POW      -> leftObject.operatorPow       (rightObject, startPosition, endPosition)
 
-            Tokens.EQUAL, Tokens.NOT_EQUAL,
+            Tokens.DOUBLE_EQUALS, Tokens.NOT_EQUAL,
             Tokens.GREATER_THAN, Tokens.LESSER_THAN,
             Tokens.GREATER_OR_EQUAL_THAN, Tokens.LESSER_OR_EQUAL_THAN -> {
                 val comparisonResult = leftObject.comparisonTo(rightObject, startPosition, endPosition)

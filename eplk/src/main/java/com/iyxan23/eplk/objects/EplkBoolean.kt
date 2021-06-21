@@ -20,6 +20,7 @@ class EplkBoolean(
         startPosition: Position,
         endPosition: Position
     ): RealtimeResult<Array<Tokens>> {
+
         val result = RealtimeResult<Array<Tokens>>()
         val comparisonResult = ArrayList<Tokens>()
 
@@ -34,7 +35,7 @@ class EplkBoolean(
         }
 
         // Now do comparisons
-        if (value == other.value) comparisonResult.add(Tokens.EQUAL)
+        if (value == other.value) comparisonResult.add(Tokens.DOUBLE_EQUALS)
         else comparisonResult.add(Tokens.NOT_EQUAL)
 
         return result.success(comparisonResult.toTypedArray())
