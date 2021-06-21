@@ -40,4 +40,51 @@ class EplkBoolean(
 
         return result.success(comparisonResult.toTypedArray())
     }
+
+    override fun andOperator(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        val result = RealtimeResult<EplkObject>()
+
+        // Make sure to be the same type
+        if (other !is EplkBoolean) {
+            return result.failure(EplkTypeError(
+                "&& operator with boolean must be with the same type. Expected Boolean, got ${other.objectName}",
+                startPosition,
+                endPosition,
+                scope
+            ))
+        }
+
+        return RealtimeResult<EplkObject>().success(EplkBoolean(value.and(other.value), scope))
+    }
+
+    override fun orOperator(
+        other: EplkObject,
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        val result = RealtimeResult<EplkObject>()
+
+        // Make sure to be the same type
+        if (other !is EplkBoolean) {
+            return result.failure(EplkTypeError(
+                "|| operator with boolean must be with the same type. Expected Boolean, got ${other.objectName}",
+                startPosition,
+                endPosition,
+                scope
+            ))
+        }
+
+        return RealtimeResult<EplkObject>().success(EplkBoolean(value.or(other.value), scope))
+    }
+
+    override fun notOperator(
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().success(EplkBoolean(!value, scope))
+    }
 }

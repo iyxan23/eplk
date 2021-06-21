@@ -62,7 +62,7 @@ abstract class EplkObject(open val scope: Scope) {
         ))
     }
 
-    open fun notOperator(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+    open fun notOperator(startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
             "comparison is not implemented by $objectName",
             startPosition,
