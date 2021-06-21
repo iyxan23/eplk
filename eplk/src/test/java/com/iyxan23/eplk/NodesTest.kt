@@ -2,9 +2,8 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
-import com.iyxan23.eplk.lexer.models.Position
-import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.BinOpNode
+import com.iyxan23.eplk.nodes.IfNode
 import com.iyxan23.eplk.nodes.UnaryOpNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.EplkBoolean
@@ -15,7 +14,7 @@ import org.junit.Test
 
 class NodesTest {
 
-    val filename = "<TEST>"
+    private val filename = "<TEST>"
 
     @Test
     fun testUnaryOpNode() {
@@ -210,5 +209,65 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 20)
+    }
+
+    @Test
+    fun ifTest() {
+        val lexerResult = Lexer(filename, "if (1 == 1) 5 else 0").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 5)
+    }
+
+    @Test
+    fun elifTest() {
+        val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 1) 7 else 0").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 7)
+    }
+
+    @Test
+    fun multipleElifTest() {
+        val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 3) 7 elif (1 == 1) 9 else 0").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 9)
+    }
+
+    @Test
+    fun elseTest() {
+        val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 3) 7 elif (1 == 4) 9 else 0").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val resultVisit = parseResult.visit(Scope(filename))
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 0)
     }
 }
