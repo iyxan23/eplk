@@ -142,11 +142,6 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             val conditionExpressionElif = conditionExpressionResultElif as Node
 
-            // ===========================================================
-            result.registerAdvancement()
-            advance()
-            // ===========================================================
-
             if (currentToken.token != Tokens.PAREN_CLOSE) {
                 return result.failure(SyntaxError(
                     "Expected a close parentheses ')' after an expression",
@@ -168,11 +163,6 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             // Save it to statements
             statements.add(Pair(conditionExpressionElif, expressionElif))
-
-            // ===========================================================
-            result.registerAdvancement()
-            advance()
-            // ===========================================================
         }
 
         // Finally, check the else statement
