@@ -13,7 +13,7 @@ fun main() {
 
     while (true) {
         print("EPLK SHELL > ")
-        val code = readLine() ?: continue
+        val code = readLine() ?: break
 
         val startTime = System.currentTimeMillis()
 
