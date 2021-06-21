@@ -89,6 +89,7 @@ abstract class EplkObject(open val scope: Scope) {
         ))
     }
 
+    // TODO: 6/21/21 make a better way of doing this
     // Returns a list of one of these tokens:
     // Tokens.EQUAL, Tokens.NOT_EQUAL, Tokens.GREATER_THAN, Tokens.LESSER_THAN,
     // Tokens.GREATER_AND_EQUAL_THAN, Tokens.LESSER_AND_EQUAL_THAN
