@@ -46,7 +46,66 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
-    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE]
+    // if-expression: IF PAREN_OPEN expression PAREN_CLOSE expression
+    private fun ifExpression(): ParseResult {
+        val result = ParseResult()
+
+        val startPosition = currentToken.startPosition
+
+        if (currentToken.token != Tokens.IF) {
+            return result.failure(SyntaxError(
+                "Expected an integer literal, float literal, identifier, 'if', 'true', 'false', '+', '-', or '('",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        result.registerAdvancement()
+        advance()
+
+        if (currentToken.token != Tokens.PAREN_OPEN) {
+            return result.failure(SyntaxError(
+                "Expected an open parentheses '(' after 'if'",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        result.registerAdvancement()
+        advance()
+
+        val conditionExpressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        val conditionExpression = conditionExpressionResult as Node
+
+        if (currentToken.token != Tokens.PAREN_CLOSE) {
+            return result.failure(SyntaxError(
+                "Expected a close parentheses ')' after an expression",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        result.registerAdvancement()
+        advance()
+
+        val expressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        val expression = expressionResult as Node
+
+        return result.success(IfNode(
+            conditionExpression,
+            expression,
+            startPosition,
+            expression.endPosition
+        ))
+
+        // TODO: 6/21/21 Check for elif(s) and else
+    }
+
+    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression
     private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
@@ -118,12 +177,12 @@ class Parser(private val tokens: ArrayList<Token>) {
                 }
             }
 
+            // Ok, finally, check an if expression
             else -> {
-                return result.failure(SyntaxError(
-                    "Expected an integer literal, float literal, identifier, 'true', 'false', '+', '-', or '('",
-                    oldToken.startPosition,
-                    oldToken.endPosition,
-                ))
+                val ifResult = result.register(ifExpression())
+                if (result.hasError) return result
+
+                return result.success(ifResult as Node)
             }
         }
     }
