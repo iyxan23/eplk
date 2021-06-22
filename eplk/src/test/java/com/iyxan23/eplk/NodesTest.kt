@@ -2,7 +2,11 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
-import com.iyxan23.eplk.nodes.*
+import com.iyxan23.eplk.nodes.control.ForNode
+import com.iyxan23.eplk.nodes.control.IfNode
+import com.iyxan23.eplk.nodes.control.WhileNode
+import com.iyxan23.eplk.nodes.operation.BinOpNode
+import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkFloat

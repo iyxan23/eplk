@@ -4,6 +4,14 @@ import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.*
+import com.iyxan23.eplk.nodes.control.ForNode
+import com.iyxan23.eplk.nodes.control.IfNode
+import com.iyxan23.eplk.nodes.control.WhileNode
+import com.iyxan23.eplk.nodes.operation.BinOpNode
+import com.iyxan23.eplk.nodes.operation.UnaryOpNode
+import com.iyxan23.eplk.nodes.types.BooleanNode
+import com.iyxan23.eplk.nodes.types.FloatNode
+import com.iyxan23.eplk.nodes.types.IntegerNode
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
@@ -350,12 +358,14 @@ class Parser(private val tokens: ArrayList<Token>) {
         // Done
         // -----------------------------------------------------------
 
-        return result.success(IfNode(
+        return result.success(
+            IfNode(
             statements.toTypedArray(),
             expressionElse,
             startPosition,
             expression.endPosition
-        ))
+        )
+        )
     }
 
     // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression | while-expression

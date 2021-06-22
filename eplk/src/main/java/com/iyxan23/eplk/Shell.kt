@@ -4,7 +4,7 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.parser.Parser
 
-const val withTime = false
+const val withTime = true
 
 fun main() {
     println("Welcome to the EPLK Shell!")
