@@ -33,6 +33,8 @@ enum class Tokens {
     FOR,
     SEMICOLON,
 
+    WHILE,
+
     EQUAL,
 
     PAREN_OPEN,

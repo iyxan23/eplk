@@ -357,6 +357,8 @@ class Lexer(
 
                 "for" -> Tokens.FOR
 
+                "while" -> Tokens.WHILE
+
                 else -> {
                     addValue = true
                     if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER

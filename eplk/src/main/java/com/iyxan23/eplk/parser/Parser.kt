@@ -44,11 +44,69 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
+    // while-expression = WHILE PAREN_OPEN expression PAREN_CLOSE expression
+    private fun whileExpression(): ParseResult {
+        val result = ParseResult()
+
+        val startPosition = currentToken.startPosition.copy()
+
+        if (currentToken.token != Tokens.WHILE) {
+            return result.failure(SyntaxError(
+                "Expected 'while'",
+                currentToken.startPosition,
+                currentToken.endPosition
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        if (currentToken.token != Tokens.PAREN_OPEN) {
+            return result.failure(SyntaxError(
+                "Expected an open parentheses '(' after 'while'",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        val conditionResult = result.register(expression())
+        if (result.hasError) return result
+
+        val condition = conditionResult as Node
+
+        if (currentToken.token != Tokens.PAREN_CLOSE) {
+            return result.failure(SyntaxError(
+                "Expected a close parentheses ')' after the third for loop expression",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        val expressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        val expression = expressionResult as Node
+
+        return result.success(WhileNode(condition, expression, startPosition))
+    }
+
     // for-expression = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE expression
     private fun forExpression(): ParseResult {
         val result = ParseResult()
 
-        val startPosition = currentToken.startPosition
+        val startPosition = currentToken.startPosition.copy()
         if (currentToken.token != Tokens.FOR) {
             return result.failure(SyntaxError(
                 "Expected 'for'",
@@ -300,7 +358,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         ))
     }
 
-    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression
+    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression | while-expression
     private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
