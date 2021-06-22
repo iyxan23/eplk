@@ -67,6 +67,18 @@ object Utils {
                 result.append(strIndentation + "Else Expression: \n")
                 result.append(prettyPrintNode(node.elseExpression, indentation + indentationAmount, indentationAmount))
             }
+
+            is ForNode -> {
+                result.append(strIndentation + "For Statement:\n")
+                result.append(strIndentation + "First Expression: \n")
+                result.appendLine(prettyPrintNode(node.firstExpression, indentation + indentationAmount, indentationAmount))
+                result.append(strIndentation + "Second Expression: \n")
+                result.appendLine(prettyPrintNode(node.secondExpression, indentation + indentationAmount, indentationAmount))
+                result.append(strIndentation + "Third Expression: \n")
+                result.appendLine(prettyPrintNode(node.thirdExpression, indentation + indentationAmount, indentationAmount))
+                result.append(strIndentation + "Expression: \n")
+                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+            }
         }
 
         return result.toString()
