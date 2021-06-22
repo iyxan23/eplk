@@ -301,6 +301,25 @@ class LexerTest {
     }
 
     @Test
+    fun whileTest() {
+        expectTokens(
+            "while (true) 1 + 1",
+            arrayListOf(
+                Tokens.WHILE, null,
+                Tokens.PAREN_OPEN, null,
+                Tokens.TRUE, null,
+                Tokens.PAREN_CLOSE, null,
+
+                Tokens.INT_LITERAL, "1",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "1",
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",
