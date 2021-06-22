@@ -3,12 +3,14 @@ package com.iyxan23.eplk
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.nodes.BinOpNode
+import com.iyxan23.eplk.nodes.ForNode
 import com.iyxan23.eplk.nodes.IfNode
 import com.iyxan23.eplk.nodes.UnaryOpNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkFloat
 import com.iyxan23.eplk.objects.EplkInteger
+import com.iyxan23.eplk.objects.EplkVoid
 import com.iyxan23.eplk.parser.Parser
 import org.junit.Test
 
@@ -269,5 +271,25 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 0)
+    }
+
+    @Test
+    fun forTest() {
+        val lexerResult = Lexer(filename, "for (var index = 0; index < 10; var index = index + 1) var number = number + 10").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as ForNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        scope.symbolTable.variables["number"] = EplkInteger(0, scope)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkVoid)
+
+        assert((scope.symbolTable.variables["number"] as EplkInteger).value == 100)
     }
 }
