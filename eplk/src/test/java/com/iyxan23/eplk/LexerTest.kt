@@ -265,6 +265,42 @@ class LexerTest {
     }
 
     @Test
+    fun forTest() {
+        expectTokens(
+            "for (var a = 0; a < 10; var a = a + 1)",
+            arrayListOf(
+                Tokens.FOR, null,
+
+                Tokens.PAREN_OPEN, null,
+
+                Tokens.KEYWORD, "var",
+                Tokens.IDENTIFIER, "a",
+                Tokens.EQUAL, null,
+                Tokens.INT_LITERAL, "0",
+
+                Tokens.SEMICOLON, null,
+
+                Tokens.IDENTIFIER, "a",
+                Tokens.LESSER_THAN, null,
+                Tokens.INT_LITERAL, "10",
+
+                Tokens.SEMICOLON, null,
+
+                Tokens.KEYWORD, "var",
+                Tokens.IDENTIFIER, "a",
+                Tokens.EQUAL, null,
+                Tokens.IDENTIFIER, "a",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "1",
+
+                Tokens.PAREN_CLOSE, null,
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",
