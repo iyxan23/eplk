@@ -446,6 +446,14 @@ class Parser(private val tokens: ArrayList<Token>) {
                 return result.success(forResult as Node)
             }
 
+            // Check if this is a while statement
+            Tokens.WHILE -> {
+                val whileResult = result.register(whileExpression())
+                if (result.hasError) return result
+
+                return result.success(whileResult as Node)
+            }
+
             else -> {
                 return result.failure(SyntaxError(
                     "Expected an integer literal, float literal, identifier, 'if', 'for', 'true', 'false', '+', '-', or '('",
