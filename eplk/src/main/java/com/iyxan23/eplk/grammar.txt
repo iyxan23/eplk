@@ -1,0 +1,18 @@
+if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
+
+atom                    = [INT|FLOAT] |
+                          IDENTIFIER |
+                          [PAREN_OPEN expression* PAREN_CLOSE] |
+                          [TRUE|FALSE] |
+                          if-expression
+
+power                   = atom [POW factor]*
+factor                  = [[PLUS|MINUS] factor] | power
+term                    = factor [[MUL|DIV] factor]*
+arithmetic-expression   = term [[PLUS|MINUS] term]*
+
+comparison-expression   = NOT comparison-expression |
+                          arithmetic-expression [[comparison operators] arithmetic-expression]*
+
+expression              = KEYWORD:VAR IDENTIFIER EQUAL expression |
+                          comparison-expression [[AND|OR] comparison-expression]*
