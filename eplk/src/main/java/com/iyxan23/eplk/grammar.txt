@@ -1,4 +1,6 @@
 if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
+                          [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
+                          ELSE expression
 
 atom                    = [INT|FLOAT] |
                           IDENTIFIER |
