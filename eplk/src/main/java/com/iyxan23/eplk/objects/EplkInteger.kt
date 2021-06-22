@@ -150,12 +150,12 @@ class EplkInteger(
                     tokens.add(Tokens.LESSER_OR_EQUAL_THAN)
                 } else {
                     tokens.add(Tokens.NOT_EQUAL)
-                }
 
-                if (value > other.value) {
-                    tokens.add(Tokens.GREATER_THAN)
-                } else {
-                    tokens.add(Tokens.LESSER_THAN)
+                    if (value > other.value) {
+                        tokens.add(Tokens.GREATER_THAN)
+                    } else {
+                        tokens.add(Tokens.LESSER_THAN)
+                    }
                 }
 
                 return RealtimeResult<Array<Tokens>>().success(tokens.toTypedArray())
@@ -172,12 +172,12 @@ class EplkInteger(
                     tokens.add(Tokens.LESSER_OR_EQUAL_THAN)
                 } else {
                     tokens.add(Tokens.NOT_EQUAL)
-                }
 
-                if (value > other.value) {
-                    tokens.add(Tokens.GREATER_THAN)
-                } else {
-                    tokens.add(Tokens.LESSER_THAN)
+                    if (value > other.value) {
+                        tokens.add(Tokens.GREATER_THAN)
+                    } else {
+                        tokens.add(Tokens.LESSER_THAN)
+                    }
                 }
 
                 return RealtimeResult<Array<Tokens>>().success(tokens.toTypedArray())
