@@ -1,3 +1,5 @@
+for-expression          = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE expression
+
 if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
                           [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
                           ELSE expression
