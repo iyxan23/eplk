@@ -2,10 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
-import com.iyxan23.eplk.nodes.BinOpNode
-import com.iyxan23.eplk.nodes.ForNode
-import com.iyxan23.eplk.nodes.IfNode
-import com.iyxan23.eplk.nodes.UnaryOpNode
+import com.iyxan23.eplk.nodes.*
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkFloat
@@ -291,5 +288,25 @@ class NodesTest {
         assert(resultVisit.value is EplkVoid)
 
         assert((scope.symbolTable.variables["number"] as EplkInteger).value == 100)
+    }
+
+    @Test
+    fun whileTest() {
+        val lexerResult = Lexer(filename, "while (number < 100) var number = number ^ 2").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as WhileNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        scope.symbolTable.variables["number"] = EplkInteger(2, scope)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkVoid)
+
+        assert((scope.symbolTable.variables["number"] as EplkFloat).value == 256f)
     }
 }
