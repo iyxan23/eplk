@@ -8,6 +8,8 @@ enum class Tokens {
     DIV,
     POW,
 
+    DOUBLE_PLUS,
+
     // Comparison tokens
     DOUBLE_EQUALS,
     GREATER_THAN,
@@ -27,6 +29,9 @@ enum class Tokens {
     ELSE,
     BRACKET_OPEN,
     BRACKET_CLOSE,
+
+    FOR,
+    SEMICOLON,
 
     EQUAL,
 

@@ -46,7 +46,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
-    // if-expression: IF PAREN_OPEN expression PAREN_CLOSE expression
+    // if-expression = IF PAREN_OPEN expression PAREN_CLOSE expression
     private fun ifExpression(): ParseResult {
         val result = ParseResult()
 
@@ -375,6 +375,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         var leftNode = leftNodeResult as Node
 
         while (arithmeticOperators.contains(currentToken.token)) {
+            // Get the operator and the next term
             val operatorToken = currentToken.copy()
 
             result.registerAdvancement()

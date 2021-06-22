@@ -45,8 +45,17 @@ class Lexer(
             // Now let's do the tokenization
             when {
                 currentChar == '+' -> {
-                    tokens.add(Token(Tokens.PLUS, null, position.copy()))
+                    var tokenToAdd = Tokens.PLUS
+                    val beforePosition = position.copy()
                     advance()
+
+                    // Check for ++ (Double plus)
+                    if (currentChar == '+') {
+                        tokenToAdd = Tokens.DOUBLE_PLUS
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
                 }
 
                 currentChar == '-' -> {
@@ -153,6 +162,11 @@ class Lexer(
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition))
+                }
+
+                currentChar == ';' -> {
+                    tokens.add(Token(Tokens.SEMICOLON, null, position.copy()))
+                    advance()
                 }
 
                 currentChar == '(' -> {
@@ -333,23 +347,21 @@ class Lexer(
         val identifier = identifierBuilder.toString()
         var addValue = false
         val tokenToAdd =
+            when (identifier) {
+                "true" -> Tokens.TRUE
+                "false" -> Tokens.FALSE
 
-        if (identifier == "true") {
-            Tokens.TRUE
-        } else if (identifier == "false") {
-            Tokens.FALSE
+                "if" -> Tokens.IF
+                "elif" -> Tokens.ELIF
+                "else" -> Tokens.ELSE
 
-        } else if (identifier == "if") {
-            Tokens.IF
-        } else if (identifier == "elif") {
-            Tokens.ELIF
-        } else if (identifier == "else") {
-            Tokens.ELSE
+                "for" -> Tokens.FOR
 
-        } else {
-            addValue = true
-            if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
-        }
+                else -> {
+                    addValue = true
+                    if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
+                }
+            }
 
         tokens.add(
             Token(
