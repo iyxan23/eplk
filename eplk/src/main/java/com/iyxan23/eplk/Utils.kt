@@ -21,15 +21,20 @@ object Utils {
                 result.append(node.float.value)
             }
 
+            is BooleanNode -> {
+                result.append(strIndentation + "Boolean: ")
+                result.append(node.value)
+            }
+
             is UnaryOpNode -> {
-                result.append(strIndentation + "Unary Operation: operator: ")
+                result.append(strIndentation + "Unary operation: operator: ")
                 result.append(node.tokenOperator.token.name)
                 result.appendLine()
                 result.append(prettyPrintNode(node.node, indentation + indentationAmount, indentationAmount))
             }
 
             is BinOpNode -> {
-                result.append(strIndentation + "Binary Operation: operator: ")
+                result.append(strIndentation + "Binary operation: operator: ")
                 result.append(node.operatorToken.token.name)
                 result.appendLine()
                 result.append(prettyPrintNode(node.leftNode, indentation + indentationAmount, indentationAmount))
@@ -38,17 +43,17 @@ object Utils {
             }
 
             is VarDeclarationNode -> {
-                result.append(strIndentation + "Variable Declaration:")
+                result.append(strIndentation + "Variable declaration:")
                 result.appendLine()
                 result.append(strIndentation + "Variable name: ${node.variableName}")
                 result.appendLine()
-                result.append(strIndentation + "Variable Value: ")
+                result.append(strIndentation + "Variable value: ")
                 result.appendLine()
                 result.append(prettyPrintNode(node.variableValue, indentation + indentationAmount, indentationAmount))
             }
 
             is VarAccessNode -> {
-                result.append(strIndentation + "Variable Access: Variable Name: ${node.variableName}")
+                result.append(strIndentation + "Variable access: Variable name: ${node.variableName}")
             }
 
             is IfNode -> {
@@ -56,7 +61,7 @@ object Utils {
                     val condition = pair.first
                     val expression = pair.second
 
-                    result.append(strIndentation + (if (index == 0) "If Condition: \n" else "Elif Condition: \n"))
+                    result.append(strIndentation + (if (index == 0) "If condition: \n" else "Elif condition: \n"))
                     result.append(prettyPrintNode(condition, indentation + indentationAmount, indentationAmount))
                     result.appendLine()
                     result.append(strIndentation + "Expression: \n")
@@ -64,20 +69,28 @@ object Utils {
                     result.appendLine()
                 }
 
-                result.append(strIndentation + "Else Expression: \n")
+                result.append(strIndentation + "Else expression: \n")
                 result.append(prettyPrintNode(node.elseExpression, indentation + indentationAmount, indentationAmount))
             }
 
             is ForNode -> {
-                result.append(strIndentation + "For Statement:\n")
-                result.append(strIndentation + "First Expression: \n")
+                result.append(strIndentation + "For statement:\n")
+                result.append(strIndentation + "First expression: \n")
                 result.appendLine(prettyPrintNode(node.firstExpression, indentation + indentationAmount, indentationAmount))
-                result.append(strIndentation + "Second Expression: \n")
+                result.append(strIndentation + "Second expression: \n")
                 result.appendLine(prettyPrintNode(node.secondExpression, indentation + indentationAmount, indentationAmount))
-                result.append(strIndentation + "Third Expression: \n")
+                result.append(strIndentation + "Third expression: \n")
                 result.appendLine(prettyPrintNode(node.thirdExpression, indentation + indentationAmount, indentationAmount))
                 result.append(strIndentation + "Expression: \n")
-                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+                result.append(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+            }
+
+            is WhileNode -> {
+                result.append(strIndentation + "While statement: \n")
+                result.append(strIndentation + "Condition: \n")
+                result.appendLine(prettyPrintNode(node.condition, indentation + indentationAmount, indentationAmount))
+                result.append(strIndentation + "Expression: \n")
+                result.append(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
             }
         }
 
