@@ -1,8 +1,8 @@
 package com.iyxan23.eplk.objects
 
 import com.iyxan23.eplk.Tokens
-import com.iyxan23.eplk.errors.EplkNotImplementedError
-import com.iyxan23.eplk.errors.EplkTypeError
+import com.iyxan23.eplk.errors.runtime.EplkNotImplementedError
+import com.iyxan23.eplk.errors.runtime.EplkTypeError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
@@ -34,12 +34,14 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().success(EplkFloat(value + other.value, scope))
 
             else ->
-                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                RealtimeResult<EplkObject>().failure(
+                    EplkNotImplementedError(
                     "+ operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope
-                ))
+                )
+                )
         }
     }
 
@@ -57,12 +59,14 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().success(EplkFloat(value - other.value, scope))
 
             else ->
-                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                RealtimeResult<EplkObject>().failure(
+                    EplkNotImplementedError(
                     "- operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope
-                ))
+                )
+                )
         }
     }
 
@@ -80,11 +84,13 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().success(EplkFloat(value * other.value, scope))
 
             else ->
-                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                RealtimeResult<EplkObject>().failure(
+                    EplkNotImplementedError(
                     "* operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition, scope
-                ))
+                )
+                )
         }
     }
 
@@ -102,12 +108,14 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().success(EplkFloat(value / other.value, scope))
 
             else ->
-                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                RealtimeResult<EplkObject>().failure(
+                    EplkNotImplementedError(
                     "/ operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope
-                ))
+                )
+                )
         }
     }
 
@@ -125,12 +133,14 @@ class EplkFloat(
                 RealtimeResult<EplkObject>().success(EplkFloat(value.pow(other.value), scope))
 
             else ->
-                RealtimeResult<EplkObject>().failure(EplkNotImplementedError(
+                RealtimeResult<EplkObject>().failure(
+                    EplkNotImplementedError(
                     "^ operator with ${other.objectName} is not supported",
                     startPosition,
                     endPosition,
                     scope
-                ))
+                )
+                )
         }
     }
 
@@ -183,12 +193,14 @@ class EplkFloat(
             }
 
             else ->
-                return RealtimeResult<Array<Tokens>>().failure(EplkTypeError(
+                return RealtimeResult<Array<Tokens>>().failure(
+                    EplkTypeError(
                     "Comparison with Integer must be either an other Integer or Float. Expected Integer / Float, got ${other.objectName}",
                     startPosition,
                     endPosition,
                     scope
-                ))
+                )
+                )
         }
     }
 }

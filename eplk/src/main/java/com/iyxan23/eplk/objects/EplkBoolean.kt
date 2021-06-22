@@ -1,7 +1,7 @@
 package com.iyxan23.eplk.objects
 
 import com.iyxan23.eplk.Tokens
-import com.iyxan23.eplk.errors.EplkTypeError
+import com.iyxan23.eplk.errors.runtime.EplkTypeError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
@@ -26,12 +26,14 @@ class EplkBoolean(
 
         // Make sure to be the same type
         if (other !is EplkBoolean) {
-            return result.failure(EplkTypeError(
+            return result.failure(
+                EplkTypeError(
                 "Comparison on boolean must be with the same type. Expected Boolean, got ${other.objectName}",
                 startPosition,
                 endPosition,
                 scope
-            ))
+            )
+            )
         }
 
         // Now do comparisons
@@ -50,12 +52,14 @@ class EplkBoolean(
 
         // Make sure to be the same type
         if (other !is EplkBoolean) {
-            return result.failure(EplkTypeError(
+            return result.failure(
+                EplkTypeError(
                 "&& operator with boolean must be with the same type. Expected Boolean, got ${other.objectName}",
                 startPosition,
                 endPosition,
                 scope
-            ))
+            )
+            )
         }
 
         return RealtimeResult<EplkObject>().success(EplkBoolean(value.and(other.value), scope))
@@ -70,12 +74,14 @@ class EplkBoolean(
 
         // Make sure to be the same type
         if (other !is EplkBoolean) {
-            return result.failure(EplkTypeError(
+            return result.failure(
+                EplkTypeError(
                 "|| operator with boolean must be with the same type. Expected Boolean, got ${other.objectName}",
                 startPosition,
                 endPosition,
                 scope
-            ))
+            )
+            )
         }
 
         return RealtimeResult<EplkObject>().success(EplkBoolean(value.or(other.value), scope))

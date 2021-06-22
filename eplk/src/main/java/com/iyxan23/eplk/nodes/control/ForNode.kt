@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.nodes.control
 
-import com.iyxan23.eplk.errors.EplkTypeError
+import com.iyxan23.eplk.errors.runtime.EplkTypeError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
@@ -65,12 +65,14 @@ class ForNode(
 
         val evaluatedSecondExpression = secondExpressionResult as EplkObject
         if (evaluatedSecondExpression !is EplkBoolean) {
-            return RealtimeResult<EplkBoolean>().failure(EplkTypeError(
+            return RealtimeResult<EplkBoolean>().failure(
+                EplkTypeError(
                 "Second expression for a for loop should evaluate into a Boolean object, got ${evaluatedSecondExpression.objectName} instead.",
                 secondExpression.startPosition,
                 secondExpression.endPosition,
                 scope
-            ))
+            )
+            )
         }
 
         return RealtimeResult<EplkBoolean>().success(evaluatedSecondExpression)

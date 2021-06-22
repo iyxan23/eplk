@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.nodes.control
 
-import com.iyxan23.eplk.errors.EplkTypeError
+import com.iyxan23.eplk.errors.runtime.EplkTypeError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
@@ -62,12 +62,14 @@ class IfNode(
 
         // Must check for the type
         if (evaluatedCondition !is EplkBoolean) {
-            return result.failure(EplkTypeError(
+            return result.failure(
+                EplkTypeError(
                 "Condition for an if statement should evaluate into a boolean. Expected Boolean, got ${evaluatedCondition.objectName} instead",
                 condition.startPosition,
                 condition.endPosition,
                 scope,
-            ))
+            )
+            )
         }
 
         return result.success(evaluatedCondition)

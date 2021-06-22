@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.nodes.variable
 
-import com.iyxan23.eplk.errors.EplkNotDefinedError
+import com.iyxan23.eplk.errors.runtime.EplkNotDefinedError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
