@@ -17,7 +17,7 @@ atom                    = [INT|FLOAT] |
                           while-expression |
                           fun-definition
 
-func-call               = atom [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
+func-call               = atom [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
 
 power                   = func-call [POW factor]*
 factor                  = [[PLUS|MINUS] factor] | power
