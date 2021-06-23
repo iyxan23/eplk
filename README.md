@@ -1,4 +1,7 @@
 # EPLK
+
+[![Hits-of-Code](https://hitsofcode.com/github/iyxan23/eplk?branch=main)](https://hitsofcode.com/github/iyxan23/eplk/view?branch=main)
+
 Epic programming language named Eplk, short for Extensible Programming Language in Kotlin
 
 Created with the help of CodePulse's "Make YOUR OWN Programming Language" series, many thanks to him! Here is his [playlist](https://www.youtube.com/watch?v=r46EONXC1i0). Also, check his [github repository](https://github.com/davidcallanan/py-myopl-code) and [profile](https://github.com/davidcallanan)
