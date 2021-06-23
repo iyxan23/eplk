@@ -100,6 +100,25 @@ object Utils {
                 result.append(strIndentation + "Expression: \n")
                 result.append(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
             }
+
+            is FunctionDefinitionNode -> {
+                result.append(strIndentation + "Function definition: \n")
+                result.append(strIndentation + "Name: ${node.functionName}\n")
+                result.append(strIndentation + "Parameters: ${node.parameters.joinToString(", ")}\n")
+                result.append(strIndentation + "Expression: \n")
+                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+            }
+
+            is FunctionCallNode -> {
+                result.append(strIndentation + "Call function: \n")
+                result.append(strIndentation + "Node to call: \n")
+                result.appendLine(prettyPrintNode(node.nodeToCall, indentation + indentationAmount, indentationAmount))
+                result.append(strIndentation + "Arguments: \n")
+
+                node.arguments.forEach { argument ->
+                    result.appendLine(prettyPrintNode(argument, indentation + indentationAmount, indentationAmount))
+                }
+            }
         }
 
         return result.toString()
