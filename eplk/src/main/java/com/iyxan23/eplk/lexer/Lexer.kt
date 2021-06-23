@@ -59,8 +59,17 @@ class Lexer(
                 }
 
                 currentChar == '-' -> {
-                    tokens.add(Token(Tokens.MINUS, null, position.copy()))
+                    var tokenToAdd = Tokens.MINUS
+                    val beforePosition = position.copy()
                     advance()
+
+                    // Check for ->
+                    if (currentChar == '>') {
+                        tokenToAdd = Tokens.ARROW
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition))
                 }
 
                 currentChar == '*' -> {
@@ -162,6 +171,11 @@ class Lexer(
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition))
+                }
+
+                currentChar == ',' -> {
+                    tokens.add(Token(Tokens.COMMA, null, position.copy()))
+                    advance()
                 }
 
                 currentChar == ';' -> {
@@ -358,6 +372,8 @@ class Lexer(
                 "for" -> Tokens.FOR
 
                 "while" -> Tokens.WHILE
+
+                "fun" -> Tokens.FUN
 
                 else -> {
                     addValue = true

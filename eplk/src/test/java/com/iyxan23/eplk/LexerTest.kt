@@ -320,6 +320,29 @@ class LexerTest {
     }
 
     @Test
+    fun funcTest() {
+        expectTokens(
+            "fun something(hi, world) -> 1",
+            arrayListOf(
+                Tokens.FUN, null,
+                Tokens.IDENTIFIER, "something",
+
+                Tokens.PAREN_OPEN, null,
+                Tokens.IDENTIFIER, "hi",
+                Tokens.COMMA, null,
+                Tokens.IDENTIFIER, "world",
+                Tokens.PAREN_CLOSE, null,
+
+                Tokens.ARROW, null,
+
+                Tokens.INT_LITERAL, "1",
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",

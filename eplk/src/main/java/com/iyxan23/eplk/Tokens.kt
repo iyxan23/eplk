@@ -33,6 +33,10 @@ enum class Tokens {
     FOR,
     SEMICOLON,
 
+    FUN,
+    COMMA,
+    ARROW,
+
     WHILE,
 
     EQUAL,
