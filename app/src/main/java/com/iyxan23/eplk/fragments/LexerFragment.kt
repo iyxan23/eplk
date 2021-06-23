@@ -1,13 +1,15 @@
 package com.iyxan23.eplk.fragments
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iyxan23.eplk.R
 import com.iyxan23.eplk.adapters.TokensRecyclerViewAdapter
-import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.viewmodels.LexerViewModel
+
 
 class LexerFragment : Fragment() {
 
@@ -77,7 +79,14 @@ class LexerFragment : Fragment() {
                     findNavController().navigateUp()
                 }
 
-            builder.create().show()
+            val dialog = builder.create()
+
+            // Set the font to be monospaced because the error message depends on it
+            val messageView = dialog.findViewById<TextView>(android.R.id.message)
+            messageView.typeface = Typeface.MONOSPACE
+            messageView.gravity = Gravity.CENTER
+
+            dialog.show()
         })
     }
 }
