@@ -163,6 +163,28 @@ class ParserTest {
     }
 
     @Test
+    fun funcCallNoArgsTest() {
+        val code = "hello_world()"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString(code)) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
+    fun funcCallWithArgsTest() {
+        val code = "hello_world(10, 10 + 10, 100 * 2)"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString(code)) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun syntaxErrorTest() {
         val code = "1 2 3 /"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
