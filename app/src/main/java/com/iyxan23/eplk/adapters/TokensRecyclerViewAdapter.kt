@@ -1,5 +1,6 @@
 package com.iyxan23.eplk.adapters
 
+import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -7,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.iyxan23.eplk.R
 import com.iyxan23.eplk.Tokens
-import com.iyxan23.eplk.Utils
 import com.iyxan23.eplk.lexer.models.Token
 
 class TokensRecyclerViewAdapter(
@@ -38,7 +39,12 @@ class TokensRecyclerViewAdapter(
             holder.codeHighlight.text = "EOF"
         } else {
             holder.codeHighlight.text =
-                cutText(code, token.startPosition.index, token.endPosition.index)
+                cutText(
+                    code,
+                    token.startPosition.index,
+                    token.endPosition.index,
+                    ContextCompat.getColor(holder.itemView.context, R.color.material_on_background_emphasis_medium)
+                )
         }
     }
 
@@ -53,19 +59,22 @@ class TokensRecyclerViewAdapter(
         text: String,
         front: Int,
         back: Int,
-        offsetFront: Int = 0,
-        offsetBack: Int = 0,
-        color: ForegroundColorSpan = ForegroundColorSpan(0xED7417) // orange
+        defaultColor: Int,
+        offsetFront: Int = 2,
+        offsetBack: Int = 2,
+        color: ForegroundColorSpan = ForegroundColorSpan(Color.parseColor("#ED7417")) // orange
     ): SpannableStringBuilder {
+
+        val defaultForeground = ForegroundColorSpan(defaultColor)
         val result = SpannableStringBuilder()
         val length = text.length
 
         val offsetFrontPosition = if (front - offsetFront > 0) front - offsetFront else 0
-        val offsetBackPosition  = if (back + offsetBack > length) back - offsetBack   else length
+        val offsetBackPosition  = if (back + offsetBack < length - 1) back + offsetBack else length - 1
 
-        result.append(text.substring(offsetFrontPosition, front))
-        result.append(text.substring(front, back), color, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        result.append(text.substring(back, offsetBackPosition))
+        result.append(text.substring(offsetFrontPosition, front), defaultForeground, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.append(text.substring(front, back), color, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.append(text.substring(back, offsetBackPosition + 1), defaultForeground, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         return result
     }
