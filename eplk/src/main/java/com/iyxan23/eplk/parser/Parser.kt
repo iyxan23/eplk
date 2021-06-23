@@ -605,10 +605,85 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // power = atom [POW factor]*
+    // atom [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
+    private fun funcCall(): ParseResult {
+        val result = ParseResult()
+        val startPosition = currentToken.startPosition.copy()
+
+        val atomNodeResult = result.register(atom()) as Node?
+        if (result.hasError) return result
+
+        val atomNode = atomNodeResult as Node
+
+        // Check if this is a function call
+        if (currentToken.token != Tokens.PAREN_OPEN) {
+            // Nope it's not, let's just return
+            return result.success(atomNode)
+
+        } else {
+            // Yep it is a function call, let's do stuff
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Check if this is just a plain function call without any arguments
+            if (currentToken.token == Tokens.PAREN_CLOSE) {
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                return result.success(FunctionCallNode(
+                    atomNode,
+                    emptyArray(),
+                    startPosition,
+                    currentToken.endPosition
+                ))
+            }
+
+            val arguments = ArrayList<Node>()
+
+            // Nope, we have arguments
+            val firstArgumentResult = result.register(expression()) as Node?
+            if (result.hasError) return result
+
+            arguments.add(firstArgumentResult as Node)
+
+            // Check if we have more arguments
+            while (currentToken.token == Tokens.COMMA) {
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                val argumentResult = result.register(expression()) as Node?
+                if (result.hasError) return result
+
+                arguments.add(argumentResult as Node)
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Ok, done, return
+            return result.success(FunctionCallNode(
+                atomNode,
+                arguments.toTypedArray(),
+                startPosition,
+                currentToken.endPosition
+            ))
+        }
+    }
+
+    // power = func-call [POW factor]*
     private fun power(): ParseResult {
         val result = ParseResult()
-        val leftNodeResult = result.register(atom()) as Node?
+        val leftNodeResult = result.register(funcCall()) as Node?
 
         if (result.hasError) return result
 
