@@ -2,6 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
+import com.iyxan23.eplk.objects.EplkVoid
 import com.iyxan23.eplk.parser.Parser
 
 const val withTime = true
@@ -38,7 +39,10 @@ fun main() {
             continue
         }
 
-        println(interpreterResult.value)
+        // Don't print void objects
+        if (interpreterResult.value !is EplkVoid) {
+            println(interpreterResult.value)
+        }
 
         if (withTime) println("Took ${System.currentTimeMillis() - startTime}ms")
     }
