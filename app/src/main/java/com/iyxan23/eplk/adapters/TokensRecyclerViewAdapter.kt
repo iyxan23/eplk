@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,8 +74,12 @@ class TokensRecyclerViewAdapter(
         val offsetBackPosition  = if (back + offsetBack < length - 1) back + offsetBack else length - 1
 
         result.append(text.substring(offsetFrontPosition, front), defaultForeground, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        result.setSpan(RelativeSizeSpan(.75f), 0, front - offsetFrontPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
         result.append(text.substring(front, back), color, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
         result.append(text.substring(back, offsetBackPosition + 1), defaultForeground, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (offsetBackPosition != length - 1) result.setSpan(RelativeSizeSpan(.75f), offsetBackPosition - back + 1, result.length - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         return result
     }
