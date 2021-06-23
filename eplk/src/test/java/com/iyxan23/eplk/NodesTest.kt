@@ -2,16 +2,14 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
+import com.iyxan23.eplk.nodes.FunctionDefinitionNode
 import com.iyxan23.eplk.nodes.control.ForNode
 import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
-import com.iyxan23.eplk.objects.EplkBoolean
-import com.iyxan23.eplk.objects.EplkFloat
-import com.iyxan23.eplk.objects.EplkInteger
-import com.iyxan23.eplk.objects.EplkVoid
+import com.iyxan23.eplk.objects.*
 import com.iyxan23.eplk.parser.Parser
 import org.junit.Test
 
@@ -312,5 +310,30 @@ class NodesTest {
         assert(resultVisit.value is EplkVoid)
 
         assert((scope.symbolTable.variables["number"] as EplkFloat).value == 256f)
+    }
+
+    @Test
+    fun funcDefTest() {
+        val lexerResult = Lexer(filename, "fun hello(world) -> 1 + 1").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as FunctionDefinitionNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkVoid)
+
+        assert(scope.symbolTable.variables.containsKey("hello"))
+        assert(scope.symbolTable.variables["hello"] is EplkFunction)
+        assert(
+            (scope.symbolTable.variables["hello"] as EplkFunction)
+                .parameters.contentEquals(
+                    arrayOf("world")
+                )
+        )
     }
 }
