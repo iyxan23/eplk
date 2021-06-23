@@ -69,7 +69,7 @@ class Lexer(
                         advance()
                     }
 
-                    tokens.add(Token(tokenToAdd, null, beforePosition))
+                    tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))
                 }
 
                 currentChar == '*' -> {
