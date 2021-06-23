@@ -105,6 +105,19 @@ abstract class EplkObject(open val scope: Scope) {
         )
     }
 
+    // When this object is being called, like for example:
+    // variable()
+    open fun call(arguments: Array<EplkObject>, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(
+            EplkNotImplementedError(
+                "$objectName is not callable",
+                startPosition,
+                endPosition,
+                scope
+            )
+        )
+    }
+
     // TODO: 6/21/21 make a better way of doing this
     // Returns a list of one of these tokens:
     // Tokens.EQUAL, Tokens.NOT_EQUAL, Tokens.GREATER_THAN, Tokens.LESSER_THAN,
