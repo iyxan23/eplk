@@ -43,7 +43,7 @@ class EplkFunction(
             ))
         }
 
-        val functionScope = Scope(functionName, SymbolTable())
+        val functionScope = Scope(functionName, SymbolTable(), scope, startPosition)
         parameters.forEachIndexed { index: Int, name: String ->
             functionScope.symbolTable.variables[name] = arguments[index]
         }
