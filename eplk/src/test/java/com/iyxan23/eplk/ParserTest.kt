@@ -152,7 +152,7 @@ class ParserTest {
     }
 
     @Test
-    fun funcTest() {
+    fun funcDefTest() {
         val code = "fun hello_world(hi, world, test) -> 1 + 1"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
