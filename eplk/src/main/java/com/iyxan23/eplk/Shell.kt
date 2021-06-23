@@ -48,6 +48,8 @@ fun main() {
 
         if (individualTimes) println("Interpreter took ${System.currentTimeMillis() - interpreterStartTime}ms")
 
+        if (withTime) println("Took ${System.currentTimeMillis() - startTime}ms")
+
         if (interpreterResult.hasError) {
             println(interpreterResult.error!!.toString(code))
             continue
@@ -55,9 +57,10 @@ fun main() {
 
         // Don't print void objects
         if (interpreterResult.value !is EplkVoid) {
+            println()
             println(interpreterResult.value)
         }
 
-        if (withTime) println("Took ${System.currentTimeMillis() - startTime}ms")
+        println()
     }
 }
