@@ -1,5 +1,7 @@
 package com.iyxan23.eplk.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iyxan23.eplk.R
@@ -59,6 +62,22 @@ class LexerFragment : Fragment() {
         viewModel.tokens.observe(viewLifecycleOwner, { tokens ->
             progressBarLexer.visibility = View.GONE
             tokensAdapter.update(tokens)
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, { error ->
+            // An error occurred in the lexer
+            progressBarLexer.visibility = View.GONE
+
+            val builder = AlertDialog.Builder(context)
+                .setTitle("Error")
+                .setMessage(error.toString(code))
+                .setCancelable(false)
+                .setPositiveButton("Ok") { dialog, which ->
+                    dialog.dismiss()
+                    findNavController().navigateUp()
+                }
+
+            builder.create().show()
         })
     }
 }

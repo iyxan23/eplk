@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 class LexerViewModel: ViewModel() {
 
     private val tokensMutable: MutableLiveData<ArrayList<Token>> = MutableLiveData()
-    private val errorMutable: MutableLiveData<EplkError?> = MutableLiveData()
+    private val errorMutable: MutableLiveData<EplkError> = MutableLiveData()
 
     val tokens: LiveData<ArrayList<Token>> = tokensMutable
-    val error: LiveData<EplkError?> = errorMutable
+    val error: LiveData<EplkError> = errorMutable
 
     fun runLexer(code: String) {
         viewModelScope.launch {
