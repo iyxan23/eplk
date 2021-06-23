@@ -12,7 +12,10 @@ atom                    = [INT|FLOAT] |
                           IDENTIFIER |
                           [PAREN_OPEN expression* PAREN_CLOSE] |
                           [TRUE|FALSE] |
-                          if-expression
+                          if-expression |
+                          for-expression |
+                          while-expression |
+                          fun-definition
 
 func-call               = atom [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
 

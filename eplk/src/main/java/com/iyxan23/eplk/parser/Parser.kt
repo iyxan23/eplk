@@ -52,6 +52,129 @@ class Parser(private val tokens: ArrayList<Token>) {
         return currentToken
     }
 
+    // func-definition = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE ARROW expression
+    private fun funcDefinition(): ParseResult {
+        val result = ParseResult()
+
+        val parameters = ArrayList<String>()
+        val startPosition = currentToken.startPosition.copy()
+
+        if (currentToken.token != Tokens.FUN) {
+            return result.failure(SyntaxError(
+                "Expected 'fun'",
+                currentToken.startPosition,
+                currentToken.endPosition
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        if (currentToken.token != Tokens.IDENTIFIER) {
+            return result.failure(SyntaxError(
+                "Expected an identifier after 'fun'",
+                currentToken.startPosition,
+                currentToken.endPosition
+            ))
+        }
+
+        val functionName = currentToken.value!!
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        if (currentToken.token != Tokens.PAREN_OPEN) {
+            return result.failure(SyntaxError(
+                "Expected an open parentheses '(' after identifier",
+                currentToken.startPosition,
+                currentToken.endPosition
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // Parse parameters
+        if (currentToken.token == Tokens.IDENTIFIER) {
+            // Add this to the list
+            parameters.add(currentToken.value!!)
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            while (currentToken.token == Tokens.COMMA) {
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                if (currentToken.token != Tokens.IDENTIFIER) {
+                    return result.failure(SyntaxError(
+                "Expected an identifier after a comma",
+                        currentToken.startPosition,
+                        currentToken.endPosition,
+                    ))
+                }
+
+                // Add this to the list
+                parameters.add(currentToken.value!!)
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+            }
+        }
+
+        if (currentToken.token != Tokens.PAREN_CLOSE) {
+            return result.failure(SyntaxError(
+                "Expected a close parentheses ')' after parameters / an open parentheses",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // TODO: 6/23/21 Multiline function
+
+        if (currentToken.token != Tokens.ARROW) {
+            return result.failure(SyntaxError(
+                "Expected an arrow ('->') after a function definition",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        val expressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        val expression = expressionResult as Node
+
+        return result.success(FunctionDefinitionNode(
+            functionName,
+            parameters.toTypedArray(),
+            expression,
+            startPosition
+        ))
+    }
+
     // while-expression = WHILE PAREN_OPEN expression PAREN_CLOSE expression
     private fun whileExpression(): ParseResult {
         val result = ParseResult()
@@ -462,6 +585,14 @@ class Parser(private val tokens: ArrayList<Token>) {
                 if (result.hasError) return result
 
                 return result.success(whileResult as Node)
+            }
+
+            // Check if this is a function definition
+            Tokens.FUN -> {
+                val funcDefResult = result.register(funcDefinition())
+                if (result.hasError) return result
+
+                return result.success(funcDefResult as Node)
             }
 
             else -> {
