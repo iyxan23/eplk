@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.fragments
+package com.iyxan23.eplk.runner.fragments
 
 import android.app.AlertDialog
 import android.graphics.Typeface
@@ -15,10 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.iyxan23.eplk.R
-import com.iyxan23.eplk.adapters.TokensRecyclerViewAdapter
+import com.iyxan23.eplk.runner.R
 import com.iyxan23.eplk.lexer.models.Token
-import com.iyxan23.eplk.viewmodels.LexerViewModel
+import com.iyxan23.eplk.runner.viewmodels.LexerViewModel
+import com.iyxan23.eplk.runner.adapters.TokensRecyclerViewAdapter
 
 class LexerFragment : Fragment() {
 

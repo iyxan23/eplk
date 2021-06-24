@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.fragments
+package com.iyxan23.eplk.runner.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.findNavController
-import com.iyxan23.eplk.R
+import com.iyxan23.eplk.runner.R
 
 class MainFragment : Fragment() {
 

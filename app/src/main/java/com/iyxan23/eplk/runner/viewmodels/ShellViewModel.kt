@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.viewmodels
+package com.iyxan23.eplk.runner.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

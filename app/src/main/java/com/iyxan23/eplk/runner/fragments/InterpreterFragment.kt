@@ -1,11 +1,11 @@
-package com.iyxan23.eplk.fragments
+package com.iyxan23.eplk.runner.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.iyxan23.eplk.R
+import com.iyxan23.eplk.runner.R
 
 class InterpreterFragment : Fragment() {
 

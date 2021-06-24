@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.fragments
+package com.iyxan23.eplk.runner.fragments
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import com.iyxan23.eplk.R
-import com.iyxan23.eplk.viewmodels.ShellViewModel
+import com.iyxan23.eplk.runner.R
+import com.iyxan23.eplk.runner.viewmodels.ShellViewModel
 
 class ShellFragment : Fragment() {
 

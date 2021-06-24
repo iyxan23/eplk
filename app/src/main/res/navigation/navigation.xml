@@ -6,7 +6,7 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/codeFragment"
-        android:name="com.iyxan23.eplk.fragments.CodeFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.CodeFragment"
         android:label="code_fragment"
         tools:layout="@layout/code_fragment">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/lexerFragment"
-        android:name="com.iyxan23.eplk.fragments.LexerFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.LexerFragment"
         android:label="lexer_fragment"
         tools:layout="@layout/lexer_fragment" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/parserFragment"
-        android:name="com.iyxan23.eplk.fragments.ParserFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.ParserFragment"
         android:label="parser_fragment"
         tools:layout="@layout/parser_fragment" >
         <action
@@ -36,17 +36,17 @@
     </fragment>
     <fragment
         android:id="@+id/interpreterFragment"
-        android:name="com.iyxan23.eplk.fragments.InterpreterFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.InterpreterFragment"
         android:label="interpreter_fragment"
         tools:layout="@layout/interpreter_fragment" />
     <fragment
         android:id="@+id/shellFragment"
-        android:name="com.iyxan23.eplk.fragments.ShellFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.ShellFragment"
         android:label="shell_fragment"
         tools:layout="@layout/shell_fragment" />
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.iyxan23.eplk.fragments.MainFragment"
+        android:name="com.iyxan23.eplk.runner.fragments.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
         <action

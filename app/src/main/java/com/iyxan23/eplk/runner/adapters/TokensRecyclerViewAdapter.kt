@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.adapters
+package com.iyxan23.eplk.runner.adapters
 
 import android.graphics.Color
 import android.text.Spannable
@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.iyxan23.eplk.R
+import com.iyxan23.eplk.runner.R
 import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.lexer.models.Token
 

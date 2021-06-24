@@ -1,4 +1,4 @@
-package com.iyxan23.eplk.fragments
+package com.iyxan23.eplk.runner.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.iyxan23.eplk.R
+import com.iyxan23.eplk.runner.R
 
 class CodeFragment : Fragment() {
 

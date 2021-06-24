@@ -1,4 +1,4 @@
-package com.iyxan23.eplk
+package com.iyxan23.eplk.runner
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
