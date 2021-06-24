@@ -91,7 +91,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -102,7 +102,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -113,7 +113,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -124,7 +124,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -135,7 +135,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -146,7 +146,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -157,7 +157,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -168,7 +168,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }
@@ -179,7 +179,7 @@ class ParserTest {
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
-        assert(!result.hasError) { println(result.error!!.toString(code)) }
+        assert(!result.hasError) { println(result.error!!.toString()) }
 
         println(Utils.prettyPrintNode(result.node!!))
     }

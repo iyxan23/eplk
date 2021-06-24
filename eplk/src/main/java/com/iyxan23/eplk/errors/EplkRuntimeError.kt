@@ -32,7 +32,7 @@ open class EplkRuntimeError(
         return result.toString()
     }
 
-    override fun toString(code: String, withPosition: Boolean): String {
-        return "${super.toString(code, false)}\n${ if (withPosition) generateTraceback() else "" }"
+    override fun generateString(withPosition: Boolean): String {
+        return "${super.generateString(false)}\n${ if (withPosition) generateTraceback() else "" }"
     }
 }

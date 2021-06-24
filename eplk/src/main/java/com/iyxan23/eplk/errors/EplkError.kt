@@ -12,8 +12,8 @@ open class EplkError(
     open val startPosition: Position,
     open val endPosition: Position,
 ) {
-    open fun toString(code: String, withPosition: Boolean = true): String {
-        val lineCode = code.split("\n")[startPosition.line]
+    open fun generateString(withPosition: Boolean = true): String {
+        val lineCode = startPosition.code.split("\n")[startPosition.line]
         val error = StringBuilder()
 
         error.appendLine()

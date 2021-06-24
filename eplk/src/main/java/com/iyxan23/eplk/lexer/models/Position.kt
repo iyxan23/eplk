@@ -8,6 +8,7 @@ data class Position(
     var column: Int,
     var line: Int,
     val filename: String,
+    val code: String,
 ) {
     fun advance(currentChar: Char?): Position {
         index++

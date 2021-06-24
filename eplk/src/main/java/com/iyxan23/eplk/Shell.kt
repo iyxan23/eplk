@@ -27,7 +27,7 @@ fun main() {
         if (individualTimes) println("Lexer took ${System.currentTimeMillis() - startTime}ms")
 
         if (lexerResult.error != null) {
-            println(lexerResult.error.toString(code))
+            println(lexerResult.error.generateString())
             continue
         }
 
@@ -38,7 +38,7 @@ fun main() {
         if (individualTimes) println("Parser took ${System.currentTimeMillis() - parserStartTime}ms")
 
         if (parseResult.hasError) {
-            println(parseResult.error!!.toString(code))
+            println(parseResult.error!!.generateString())
             continue
         }
 
@@ -51,7 +51,7 @@ fun main() {
         if (withTime) println("Took ${System.currentTimeMillis() - startTime}ms")
 
         if (interpreterResult.hasError) {
-            println(interpreterResult.error!!.toString(code))
+            println(interpreterResult.error!!.generateString())
             continue
         }
 

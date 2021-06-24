@@ -72,7 +72,7 @@ class ShellFragment : Fragment() {
             executeButton.isEnabled = true
 
             out(
-                error.toString(code),
+                error.generateString(code),
                 ResourcesCompat.getColor(
                     resources,
                     R.color.design_default_color_error,

@@ -18,7 +18,7 @@ class Lexer(
 ) {
 
     private val spaces = arrayOf(' ', '\t', '\n')
-    private val position = Position(-1, 0, 0, filename)
+    private val position = Position(-1, 0, 0, filename, code)
     private var currentChar: Char? = null
 
     private var errorThrown: EplkError? = null
