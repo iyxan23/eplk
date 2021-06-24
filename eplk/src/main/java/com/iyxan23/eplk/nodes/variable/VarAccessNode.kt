@@ -13,8 +13,8 @@ class VarAccessNode(
 ) : Node() {
 
     val variableName = identifierToken.value!!
-    override val endPosition: Position = identifierToken.startPosition
-    override val startPosition: Position = identifierToken.endPosition
+    override val startPosition: Position = identifierToken.startPosition
+    override val endPosition: Position = identifierToken.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
