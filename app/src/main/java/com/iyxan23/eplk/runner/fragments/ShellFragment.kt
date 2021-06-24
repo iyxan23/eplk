@@ -48,8 +48,6 @@ class ShellFragment : Fragment() {
         shellOutput.text = output
     }
 
-    private var isExecuting = false
-
     private var code = ""
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,6 +56,7 @@ class ShellFragment : Fragment() {
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
             runningProgressBar.visibility = View.GONE
+            executeButton.isEnabled = true
 
             out(
                 result.toString(),
@@ -71,6 +70,7 @@ class ShellFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
             runningProgressBar.visibility = View.GONE
+            executeButton.isEnabled = true
 
             out(
                 error.toString(code),
@@ -84,6 +84,7 @@ class ShellFragment : Fragment() {
 
         executeButton.setOnClickListener {
             code = codeText.text.toString()
+            codeText.text.clear()
 
             out(
                 "EPLK SHELL > $code",
@@ -94,8 +95,7 @@ class ShellFragment : Fragment() {
                 )
             )
 
-            isExecuting = true
-            it.isEnabled = false
+            executeButton.isEnabled = false
 
             runningProgressBar.visibility = View.VISIBLE
 
