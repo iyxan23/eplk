@@ -519,7 +519,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             // ===========================================================
 
             // Return an empty list
-            TODO("Make ListNode")
+            return result.success(ListNode(startPosition, bracketCloseTokenEndPos))
         }
 
         // Parse expression(s)
@@ -557,7 +557,11 @@ class Parser(private val tokens: ArrayList<Token>) {
         // ===========================================================
 
         // Alright we're done parsing
-        TODO("Make ListNode")
+        return result.success(ListNode(
+            startPosition,
+            bracketCloseEndPos,
+            items
+        ))
     }
 
     // atom = INT_LITERAL | FLOAT_LITERAL | IDENTIFIER | STRING_LITERAL | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | list-expression | if-expression | for-expression | while-expression
