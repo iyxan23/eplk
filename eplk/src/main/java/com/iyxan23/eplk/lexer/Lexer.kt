@@ -208,8 +208,6 @@ class Lexer(
                     parseStringLiteral()
 
                     if (errorThrown != null) return LexerResult(null, errorThrown)
-
-                    advance()
                 }
 
                 currentChar!!.isDigit() -> {
@@ -312,6 +310,8 @@ class Lexer(
 
             when (currentChar) {
                 '"' -> {
+                    advance()
+
                     // Add the string literal token
                     tokens.add(Token(Tokens.STRING_LITERAL, builder.toString(), stringStartPosition, position.copy()))
                     return
