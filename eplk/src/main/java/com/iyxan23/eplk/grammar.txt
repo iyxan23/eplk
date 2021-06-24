@@ -8,7 +8,7 @@ if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
                           [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
                           ELSE expression
 
-list-expression         = BRACKET_OPEN expression [COMMA expression]* BRACKET_CLOSE
+list-expression         = BRACKET_OPEN [expression [COMMA expression]]* BRACKET_CLOSE
 
 atom                    = INT_LITERAL |
                           FLOAT_LITERAL |

@@ -9,10 +9,7 @@ import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
-import com.iyxan23.eplk.nodes.types.BooleanNode
-import com.iyxan23.eplk.nodes.types.FloatNode
-import com.iyxan23.eplk.nodes.types.IntegerNode
-import com.iyxan23.eplk.nodes.types.StringNode
+import com.iyxan23.eplk.nodes.types.*
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
@@ -492,6 +489,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         )
     }
 
+    // list-expression = BRACKET_OPEN [expression [COMMA expression]]* BRACKET_CLOSE
     private fun listExpression(): ParseResult {
         val items = ArrayList<Node>()
         val result = ParseResult()
@@ -513,6 +511,13 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         // Check if this is just an empty list
         if (currentToken.token == Tokens.BRACKET_CLOSE) {
+            val bracketCloseTokenEndPos = currentToken.endPosition.copy()
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
             // Return an empty list
             TODO("Make ListNode")
         }
@@ -524,6 +529,11 @@ class Parser(private val tokens: ArrayList<Token>) {
         items.add(firstExpressionResult as Node)
 
         while (currentToken.token == Tokens.COMMA) {
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
             // Parse the expression after the comma
             val expressionResult = result.register(expression())
             if (result.hasError) return result
@@ -538,6 +548,13 @@ class Parser(private val tokens: ArrayList<Token>) {
                 currentToken.endPosition,
             ))
         }
+
+        val bracketCloseEndPos = currentToken.endPosition.copy()
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
 
         // Alright we're done parsing
         TODO("Make ListNode")
