@@ -343,6 +343,33 @@ class LexerTest {
     }
 
     @Test
+    fun listTest() {
+        expectTokens(
+            "[hi, \"hello\", 1, 1 + 1]",
+            arrayListOf(
+                Tokens.BRACKET_OPEN, null,
+
+                Tokens.IDENTIFIER, "hi",
+                Tokens.COMMA, null,
+
+                Tokens.STRING_LITERAL, "hello",
+                Tokens.COMMA, null,
+
+                Tokens.INT_LITERAL, "1",
+                Tokens.COMMA, null,
+
+                Tokens.INT_LITERAL, "1",
+                Tokens.PLUS, null,
+                Tokens.INT_LITERAL, "1",
+
+                Tokens.BRACKET_CLOSE, null,
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",
