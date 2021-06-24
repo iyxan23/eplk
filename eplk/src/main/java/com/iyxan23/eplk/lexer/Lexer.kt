@@ -193,13 +193,23 @@ class Lexer(
                     advance()
                 }
 
-                currentChar == '{' -> {
+                currentChar == '[' -> {
                     tokens.add(Token(Tokens.BRACKET_OPEN, null, position.copy()))
                     advance()
                 }
 
-                currentChar == '}' -> {
+                currentChar == ']' -> {
                     tokens.add(Token(Tokens.BRACKET_CLOSE, null, position.copy()))
+                    advance()
+                }
+
+                currentChar == '{' -> {
+                    tokens.add(Token(Tokens.BRACES_OPEN, null, position.copy()))
+                    advance()
+                }
+
+                currentChar == '}' -> {
+                    tokens.add(Token(Tokens.BRACES_CLOSE, null, position.copy()))
                     advance()
                 }
 

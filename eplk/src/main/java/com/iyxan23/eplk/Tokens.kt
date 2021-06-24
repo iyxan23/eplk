@@ -27,8 +27,8 @@ enum class Tokens {
     IF,
     ELIF,
     ELSE,
-    BRACKET_OPEN,
-    BRACKET_CLOSE,
+    BRACES_OPEN,  // {
+    BRACES_CLOSE, // }
 
     FOR,
     SEMICOLON,
@@ -41,11 +41,15 @@ enum class Tokens {
 
     EQUAL,
 
-    PAREN_OPEN,
-    PAREN_CLOSE,
+    PAREN_OPEN,  // (
+    PAREN_CLOSE, // )
+
     STRING_LITERAL,
     INT_LITERAL,
     FLOAT_LITERAL,
+
+    BRACKET_OPEN,  // [
+    BRACKET_CLOSE, // ]
 
     IDENTIFIER,
     KEYWORD,

@@ -251,13 +251,13 @@ class LexerTest {
                 Tokens.IDENTIFIER, "something",
                 Tokens.PAREN_CLOSE, null,
 
-                Tokens.BRACKET_OPEN, null,
-                Tokens.BRACKET_CLOSE, null,
+                Tokens.BRACES_OPEN, null,
+                Tokens.BRACES_CLOSE, null,
 
                 Tokens.ELSE, null,
 
-                Tokens.BRACKET_OPEN, null,
-                Tokens.BRACKET_CLOSE, null,
+                Tokens.BRACES_OPEN, null,
+                Tokens.BRACES_CLOSE, null,
 
                 Tokens.EOF, null,
             ) as ArrayList<Any>
