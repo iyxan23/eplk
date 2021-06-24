@@ -3,6 +3,9 @@ package com.iyxan23.eplk.runner.fragments
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.iyxan23.eplk.runner.R
 import com.iyxan23.eplk.runner.viewmodels.ShellViewModel
 
@@ -34,9 +38,11 @@ class ShellFragment : Fragment() {
         return root
     }
 
-    @SuppressLint("SetTextI18n")
-    fun out(text: String) {
-        shellOutput.text = "${shellOutput.text}$text\n"
+    private val output = SpannableStringBuilder()
+
+    private fun out(text: String, color: Int) {
+        output.append("$text\n", ForegroundColorSpan(color), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        shellOutput.text = output
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -44,17 +50,40 @@ class ShellFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ShellViewModel::class.java)
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
-            out(result.toString())
+            out(
+                result.toString(),
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.material_on_background_emphasis_high_type,
+                    requireActivity().theme
+                )
+            )
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
             val code = codeText.text.toString()
-            out(error.toString(code))
+            out(
+                error.toString(code),
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.design_default_color_error,
+                    requireActivity().theme
+                )
+            )
         }
 
         executeButton.setOnClickListener {
             val code = codeText.text.toString()
-            out("<< $code")
+
+            out(
+                "EPLK SHELL > $code",
+                ResourcesCompat.getColor(
+                    resources,
+                    R.color.material_on_background_emphasis_medium,
+                    requireActivity().theme
+                )
+            )
+
             viewModel.executeCode(code)
         }
     }
