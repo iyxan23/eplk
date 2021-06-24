@@ -12,6 +12,7 @@ import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.types.BooleanNode
 import com.iyxan23.eplk.nodes.types.FloatNode
 import com.iyxan23.eplk.nodes.types.IntegerNode
+import com.iyxan23.eplk.nodes.types.StringNode
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
@@ -491,7 +492,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         )
     }
 
-    // atom = [INT|FLOAT] | IDENTIFIER | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression | while-expression
+    // atom = INT_LITERAL | FLOAT_LITERAL | IDENTIFIER | STRING_LITERAL | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression | while-expression
     private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
@@ -514,20 +515,6 @@ class Parser(private val tokens: ArrayList<Token>) {
                 return result.success(FloatNode(oldToken))
             }
 
-            // Check if the current token is a boolean literal (true / false)
-            Tokens.TRUE, Tokens.FALSE -> {
-                result.registerAdvancement()
-                advance()
-
-                return result.success(
-                    BooleanNode(
-                        oldToken.token == Tokens.TRUE,
-                        oldToken.startPosition,
-                        oldToken.endPosition
-                    )
-                )
-            }
-
             // Check if the current token is an identifier (variable)
             Tokens.IDENTIFIER -> {
                 result.registerAdvancement()
@@ -538,6 +525,13 @@ class Parser(private val tokens: ArrayList<Token>) {
                     oldToken.startPosition,
                     oldToken.endPosition
                 ))
+            }
+
+            Tokens.STRING_LITERAL -> {
+                result.registerAdvancement()
+                advance()
+
+                return result.success(StringNode(oldToken))
             }
 
             // Check if the current token is an open parentheses
@@ -561,6 +555,20 @@ class Parser(private val tokens: ArrayList<Token>) {
                         currentToken.endPosition,
                     ))
                 }
+            }
+
+            // Check if the current token is a boolean literal (true / false)
+            Tokens.TRUE, Tokens.FALSE -> {
+                result.registerAdvancement()
+                advance()
+
+                return result.success(
+                    BooleanNode(
+                        oldToken.token == Tokens.TRUE,
+                        oldToken.startPosition,
+                        oldToken.endPosition
+                    )
+                )
             }
 
             // Check if this is an if expression
@@ -597,7 +605,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             else -> {
                 return result.failure(SyntaxError(
-                    "Expected an integer literal, float literal, identifier, 'if', 'for', 'true', 'false', '+', '-', or '('",
+                    "Expected an integer literal, float literal, identifier, string literal, 'if', 'for', 'true', 'false', '+', '-', or '('",
                     oldToken.startPosition,
                     oldToken.endPosition,
                 ))
