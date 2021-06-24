@@ -4,14 +4,17 @@ import com.iyxan23.eplk.errors.runtime.EplkNotDefinedError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
+import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.EplkObject
 
 class VarAccessNode(
-    val variableName: String,
-    override val startPosition: Position,
-    override val endPosition: Position,
+    identifierToken: Token,
 ) : Node() {
+
+    val variableName = identifierToken.value!!
+    override val endPosition: Position = identifierToken.startPosition
+    override val startPosition: Position = identifierToken.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()

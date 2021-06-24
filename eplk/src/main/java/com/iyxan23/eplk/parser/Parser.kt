@@ -520,11 +520,7 @@ class Parser(private val tokens: ArrayList<Token>) {
                 result.registerAdvancement()
                 advance()
 
-                return result.success(VarAccessNode(
-                    oldToken.value!!,
-                    oldToken.startPosition,
-                    oldToken.endPosition
-                ))
+                return result.success(VarAccessNode(oldToken))
             }
 
             Tokens.STRING_LITERAL -> {
@@ -562,13 +558,7 @@ class Parser(private val tokens: ArrayList<Token>) {
                 result.registerAdvancement()
                 advance()
 
-                return result.success(
-                    BooleanNode(
-                        oldToken.token == Tokens.TRUE,
-                        oldToken.startPosition,
-                        oldToken.endPosition
-                    )
-                )
+                return result.success(BooleanNode(oldToken))
             }
 
             // Check if this is an if expression
