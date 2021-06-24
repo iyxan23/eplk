@@ -23,7 +23,7 @@ class MainFragment : Fragment() {
                     .navigate(MainFragmentDirections.actionMainFragmentToShellFragment())
             }
 
-        root.findViewById<Button>(R.id.buttonShell)
+        root.findViewById<Button>(R.id.buttonStepByStep)
             .setOnClickListener {
                 it  .findNavController()
                     .navigate(MainFragmentDirections.actionMainFragmentToCodeFragment())
