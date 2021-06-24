@@ -14,6 +14,8 @@ class StringNode(
     override val startPosition: Position = stringToken.startPosition
     override val endPosition: Position = stringToken.endPosition
 
+    val value = stringToken.value
+
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().success(EplkString(stringToken.value!!, scope))
     }

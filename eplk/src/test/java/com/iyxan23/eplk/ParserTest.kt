@@ -42,6 +42,17 @@ class ParserTest {
     }
 
     @Test
+    fun stringTest() {
+        val code = "\"Hello World\n\""
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError)
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun parenthesesTest() {
         val code = "(1 + 2) * 3"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!

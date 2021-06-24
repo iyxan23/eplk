@@ -8,6 +8,7 @@ import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
+import com.iyxan23.eplk.nodes.types.StringNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.*
 import com.iyxan23.eplk.parser.Parser
@@ -335,5 +336,22 @@ class NodesTest {
                     arrayOf("world")
                 )
         )
+    }
+
+    @Test
+    fun stringTest() {
+        val lexerResult = Lexer(filename, "\"Hello\" + \" World\" * 3").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkString)
+        assert((resultVisit.value as EplkString).value == "Hello World World World")
     }
 }

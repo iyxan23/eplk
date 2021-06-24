@@ -9,6 +9,7 @@ import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.types.BooleanNode
 import com.iyxan23.eplk.nodes.types.FloatNode
 import com.iyxan23.eplk.nodes.types.IntegerNode
+import com.iyxan23.eplk.nodes.types.StringNode
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
@@ -31,6 +32,11 @@ object Utils {
 
             is BooleanNode -> {
                 result.append(strIndentation + "Boolean: ")
+                result.append(node.value)
+            }
+
+            is StringNode -> {
+                result.append(strIndentation + "String: ")
                 result.append(node.value)
             }
 
