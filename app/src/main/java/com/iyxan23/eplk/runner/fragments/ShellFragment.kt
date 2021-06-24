@@ -85,6 +85,7 @@ class ShellFragment : Fragment() {
             )
 
             viewModel.executeCode(code)
+            codeText.text.clear()
         }
     }
 }
