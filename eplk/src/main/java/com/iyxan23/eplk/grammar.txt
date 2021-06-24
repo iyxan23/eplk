@@ -8,8 +8,10 @@ if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
                           [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
                           ELSE expression
 
-atom                    = [INT|FLOAT] |
+atom                    = INT_LITERAL |
+                          FLOAT_LITERAL |
                           IDENTIFIER |
+                          STRING_LITERAL |
                           [PAREN_OPEN expression* PAREN_CLOSE] |
                           [TRUE|FALSE] |
                           if-expression |
