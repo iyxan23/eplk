@@ -43,7 +43,13 @@ class EplkFunction(
             ))
         }
 
-        val functionScope = Scope(functionName, SymbolTable(), scope, startPosition)
+        val functionScope = Scope(
+            "function $functionName(${parameters.joinToString(", ")})",
+            SymbolTable(),
+            scope,
+            startPosition
+        )
+
         parameters.forEachIndexed { index: Int, name: String ->
             functionScope.symbolTable.variables[name] = arguments[index]
         }
