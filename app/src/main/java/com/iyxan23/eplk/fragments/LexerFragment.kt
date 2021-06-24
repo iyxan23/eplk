@@ -17,20 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iyxan23.eplk.R
 import com.iyxan23.eplk.adapters.TokensRecyclerViewAdapter
+import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.viewmodels.LexerViewModel
 
-
 class LexerFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = LexerFragment()
-    }
 
     private lateinit var viewModel: LexerViewModel
     private var tokensAdapter: TokensRecyclerViewAdapter
                 = TokensRecyclerViewAdapter(ArrayList(), "")
 
+    private var tokens: Array<Token>? = null
+
     private lateinit var progressBarLexer: ProgressBar
+    private lateinit var runParserButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +41,15 @@ class LexerFragment : Fragment() {
         tokensRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         tokensRecyclerView.adapter = tokensAdapter
 
-        val runParserButton = root.findViewById<Button>(R.id.run_parser_button)
-        progressBarLexer = root.findViewById<ProgressBar>(R.id.progress_lexer)
+        runParserButton = root.findViewById(R.id.run_parser_button)
+        progressBarLexer = root.findViewById(R.id.progress_lexer)
+
+        // Don't enable the run parser button before the lexer has finished doing lexical analysis
+        runParserButton.isEnabled = false
         runParserButton.setOnClickListener {
-            TODO("Implement ParseFragment")
+            // tokens can't be null because the button is enabled after the lexer has finished
+            findNavController()
+                .navigate(LexerFragmentDirections.actionLexerFragmentToParserFragment())
         }
 
         return root
@@ -64,6 +68,11 @@ class LexerFragment : Fragment() {
         viewModel.tokens.observe(viewLifecycleOwner, { tokens ->
             progressBarLexer.visibility = View.GONE
             tokensAdapter.update(tokens)
+
+            this.tokens = tokens.toTypedArray()
+
+            // Enable the run parser button
+            runParserButton.isEnabled = true
         })
 
         viewModel.error.observe(viewLifecycleOwner, { error ->
@@ -74,7 +83,7 @@ class LexerFragment : Fragment() {
                 .setTitle("Error")
                 .setMessage(error.toString(code))
                 .setCancelable(false)
-                .setPositiveButton("Ok") { dialog, which ->
+                .setPositiveButton("Ok") { dialog, _ ->
                     dialog.dismiss()
                     findNavController().navigateUp()
                 }

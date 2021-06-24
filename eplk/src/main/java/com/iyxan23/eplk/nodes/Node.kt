@@ -9,7 +9,6 @@ import com.iyxan23.eplk.objects.EplkObject
  * An abstract class used to represent a node
  */
 abstract class Node() {
-
     abstract val startPosition: Position
     abstract val endPosition: Position
 

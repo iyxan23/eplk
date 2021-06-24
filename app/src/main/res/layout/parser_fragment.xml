@@ -5,4 +5,18 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ParserFragment"/>
+    tools:context=".fragments.ParserFragment">
+
+    <com.otaliastudios.zoom.ZoomLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:hasClickableChildren="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ast_graph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </com.otaliastudios.zoom.ZoomLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

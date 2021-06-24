@@ -1,5 +1,7 @@
 package com.iyxan23.eplk.lexer.models
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.iyxan23.eplk.Tokens
 
 /**

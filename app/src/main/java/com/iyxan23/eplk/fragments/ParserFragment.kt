@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.iyxan23.eplk.R
+import com.iyxan23.eplk.viewmodels.LexerViewModel
+import com.iyxan23.eplk.viewmodels.ParserViewModel
 
 class ParserFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ParserFragment()
-    }
+    lateinit var viewModel: ParserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,5 +23,7 @@ class ParserFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(ParserViewModel::class.java)
     }
 }

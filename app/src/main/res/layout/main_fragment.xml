@@ -2,50 +2,36 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/root_mainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.MainFragment">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/run_lexer_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <EditText
-                android:id="@+id/code"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:background="@android:color/transparent"
-                android:hint="Write your code here"
-                android:fontFamily="monospace"
-                android:textSize="12sp"
-                android:gravity="start|top"
-                android:inputType="textMultiLine" />
-        </LinearLayout>
-    </ScrollView>
-
     <Button
-        android:id="@+id/run_lexer_button"
+        android:id="@+id/buttonShell"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Run Lexer"
+        android:text="Shell"
+        tools:layout_editor_absoluteX="165dp"
+        tools:layout_editor_absoluteY="279dp" />
+
+    <Button
+        android:id="@+id/buttonStepByStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Step-By-Step (WIP)"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="348dp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="buttonShell,buttonStepByStep"
+        app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

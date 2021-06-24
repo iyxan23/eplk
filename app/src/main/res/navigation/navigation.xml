@@ -5,10 +5,10 @@
     android:id="@+id/navigation"
     app:startDestination="@id/mainFragment">
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.iyxan23.eplk.fragments.MainFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" >
+        android:id="@+id/codeFragment"
+        android:name="com.iyxan23.eplk.fragments.CodeFragment"
+        android:label="code_fragment"
+        tools:layout="@layout/code_fragment">
         <action
             android:id="@+id/action_mainFragment_to_lexerFragment"
             app:destination="@id/lexerFragment" />
@@ -39,4 +39,21 @@
         android:name="com.iyxan23.eplk.fragments.InterpreterFragment"
         android:label="interpreter_fragment"
         tools:layout="@layout/interpreter_fragment" />
+    <fragment
+        android:id="@+id/shellFragment"
+        android:name="com.iyxan23.eplk.fragments.ShellFragment"
+        android:label="shell_fragment"
+        tools:layout="@layout/shell_fragment" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.iyxan23.eplk.fragments.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_shellFragment"
+            app:destination="@id/shellFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_codeFragment"
+            app:destination="@id/codeFragment" />
+    </fragment>
 </navigation>
