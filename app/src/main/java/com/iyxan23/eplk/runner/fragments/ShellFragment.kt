@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.iyxan23.eplk.runner.R
@@ -24,6 +25,7 @@ class ShellFragment : Fragment() {
     private lateinit var shellOutput: TextView
     private lateinit var executeButton: Button
     private lateinit var codeText: EditText
+    private lateinit var runningProgressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +36,7 @@ class ShellFragment : Fragment() {
         shellOutput = root.findViewById(R.id.shell_output)
         executeButton = root.findViewById(R.id.executeButton)
         codeText = root.findViewById(R.id.shellCode)
+        runningProgressBar = root.findViewById(R.id.shell_progress_bar)
 
         return root
     }
@@ -45,11 +48,17 @@ class ShellFragment : Fragment() {
         shellOutput.text = output
     }
 
+    private var isExecuting = false
+
+    private var code = ""
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ShellViewModel::class.java)
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
+            runningProgressBar.visibility = View.GONE
+
             out(
                 result.toString(),
                 ResourcesCompat.getColor(
@@ -61,7 +70,8 @@ class ShellFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            val code = codeText.text.toString()
+            runningProgressBar.visibility = View.GONE
+
             out(
                 error.toString(code),
                 ResourcesCompat.getColor(
@@ -73,7 +83,7 @@ class ShellFragment : Fragment() {
         }
 
         executeButton.setOnClickListener {
-            val code = codeText.text.toString()
+            code = codeText.text.toString()
 
             out(
                 "EPLK SHELL > $code",
@@ -84,8 +94,12 @@ class ShellFragment : Fragment() {
                 )
             )
 
+            isExecuting = true
+            it.isEnabled = false
+
+            runningProgressBar.visibility = View.VISIBLE
+
             viewModel.executeCode(code)
-            codeText.text.clear()
         }
     }
 }
