@@ -492,7 +492,58 @@ class Parser(private val tokens: ArrayList<Token>) {
         )
     }
 
-    // atom = INT_LITERAL | FLOAT_LITERAL | IDENTIFIER | STRING_LITERAL | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | if-expression | for-expression | while-expression
+    private fun listExpression(): ParseResult {
+        val items = ArrayList<Node>()
+        val result = ParseResult()
+
+        if (currentToken.token != Tokens.BRACKET_OPEN) {
+            return result.failure(SyntaxError(
+                "Expected an open bracket '['",
+                currentToken.startPosition,
+                currentToken.endPosition
+            ))
+        }
+
+        val startPosition = currentToken.startPosition.copy()
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // Check if this is just an empty list
+        if (currentToken.token == Tokens.BRACKET_CLOSE) {
+            // Return an empty list
+            TODO("Make ListNode")
+        }
+
+        // Parse expression(s)
+        val firstExpressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        items.add(firstExpressionResult as Node)
+
+        while (currentToken.token == Tokens.COMMA) {
+            // Parse the expression after the comma
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            items.add(expressionResult as Node)
+        }
+
+        if (currentToken.token != Tokens.BRACKET_CLOSE) {
+            return result.failure(SyntaxError(
+                "Expected a close bracket ']' after expression(s)",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // Alright we're done parsing
+        TODO("Make ListNode")
+    }
+
+    // atom = INT_LITERAL | FLOAT_LITERAL | IDENTIFIER | STRING_LITERAL | [PAREN_OPEN expression* PAREN_CLOSE] | [TRUE|FALSE] | list-expression | if-expression | for-expression | while-expression
     private fun atom(): ParseResult {
         val result = ParseResult()
         val oldToken = currentToken.copy()
@@ -559,6 +610,13 @@ class Parser(private val tokens: ArrayList<Token>) {
                 advance()
 
                 return result.success(BooleanNode(oldToken))
+            }
+
+            Tokens.BRACKET_OPEN -> {
+                val listResult = result.register(listExpression())
+                if (result.hasError) return result
+
+                return result.success(listResult as Node)
             }
 
             // Check if this is an if expression

@@ -8,12 +8,15 @@ if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
                           [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
                           ELSE expression
 
+list-expression         = BRACKET_OPEN expression [COMMA expression]* BRACKET_CLOSE
+
 atom                    = INT_LITERAL |
                           FLOAT_LITERAL |
                           IDENTIFIER |
                           STRING_LITERAL |
                           [PAREN_OPEN expression* PAREN_CLOSE] |
                           [TRUE|FALSE] |
+                          list-expression |
                           if-expression |
                           for-expression |
                           while-expression |
