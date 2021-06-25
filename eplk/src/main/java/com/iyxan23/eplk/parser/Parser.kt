@@ -682,20 +682,55 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // atom [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
-    private fun funcCall(): ParseResult {
+    private fun incrementDecrement(): ParseResult {
         val result = ParseResult()
-        val startPosition = currentToken.startPosition.copy()
 
         val atomNodeResult = result.register(atom()) as Node?
         if (result.hasError) return result
 
-        val atomNode = atomNodeResult as Node
+        when (currentToken.token) {
+            // Check if the next token is a double plus or a double minus
+            Tokens.DOUBLE_PLUS -> {
+                val doublePlusToken = currentToken.copy()
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                return result.success(IncrementOrDecrementNode(doublePlusToken, atomNodeResult!!))
+            }
+
+            Tokens.DOUBLE_MINUS -> {
+                val doubleMinusToken = currentToken.copy()
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                return result.success(IncrementOrDecrementNode(doubleMinusToken, atomNodeResult!!))
+            }
+
+            // Nope, just return
+            else -> return result.success(atomNodeResult!!)
+        }
+    }
+
+    // increment-decrement [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
+    private fun funcCall(): ParseResult {
+        val result = ParseResult()
+        val startPosition = currentToken.startPosition.copy()
+
+        val incDecResult = result.register(incrementDecrement()) as Node?
+        if (result.hasError) return result
+
+        val incDecNode = incDecResult as Node
 
         // Check if this is a function call
         if (currentToken.token != Tokens.PAREN_OPEN) {
             // Nope it's not, let's just return
-            return result.success(atomNode)
+            return result.success(incDecNode)
 
         } else {
             // Yep it is a function call, let's do stuff
@@ -713,7 +748,7 @@ class Parser(private val tokens: ArrayList<Token>) {
                 // ===========================================================
 
                 return result.success(FunctionCallNode(
-                    atomNode,
+                    incDecNode,
                     emptyArray(),
                     startPosition,
                     currentToken.endPosition
@@ -749,7 +784,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             // Ok, done, return
             return result.success(FunctionCallNode(
-                atomNode,
+                incDecNode,
                 arguments.toTypedArray(),
                 startPosition,
                 currentToken.endPosition

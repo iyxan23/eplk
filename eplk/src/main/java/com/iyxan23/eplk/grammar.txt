@@ -22,7 +22,9 @@ atom                    = INT_LITERAL |
                           while-expression |
                           fun-definition
 
-func-call               = atom [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
+increment-decrement     = atom [DOUBLE_PLUS | DOUBLE_MINUS]
+
+func-call               = increment-decrement [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
 
 index                   = func-call [BRACKET_OPEN expression BRACKET_CLOSE]
 
