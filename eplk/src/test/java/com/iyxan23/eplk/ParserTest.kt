@@ -218,6 +218,28 @@ class ParserTest {
     }
 
     @Test
+    fun incrementTest() {
+        val code = "a++"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString()) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
+    fun decrementTest() {
+        val code = "a--"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString()) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun syntaxErrorTest() {
         val code = "1 2 3 /"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
