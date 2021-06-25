@@ -21,15 +21,6 @@ class EplkNativeFunction(
     override val objectName: String = "Native function"
     override fun toString(): String = "Native function $functionName(${parameters.joinToString(", ")})"
 
-    interface EplkNativeFunctionCallback {
-        fun call(
-            scope: Scope,
-            arguments: Array<EplkObject>,
-            startPosition: Position,
-            endPosition: Position
-        ): RealtimeResult<EplkObject>
-    }
-
     override fun call(
         arguments: Array<EplkObject>,
         startPosition: Position,
