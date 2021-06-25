@@ -67,6 +67,11 @@ class Lexer(
                     if (currentChar == '>') {
                         tokenToAdd = Tokens.ARROW
                         advance()
+
+                    // Check for -- (double minus)
+                    } else if (currentChar == '-') {
+                        tokenToAdd = Tokens.DOUBLE_MINUS
+                        advance()
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))

@@ -9,6 +9,7 @@ enum class Tokens {
     POW,
 
     DOUBLE_PLUS,
+    DOUBLE_MINUS,
 
     // Comparison tokens
     DOUBLE_EQUALS,
