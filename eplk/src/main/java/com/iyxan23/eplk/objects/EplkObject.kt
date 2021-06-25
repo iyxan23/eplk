@@ -107,7 +107,7 @@ abstract class EplkObject(open val scope: Scope) {
 
     // When this object is being indexed, like for example:
     // variable[1]
-    open fun index(arguments: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+    open fun index(eplkObject: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
         return RealtimeResult<EplkObject>().failure(
             EplkNotImplementedError(
                 "$objectName can't be indexed",
