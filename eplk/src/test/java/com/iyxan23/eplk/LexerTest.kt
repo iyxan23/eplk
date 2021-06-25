@@ -370,6 +370,19 @@ class LexerTest {
     }
 
     @Test
+    fun incrementDecrementTest() {
+        expectTokens(
+            "++ --",
+            arrayListOf(
+                Tokens.DOUBLE_PLUS, null,
+                Tokens.DOUBLE_MINUS, null,
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",
