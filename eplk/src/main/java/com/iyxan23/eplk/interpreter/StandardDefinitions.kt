@@ -12,13 +12,16 @@ object StandardDefinitions {
         val scope = Scope(name)
 
         scope.symbolTable.variables["println"] = EplkNativeFunction(scope, "println", arrayOf("text"))
+        { functionScope: Scope,
+          arguments: Array<EplkObject>,
+          startPosition: Position,
+          endPosition: Position ->
 
-        { functionScope: Scope, arguments: Array<EplkObject>, startPosition: Position, endPosition: Position ->
             val result = RealtimeResult<EplkObject>()
             val text = arguments[0]
 
             if (text !is EplkString) {
-                return@EplkNativeFunction  result.failure(EplkTypeError(
+                return@EplkNativeFunction result.failure(EplkTypeError(
                     "First argument must be a string, got ${text.objectName} instead",
                     startPosition, endPosition, functionScope
                 ))
