@@ -14,6 +14,30 @@ class IndexNode(
         get() = nodeToIndex.startPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        TODO("Not yet implemented")
+        val result = RealtimeResult<EplkObject>()
+
+        // Get the value
+        val valueResult = result.register(indexValue.visit(scope))
+        if (result.hasError) return result
+
+        val value = valueResult!!
+
+        // And the object that is to be indexed
+        val nodeToIndexResult = result.register(nodeToIndex.visit(scope))
+        if (result.hasError) return result
+
+        val objectToIndex = nodeToIndexResult!!
+
+        // Then index them
+        val indexResult = result.register(objectToIndex.index(
+            value,
+            startPosition,
+            endPosition
+        ))
+
+        if (result.hasError) return result
+
+        // And return it
+        return result.success(indexResult!!)
     }
 }
