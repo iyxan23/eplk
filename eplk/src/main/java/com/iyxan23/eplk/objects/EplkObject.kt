@@ -24,8 +24,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun operatorMinus(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -35,8 +34,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun operatorMultiply(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -46,8 +44,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun operatorDivide(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -57,8 +54,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun operatorPow(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -68,8 +64,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun notOperator(startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -79,8 +74,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun andOperator(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -90,8 +84,7 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 
     open fun orOperator(other: EplkObject, startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
@@ -101,7 +94,28 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
+        ))
+    }
+
+    open fun increment(startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(
+            EplkNotImplementedError(
+                "$objectName can't be incremented",
+                startPosition,
+                endPosition,
+                scope
+            )
         )
+    }
+
+    open fun decrement(startPosition: Position, endPosition: Position): RealtimeResult<EplkObject> {
+        return RealtimeResult<EplkObject>().failure(
+            EplkNotImplementedError(
+                "$objectName can't be decremented",
+                startPosition,
+                endPosition,
+                scope
+            )
         )
     }
 
@@ -142,7 +156,6 @@ abstract class EplkObject(open val scope: Scope) {
             startPosition,
             endPosition,
             scope
-        )
-        )
+        ))
     }
 }
