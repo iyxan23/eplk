@@ -24,7 +24,9 @@ atom                    = INT_LITERAL |
 
 func-call               = atom [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
 
-power                   = func-call [POW factor]*
+index                   = func-call [BRACKET_OPEN expression BRACKET_CLOSE]
+
+power                   = index [POW factor]*
 factor                  = [[PLUS|MINUS] factor] | power
 term                    = factor [[MUL|DIV] factor]*
 arithmetic-expression   = term [[PLUS|MINUS] term]*

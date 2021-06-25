@@ -757,10 +757,58 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // power = func-call [POW factor]*
-    private fun power(): ParseResult {
+    // index = func-call [BRACKET_OPEN expression BRACKET_CLOSE]
+    private fun index(): ParseResult {
         val result = ParseResult()
         val leftNodeResult = result.register(funcCall()) as Node?
+
+        if (result.hasError) return result
+
+        val leftNode = leftNodeResult as Node
+
+        // Check if we have the bracket open token to do index
+        if (currentToken.token == Tokens.BRACKET_OPEN) {
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            val expressionResult = result.register(expression()) as Node?
+
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            if (currentToken.token != Tokens.BRACKET_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected a close bracket ']' after an expression",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                ))
+            }
+
+            val bracketCloseTokenEndPos = currentToken.endPosition.copy()
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            return result.success(IndexNode(
+                leftNode,
+                expression,
+                bracketCloseTokenEndPos
+            ))
+        }
+
+        return result.success(leftNode)
+    }
+
+    // power = index [POW factor]*
+    private fun power(): ParseResult {
+        val result = ParseResult()
+        val leftNodeResult = result.register(index()) as Node?
 
         if (result.hasError) return result
 
