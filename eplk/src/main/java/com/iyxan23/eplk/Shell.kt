@@ -1,6 +1,7 @@
 package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
+import com.iyxan23.eplk.interpreter.StandardDefinitions
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.objects.EplkVoid
 import com.iyxan23.eplk.parser.Parser
@@ -14,7 +15,8 @@ const val individualTimes = true
 fun main() {
     println("Welcome to the EPLK Shell!")
 
-    val scope = Scope("<SHELL>")
+    // val scope = Scope("<SHELL>")
+    val scope = StandardDefinitions.generateScope("<SHELL>")
 
     while (true) {
         print("EPLK SHELL > ")
