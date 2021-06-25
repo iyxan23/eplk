@@ -8,6 +8,7 @@ import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
+import com.iyxan23.eplk.nodes.types.ListNode
 import com.iyxan23.eplk.nodes.types.StringNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.*
@@ -353,5 +354,22 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkString)
         assert((resultVisit.value as EplkString).value == "Hello World World World")
+    }
+
+    @Test
+    fun listTest() {
+        val lexerResult = Lexer(filename, "[1, 1 + 1, \"hi\", \"hi \" + \"world\"]").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as ListNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkList)
+        assert((resultVisit.value as EplkList).toString() == "[1, 2, \"hi\", \"hi world\"]")
     }
 }
