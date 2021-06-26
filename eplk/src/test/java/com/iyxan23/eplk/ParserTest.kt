@@ -240,6 +240,17 @@ class ParserTest {
     }
 
     @Test
+    fun statementsTest() {
+        val code = "1 + 1\n5 * 2\n\n10 / 50\n\n\n\n     \n\n\n 10 * 10"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString()) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun syntaxErrorTest() {
         val code = "1 2 3 /"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
