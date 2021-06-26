@@ -11,6 +11,9 @@ const val withTime = true
 // This one is for showing individual times for the lexer, parser, and interpreter
 const val individualTimes = true
 
+// This replaces \\n with a new line, used for testing newline statements
+const val replaceSlashNWithNewline = false
+
 fun main() {
     println("Welcome to the EPLK Shell!")
 
@@ -19,7 +22,9 @@ fun main() {
 
     while (true) {
         print("EPLK SHELL > ")
-        val code = readLine() ?: break
+        var code = readLine() ?: break
+
+        if (replaceSlashNWithNewline) code = code.replace("\\n", "\n")
 
         val startTime = System.currentTimeMillis()
 
