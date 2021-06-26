@@ -53,6 +53,11 @@ class Lexer(
                     if (currentChar == '+') {
                         tokenToAdd = Tokens.DOUBLE_PLUS
                         advance()
+
+                    // Check for +=
+                    } else if (currentChar == '=') {
+                        tokenToAdd = Tokens.PLUS_EQUAL
+                        advance()
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition))
@@ -72,19 +77,42 @@ class Lexer(
                     } else if (currentChar == '-') {
                         tokenToAdd = Tokens.DOUBLE_MINUS
                         advance()
+
+                    // Check for -=
+                    } else if (currentChar == '=') {
+                        tokenToAdd = Tokens.MINUS_EQUAL
+                        advance()
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))
                 }
 
                 currentChar == '*' -> {
-                    tokens.add(Token(Tokens.MUL, null, position.copy()))
+                    var tokenToAdd = Tokens.MUL
+                    val beforePosition = position.copy()
                     advance()
+
+                    // Check for *=
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.MUL_EQUAL
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))
                 }
 
                 currentChar == '/' -> {
-                    tokens.add(Token(Tokens.DIV, null, position.copy()))
+                    var tokenToAdd = Tokens.DIV
+                    val beforePosition = position.copy()
                     advance()
+
+                    // Check for /=
+                    if (currentChar == '=') {
+                        tokenToAdd = Tokens.DIV_EQUAL
+                        advance()
+                    }
+
+                    tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))
                 }
 
                 currentChar == '^' -> {

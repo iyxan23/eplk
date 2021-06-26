@@ -383,6 +383,21 @@ class LexerTest {
     }
 
     @Test
+    fun equalOperatorsTest() {
+        expectTokens(
+            "+= -= *= /=",
+            arrayListOf(
+                Tokens.PLUS_EQUAL, null,
+                Tokens.MINUS_EQUAL, null,
+                Tokens.MUL_EQUAL, null,
+                Tokens.DIV_EQUAL, null,
+
+                Tokens.EOF, null,
+            ) as ArrayList<Any>
+        )
+    }
+
+    @Test
     fun expectedOrErrorTest() {
         expectError(
             "|",

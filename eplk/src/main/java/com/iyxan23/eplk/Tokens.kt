@@ -8,6 +8,11 @@ enum class Tokens {
     DIV,
     POW,
 
+    PLUS_EQUAL,
+    MINUS_EQUAL,
+    MUL_EQUAL,
+    DIV_EQUAL,
+
     DOUBLE_PLUS,
     DOUBLE_MINUS,
 
