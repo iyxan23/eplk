@@ -3,13 +3,13 @@ package com.iyxan23.eplk
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.nodes.FunctionDefinitionNode
+import com.iyxan23.eplk.nodes.IncrementOrDecrementNode
 import com.iyxan23.eplk.nodes.control.ForNode
 import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.types.ListNode
-import com.iyxan23.eplk.nodes.types.StringNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 import com.iyxan23.eplk.objects.*
 import com.iyxan23.eplk.parser.Parser
@@ -371,5 +371,51 @@ class NodesTest {
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkList)
         assert((resultVisit.value as EplkList).toString() == "[1, 2, \"hi\", \"hi world\"]")
+    }
+
+    @Test
+    fun incrementTest() {
+        val lexerResult = Lexer(filename, "test++").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IncrementOrDecrementNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        scope.symbolTable.variables["test"] = EplkInteger(14, scope)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 15)
+
+        assert(scope.symbolTable.variables.containsKey("test"))
+        assert(scope.symbolTable.variables["test"] is EplkInteger)
+        assert((scope.symbolTable.variables["test"] as EplkInteger).value == 15)
+    }
+
+    @Test
+    fun decrementTest() {
+        val lexerResult = Lexer(filename, "test--").doLexicalAnalysis()
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as IncrementOrDecrementNode
+
+        println("Lexer result: $lexerResult")
+        println("Parse result: $parseResult")
+
+        val scope = Scope(filename)
+
+        scope.symbolTable.variables["test"] = EplkInteger(16, scope)
+
+        val resultVisit = parseResult.visit(scope)
+
+        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(resultVisit.value is EplkInteger)
+        assert((resultVisit.value as EplkInteger).value == 15)
+
+        assert(scope.symbolTable.variables.containsKey("test"))
+        assert(scope.symbolTable.variables["test"] is EplkInteger)
+        assert((scope.symbolTable.variables["test"] as EplkInteger).value == 15)
     }
 }
