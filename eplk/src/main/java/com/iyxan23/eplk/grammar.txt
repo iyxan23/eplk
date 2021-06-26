@@ -1,6 +1,6 @@
 func-definition         = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE ARROW expression
 
-while-expression        = WHILE PAREN_OPEN expression PAREN_CLOSE expression
+while-expression        = WHILE PAREN_OPEN expression PAREN_CLOSE [BRACES_OPEN statements BRACES_CLOSE | expression]
 
 for-expression          = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE expression
 

@@ -77,7 +77,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             // Try parsing an expression
             val statement = result.tryRegister(expression())
 
-            // There is a problem here, this might not be an expression we're expecting
+            // Check if there is a problem here, this might not be an expression we're expecting
             if (statement == null) {
                 // Go back
                 reverse(result.reverseCount)
@@ -264,7 +264,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         if (currentToken.token != Tokens.PAREN_CLOSE) {
             return result.failure(SyntaxError(
-                "Expected a close parentheses ')' after the third for loop expression",
+                "Expected a close parentheses ')' after an expression",
                 currentToken.startPosition,
                 currentToken.endPosition,
             ))
@@ -275,12 +275,45 @@ class Parser(private val tokens: ArrayList<Token>) {
         advance()
         // ===========================================================
 
-        val expressionResult = result.register(expression())
-        if (result.hasError) return result
+        // Check if there is an open braces '{'
+        if (currentToken.token == Tokens.BRACES_OPEN) {
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
 
-        val expression = expressionResult as Node
+            // Alright parse the statements
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
 
-        return result.success(WhileNode(condition, expression, startPosition))
+            val statements = statementsResult as Node
+
+            // Now check if there is a close brace '}'
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected a close brace '}' after statements",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Alright we're done!
+            TODO("Implement multi-line while loop in WhileNode")
+
+        } else {
+            // If no open brace, then this is a single expression while loop
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            return result.success(WhileNode(condition, expression, startPosition))
+        }
     }
 
     // for-expression = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE expression
