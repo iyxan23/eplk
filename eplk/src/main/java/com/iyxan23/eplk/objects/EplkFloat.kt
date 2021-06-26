@@ -12,7 +12,7 @@ import kotlin.math.pow
  * A float object in EPLK
  */
 class EplkFloat(
-    val value: Float,
+    var value: Float,
     override val scope: Scope
 ) : EplkObject(scope) {
 
@@ -142,6 +142,24 @@ class EplkFloat(
                 )
                 )
         }
+    }
+
+    override fun increment(
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        value++
+
+        return RealtimeResult<EplkObject>().success(this)
+    }
+
+    override fun decrement(
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        value--
+
+        return RealtimeResult<EplkObject>().success(this)
     }
 
     override fun comparisonTo(

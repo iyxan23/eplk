@@ -12,7 +12,7 @@ import kotlin.math.pow
  * An Integer object in EPLK
  */
 class EplkInteger(
-    val value: Int,
+    var value: Int,
     override val scope: Scope
 ) : EplkObject(scope) {
 
@@ -143,6 +143,24 @@ class EplkInteger(
                 )
                 )
         }
+    }
+
+    override fun increment(
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        value++
+
+        return RealtimeResult<EplkObject>().success(this)
+    }
+
+    override fun decrement(
+        startPosition: Position,
+        endPosition: Position
+    ): RealtimeResult<EplkObject> {
+        value--
+
+        return RealtimeResult<EplkObject>().success(this)
     }
 
     override fun comparisonTo(
