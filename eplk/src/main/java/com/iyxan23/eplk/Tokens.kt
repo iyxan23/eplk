@@ -60,5 +60,7 @@ enum class Tokens {
     IDENTIFIER,
     KEYWORD,
 
+    NEWLINE,
+
     EOF, // End Of File
 }

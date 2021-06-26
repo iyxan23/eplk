@@ -57,7 +57,7 @@ class LexerTest {
     @Test
     fun stringTest2() {
         expectTokens(
-                " \n    \t\"Hello \\\"World\"\n    \t\n",
+                "     \t\"Hello \\\"World\"    \t",
                 arrayListOf(
                     Tokens.STRING_LITERAL, "Hello \"World",
                     Tokens.EOF, null
@@ -90,7 +90,7 @@ class LexerTest {
     @Test
     fun intTest2() {
         expectTokens(
-                "   \n\n \t  1234567890 \t\n    \t\t",
+                "    \t  1234567890 \t    \t\t",
                 arrayListOf(
                     Tokens.INT_LITERAL, "1234567890",
                     Tokens.EOF, null
@@ -112,7 +112,7 @@ class LexerTest {
     @Test
     fun floatTest2() {
         expectTokens(
-                "  \t \t \n\n  12312302433.51434234\n\n  ",
+                "  \t \t   12312302433.51434234  ",
                 arrayListOf(
                     Tokens.FLOAT_LITERAL, "12312302433.51434234",
                     Tokens.EOF, null

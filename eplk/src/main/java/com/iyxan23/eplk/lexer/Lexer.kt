@@ -17,7 +17,7 @@ class Lexer(
     private val code: String
 ) {
 
-    private val spaces = arrayOf(' ', '\t', '\n')
+    private val spaces = arrayOf(' ', '\t')
     private val position = Position(-1, 0, 0, filename, code)
     private var currentChar: Char? = null
 
@@ -44,6 +44,11 @@ class Lexer(
 
             // Now let's do the tokenization
             when {
+                currentChar == '\n' -> {
+                    tokens.add(Token(Tokens.NEWLINE, null, position.copy()))
+                    advance()
+                }
+
                 currentChar == '+' -> {
                     var tokenToAdd = Tokens.PLUS
                     val beforePosition = position.copy()
