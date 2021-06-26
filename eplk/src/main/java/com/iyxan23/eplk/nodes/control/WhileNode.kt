@@ -5,17 +5,18 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
+import com.iyxan23.eplk.nodes.types.ListNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
 
 class WhileNode(
     val condition: Node,
-    val expression: Node,
+    val expressions: ListNode,
     override val startPosition: Position
 ) : Node() {
 
-    override val endPosition: Position = expression.endPosition
+    override val endPosition: Position = expressions.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
@@ -29,8 +30,8 @@ class WhileNode(
                 break
             }
 
-            // Alright execute the expression
-            val expressionResult = result.register(evalExpression(scope))
+            // Alright execute the expression(s)
+            result.register(evalExpressions(scope))
             if (result.hasError) return result
         }
 
@@ -46,22 +47,20 @@ class WhileNode(
 
         val evaluatedCondition = conditionResult as EplkObject
         if (evaluatedCondition !is EplkBoolean) {
-            return RealtimeResult<EplkBoolean>().failure(
-                EplkTypeError(
+            return RealtimeResult<EplkBoolean>().failure(EplkTypeError(
                 "Condition for a while loop should evaluate into a Boolean object, got ${evaluatedCondition.objectName} instead.",
                 condition.startPosition,
                 condition.endPosition,
                 scope
-            )
-            )
+            ))
         }
 
         return RealtimeResult<EplkBoolean>().success(evaluatedCondition)
     }
 
-    private fun evalExpression(scope: Scope): RealtimeResult<EplkObject> {
+    private fun evalExpressions(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
-        val thirdExpressionResult = result.register(expression.visit(scope))
+        val thirdExpressionResult = result.register(expressions.visit(scope))
         if (result.hasError) return result
 
         return result.success(thirdExpressionResult!!)

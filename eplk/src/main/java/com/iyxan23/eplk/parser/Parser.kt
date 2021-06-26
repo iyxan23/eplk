@@ -286,7 +286,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             val statementsResult = result.register(statements())
             if (result.hasError) return result
 
-            val statements = statementsResult as Node
+            val statements = statementsResult as ListNode
 
             // Now check if there is a close brace '}'
             if (currentToken.token != Tokens.BRACES_CLOSE) {
@@ -303,7 +303,11 @@ class Parser(private val tokens: ArrayList<Token>) {
             // ===========================================================
 
             // Alright we're done!
-            TODO("Implement multi-line while loop in WhileNode")
+            return result.success(WhileNode(
+                condition,
+                statements,
+                startPosition
+            ))
 
         } else {
             // If no open brace, then this is a single expression while loop
@@ -312,7 +316,15 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             val expression = expressionResult as Node
 
-            return result.success(WhileNode(condition, expression, startPosition))
+            return result.success(WhileNode(
+                condition,
+                ListNode(
+                    expression.startPosition,
+                    expression.endPosition,
+                    arrayListOf(expression)
+                ),
+                startPosition
+            ))
         }
     }
 

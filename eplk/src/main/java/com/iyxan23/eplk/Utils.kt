@@ -95,7 +95,7 @@ object Utils {
                 result.appendLine(strIndentation + "Condition:")
                 result.appendLine(prettyPrintNode(node.condition, indentation + indentationAmount, indentationAmount))
                 result.appendLine(strIndentation + "Expression:")
-                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+                result.appendLine(prettyPrintNode(node.expressions, indentation + indentationAmount, indentationAmount))
             }
 
             is FunctionDefinitionNode -> {
