@@ -6,10 +6,7 @@ import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
 import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
-import com.iyxan23.eplk.nodes.types.BooleanNode
-import com.iyxan23.eplk.nodes.types.FloatNode
-import com.iyxan23.eplk.nodes.types.IntegerNode
-import com.iyxan23.eplk.nodes.types.StringNode
+import com.iyxan23.eplk.nodes.types.*
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
@@ -38,6 +35,13 @@ object Utils {
             is StringNode -> {
                 result.append(strIndentation + "String: ")
                 result.append(node.value)
+            }
+
+            is ListNode -> {
+                result.appendLine(strIndentation + "List: ")
+                node.items.forEach { item ->
+                    result.appendLine(prettyPrintNode(item, indentation + indentationAmount, indentationAmount))
+                }
             }
 
             is UnaryOpNode -> {
