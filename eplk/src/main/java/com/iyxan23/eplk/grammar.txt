@@ -38,3 +38,5 @@ comparison-expression   = NOT comparison-expression |
 
 expression              = KEYWORD:VAR IDENTIFIER EQUAL expression |
                           comparison-expression [[AND|OR] comparison-expression]*
+
+statements              = NEWLINE* expression (NEWLINE+ expression)* NEWLINE*

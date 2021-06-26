@@ -43,11 +43,73 @@ class Parser(private val tokens: ArrayList<Token>) {
     private fun advance(): Token {
         indexToken++
 
-        if (indexToken < tokens.size) {
+        return fetchToken()
+    }
+
+    private fun reverse(amount: Int): Token {
+        indexToken -= amount
+
+        return fetchToken()
+    }
+
+    private fun fetchToken(): Token {
+        if (indexToken < tokens.size && indexToken >= 0) {
             currentToken = tokens[indexToken]
         }
 
         return currentToken
+    }
+
+    // statements = NEWLINE* expression (NEWLINE+ expression)* NEWLINE*
+    private fun statements(): ParseResult {
+        val result = ParseResult()
+        val statements = ArrayList<Node>()
+
+        val startPosition = currentToken.startPosition.copy()
+
+        // Skip the first newline(s)
+        while (currentToken.token == Tokens.NEWLINE) {
+            result.registerAdvancement()
+            advance()
+        }
+
+        val expressionResult = result.register(expression())
+        if (result.hasError) return result
+
+        statements.add(expressionResult as Node)
+
+        var moreStatements = false
+
+        while (true) {
+            var newlineCount = 0
+            while (currentToken.token == Tokens.NEWLINE) {
+                result.registerAdvancement()
+                advance()
+            }
+
+            newlineCount += 1
+            if (newlineCount == 0) {
+                moreStatements = false
+            }
+
+            if (!moreStatements) break
+
+            val statement = result.tryRegister(expression())
+
+            if (statement == null) {
+                reverse(result.reverseCount)
+                moreStatements = false
+                continue
+            }
+
+            statements.add(statement)
+        }
+
+        return result.success(ListNode(
+            startPosition,
+            currentToken.endPosition,
+            statements,
+        ))
     }
 
     // func-definition = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE ARROW expression

@@ -20,7 +20,8 @@ class ParseResult() {
 
     val hasError get() = error != null
 
-    var advancementCount = 0
+    private var advancementCount = 0
+    var reverseCount = 0
 
     fun registerAdvancement() {
         advancementCount++
@@ -29,6 +30,15 @@ class ParseResult() {
     fun register(result: ParseResult): Any? {
         if (result.error != null) {
             this.error = result.error
+        }
+
+        return result.node
+    }
+
+    fun tryRegister(result: ParseResult): Node? {
+        if (result.hasError) {
+            reverseCount = result.advancementCount
+            return null
         }
 
         return result.node
