@@ -19,9 +19,8 @@ class VarAccessNode(
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
-        // check if the variable exists in the current scope
-        if (!scope.symbolTable.variables.containsKey(variableName)) {
-            return result.failure(
+        val variable = scope.searchVariable(variableName)
+            ?: return result.failure(
                 EplkNotDefinedError(
                     "Variable $variableName is not defined in this scope",
                     startPosition,
@@ -29,8 +28,7 @@ class VarAccessNode(
                     scope
                 )
             )
-        }
 
-        return result.success(scope.symbolTable.variables[variableName]!!)
+        return result.success(variable)
     }
 }

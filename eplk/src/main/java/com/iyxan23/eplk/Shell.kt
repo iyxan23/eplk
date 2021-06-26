@@ -1,6 +1,5 @@
 package com.iyxan23.eplk
 
-import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.interpreter.StandardDefinitions
 import com.iyxan23.eplk.lexer.Lexer
 import com.iyxan23.eplk.objects.EplkVoid
