@@ -137,6 +137,13 @@ object Utils {
                 result.appendLine(strIndentation + "Node to " + (if (increment) "Increment" else "decrement") + ": ")
                 result.appendLine(prettyPrintNode(node.nodeToIncDec, indentation + indentationAmount, indentationAmount))
             }
+
+            is IndexNode -> {
+                result.appendLine(strIndentation + "Index Node: Node to Index: ")
+                result.appendLine(prettyPrintNode(node.nodeToIndex, indentation + indentationAmount, indentationAmount))
+                result.appendLine(strIndentation + "Index value: ")
+                result.appendLine(prettyPrintNode(node.indexValue, indentation + indentationAmount, indentationAmount))
+            }
         }
 
         return result.toString()
