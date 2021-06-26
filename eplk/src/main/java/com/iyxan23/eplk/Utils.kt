@@ -125,6 +125,14 @@ object Utils {
                     result.appendLine(prettyPrintNode(argument, indentation + indentationAmount, indentationAmount))
                 }
             }
+
+            is IncrementOrDecrementNode -> {
+                val increment = node.incDecToken.token == Tokens.DOUBLE_PLUS
+
+                result.appendLine(strIndentation + "IncrementOrDecrementNode: " + (if (increment) "Increment" else "decrement"))
+                result.appendLine(strIndentation + "Node to " + (if (increment) "Increment" else "decrement") + ": ")
+                result.appendLine(prettyPrintNode(node.nodeToIncDec, indentation + indentationAmount, indentationAmount))
+            }
         }
 
         return result.toString()
