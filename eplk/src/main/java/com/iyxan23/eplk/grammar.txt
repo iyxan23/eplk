@@ -1,3 +1,12 @@
+** SYMBOLS **
+ - [] - Capture group
+ - * - Zero or more
+ - + - One or more
+ - ? - Zero or one
+ - | - Or
+ - // - A comment
+*************
+
 func-definition         = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE NEWLINE* [[ARROW expression] | BRACES_OPEN statements BRACES_CLOSE]
 
 while-expression        = WHILE PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
