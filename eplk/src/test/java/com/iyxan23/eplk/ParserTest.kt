@@ -163,8 +163,30 @@ class ParserTest {
     }
 
     @Test
+    fun multilineWhileTest() {
+        val code = "while (variable > 10) {\n    var something = something * 2\n    var hello = some_function() * 10\n}"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString()) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
     fun funcDefTest() {
         val code = "fun hello_world(hi, world, test) -> 1 + 1"
+        val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
+        val result = Parser(tokens).parse()
+
+        assert(!result.hasError) { println(result.error!!.toString()) }
+
+        println(Utils.prettyPrintNode(result.node!!))
+    }
+
+    @Test
+    fun multilineFuncDefTest() {
+        val code = "fun hello_world(hi, world, test) {\n    var a = 10\n    println(\"Hello World\")\n}"
         val tokens = Lexer(filename, code).doLexicalAnalysis().tokens!!
         val result = Parser(tokens).parse()
 
