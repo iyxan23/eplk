@@ -11,7 +11,7 @@ class EplkString(
     override val scope: Scope,
 ) : EplkObject(scope) {
     override val objectName: String = "String"
-    override fun toString(): String = "\"$value\""
+    override fun toString(): String = value
 
     override fun operatorPlus(
         other: EplkObject,
