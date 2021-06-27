@@ -1,6 +1,7 @@
 # EPLK
 
 [![Hits-of-Code](https://hitsofcode.com/github/iyxan23/eplk?branch=main)](https://hitsofcode.com/github/iyxan23/eplk/view?branch=main)
+[![Java CI with Gradle](https://github.com/Iyxan23/eplk/actions/workflows/gradle.yml/badge.svg)](https://github.com/Iyxan23/eplk/actions/workflows/gradle.yml)
 
 Epic programming language named Eplk, short for Extensible Programming Language in Kotlin
 
