@@ -16,7 +16,7 @@ data class Position(
 
         if (currentChar == '\n') {
             line++
-            column = 0
+            column = 1
         }
 
         return this
