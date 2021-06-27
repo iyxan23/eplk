@@ -2,15 +2,7 @@ package com.iyxan23.eplk
 
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.Lexer
-import com.iyxan23.eplk.nodes.FunctionDefinitionNode
-import com.iyxan23.eplk.nodes.IncrementOrDecrementNode
-import com.iyxan23.eplk.nodes.control.ForNode
-import com.iyxan23.eplk.nodes.control.IfNode
-import com.iyxan23.eplk.nodes.control.WhileNode
-import com.iyxan23.eplk.nodes.operation.BinOpNode
-import com.iyxan23.eplk.nodes.operation.UnaryOpNode
-import com.iyxan23.eplk.nodes.types.ListNode
-import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
+import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.*
 import com.iyxan23.eplk.parser.Parser
 import org.junit.Test
@@ -22,7 +14,7 @@ class NodesTest {
     @Test
     fun testUnaryOpNode() {
         val lexerResult = Lexer(filename, "-1").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as UnaryOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -37,7 +29,7 @@ class NodesTest {
     @Test
     fun testUnaryOpNode2() {
         val lexerResult = Lexer(filename, "-(-(-(-1)))").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as UnaryOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -52,7 +44,7 @@ class NodesTest {
     @Test
     fun testUnaryOpNode3() {
         val lexerResult = Lexer(filename, "!!!!false").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as UnaryOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -67,7 +59,7 @@ class NodesTest {
     @Test
     fun testBinOpNode() {
         val lexerResult = Lexer(filename, "1 + 1").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -82,7 +74,7 @@ class NodesTest {
     @Test
     fun testBinOpNode2() {
         val lexerResult = Lexer(filename, "1 + 2 * 3 / 4").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -98,7 +90,7 @@ class NodesTest {
     @Test
     fun testBinOpNode3() {
         val lexerResult = Lexer(filename, "3 ^ 3").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -114,7 +106,7 @@ class NodesTest {
     @Test
     fun testBinOpNode4() {
         val lexerResult = Lexer(filename, "3 ^ (1 + 2)").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -130,7 +122,7 @@ class NodesTest {
     @Test
     fun testBinOpNode5() {
         val lexerResult = Lexer(filename, "true && false || !true").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -145,7 +137,7 @@ class NodesTest {
     @Test
     fun testBinOpNode6Comparison() {
         val lexerResult = Lexer(filename, "true == true && !(false != true)").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -160,7 +152,7 @@ class NodesTest {
     @Test
     fun testBinOpNodeParentheses() {
         val lexerResult = Lexer(filename, "(1 + 2) * 3").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -175,7 +167,7 @@ class NodesTest {
     @Test
     fun variableDeclarationTest() {
         val lexerResult = Lexer(filename, "var hello_world = 10 + 10 / 10").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as VarDeclarationNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -197,7 +189,7 @@ class NodesTest {
     @Test
     fun variableAccessTest() {
         val lexerResult = Lexer(filename, "5 + hello_world").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -217,7 +209,7 @@ class NodesTest {
     @Test
     fun ifTest() {
         val lexerResult = Lexer(filename, "if (1 == 1) 5 else 0").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -232,7 +224,7 @@ class NodesTest {
     @Test
     fun elifTest() {
         val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 1) 7 else 0").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -247,7 +239,7 @@ class NodesTest {
     @Test
     fun multipleElifTest() {
         val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 3) 7 elif (1 == 1) 9 else 0").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -262,7 +254,7 @@ class NodesTest {
     @Test
     fun elseTest() {
         val lexerResult = Lexer(filename, "if (1 == 2) 5 elif (1 == 3) 7 elif (1 == 4) 9 else 0").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IfNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -277,7 +269,7 @@ class NodesTest {
     @Test
     fun forTest() {
         val lexerResult = Lexer(filename, "for (var index = 0; index < 10; var index = index + 1) var number = number + 10").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as ForNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -297,7 +289,7 @@ class NodesTest {
     @Test
     fun whileTest() {
         val lexerResult = Lexer(filename, "while (number < 100) var number = number ^ 2").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as WhileNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -317,7 +309,7 @@ class NodesTest {
     @Test
     fun funcDefTest() {
         val lexerResult = Lexer(filename, "fun hello(world) -> 1 + 1").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as FunctionDefinitionNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -342,7 +334,7 @@ class NodesTest {
     @Test
     fun stringTest() {
         val lexerResult = Lexer(filename, "\"Hello\" + \" World\" * 3").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as BinOpNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -359,7 +351,7 @@ class NodesTest {
     @Test
     fun listTest() {
         val lexerResult = Lexer(filename, "[1, 1 + 1, \"hi\", \"hi \" + \"world\"]").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as ListNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -370,13 +362,13 @@ class NodesTest {
 
         assert(!resultVisit.hasError) { println(resultVisit.error) }
         assert(resultVisit.value is EplkList)
-        assert((resultVisit.value as EplkList).toString() == "[1, 2, \"hi\", \"hi world\"]")
+        assert((resultVisit.value as EplkList).toString() == "[1, 2, hi, hi world]")
     }
 
     @Test
     fun incrementTest() {
         val lexerResult = Lexer(filename, "test++").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IncrementOrDecrementNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
@@ -399,7 +391,7 @@ class NodesTest {
     @Test
     fun decrementTest() {
         val lexerResult = Lexer(filename, "test--").doLexicalAnalysis()
-        val parseResult = Parser(lexerResult.tokens!!).parse().node as IncrementOrDecrementNode
+        val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
         println("Parse result: $parseResult")
