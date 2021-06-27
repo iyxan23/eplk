@@ -6,13 +6,13 @@ import com.iyxan23.eplk.objects.EplkVoid
 import com.iyxan23.eplk.parser.Parser
 
 // Shows on how much time does it took to execute a command
-const val withTime = true
+const val withTime = false
 
 // This one is for showing individual times for the lexer, parser, and interpreter
-const val individualTimes = true
+const val individualTimes = false
 
 // This replaces \\n with a new line, used for testing newline statements
-const val replaceSlashNWithNewline = false
+const val replaceSlashNWithNewline = true
 
 fun main() {
     println("Welcome to the EPLK Shell!")
