@@ -102,8 +102,8 @@ object Utils {
                 result.appendLine(strIndentation + "Function definition:")
                 result.appendLine(strIndentation + "Name: ${node.functionName}")
                 result.appendLine(strIndentation + "Parameters: ${node.parameters.joinToString(", ")}")
-                result.appendLine(strIndentation + "Expression:")
-                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+                result.appendLine(strIndentation + "Statement(s):")
+                result.appendLine(prettyPrintNode(node.statements, indentation + indentationAmount, indentationAmount))
             }
 
             is FunctionCallNode -> {

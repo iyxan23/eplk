@@ -6,13 +6,14 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.interpreter.SymbolTable
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
+import com.iyxan23.eplk.nodes.StatementsNode
 import kotlin.math.exp
 
 class EplkFunction(
     scope: Scope,
     val functionName: String,
     val parameters: Array<String>,
-    val expression: Node,
+    val statements: StatementsNode,
 ) : EplkObject(scope) {
 
     override val objectName: String = "Function"
@@ -55,7 +56,7 @@ class EplkFunction(
         }
 
         // Alright let's execute the expression
-        val expressionResult = result.register(expression.visit(functionScope))
+        val expressionResult = result.register(statements.visit(functionScope))
         if (result.hasError) return result
 
         return result.success(expressionResult!!)

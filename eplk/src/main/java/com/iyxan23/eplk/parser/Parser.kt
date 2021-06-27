@@ -104,7 +104,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         return result.success(StatementsNode(statements.toTypedArray()))
     }
 
-    // func-definition = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE ARROW expression
+    // func-definition = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE NEWLINE* [[ARROW expression] | BRACES_OPEN statements BRACES_CLOSE]
     private fun funcDefinition(): ParseResult {
         val result = ParseResult()
 
@@ -199,31 +199,75 @@ class Parser(private val tokens: ArrayList<Token>) {
         advance()
         // ===========================================================
 
-        // TODO: 6/23/21 Multiline function
-
-        if (currentToken.token != Tokens.ARROW) {
-            return result.failure(SyntaxError(
-                "Expected an arrow ('->') after a function definition",
-                currentToken.startPosition,
-                currentToken.endPosition,
-            ))
+        // Skip every newlines here
+        while (currentToken.token == Tokens.NEWLINE) {
+            result.registerAdvancement()
+            advance()
         }
 
-        // ===========================================================
-        result.registerAdvancement()
-        advance()
-        // ===========================================================
+        if (currentToken.token == Tokens.ARROW) {
+            // Single expression function
 
-        val expressionResult = result.register(expression())
-        if (result.hasError) return result
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
 
-        val expression = expressionResult as Node
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
 
-        return result.success(FunctionDefinitionNode(
-            functionName,
-            parameters.toTypedArray(),
-            expression,
-            startPosition
+            val expression = expressionResult as Node
+
+            return result.success(
+                FunctionDefinitionNode(
+                    functionName,
+                    parameters.toTypedArray(),
+                    StatementsNode(arrayOf(expression)),
+                    startPosition
+                )
+            )
+
+        } else if (currentToken.token == Tokens.BRACES_OPEN) {
+            // Multi-line function
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
+
+            val statements = statementsResult as StatementsNode
+
+            // Check for }
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected braces close '}' after statements",
+                    currentToken.startPosition,
+                    currentToken.endPosition
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            return result.success(
+                FunctionDefinitionNode(
+                    functionName,
+                    parameters.toTypedArray(),
+                    statements,
+                    startPosition
+                )
+            )
+        }
+
+        return result.failure(SyntaxError(
+            "Expected an arrow '->' or an open brace '{' after a function definition",
+            currentToken.startPosition,
+            currentToken.endPosition,
         ))
     }
 

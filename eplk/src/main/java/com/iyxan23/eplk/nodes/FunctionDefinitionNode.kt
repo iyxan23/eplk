@@ -10,14 +10,14 @@ import com.iyxan23.eplk.objects.EplkVoid
 class FunctionDefinitionNode(
     val functionName: String,
     val parameters: Array<String>,
-    val expression: Node,
+    val statements: StatementsNode,
     override val startPosition: Position
 ) : Node() {
-    override val endPosition: Position = expression.endPosition
+    override val endPosition: Position = statements.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         scope.symbolTable.variables[functionName] =
-            EplkFunction(scope, functionName, parameters, expression)
+            EplkFunction(scope, functionName, parameters, statements)
 
         return RealtimeResult<EplkObject>().success(EplkVoid(scope))
     }
