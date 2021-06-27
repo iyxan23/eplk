@@ -13,22 +13,51 @@ while-expression        = WHILE PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN 
 
 for-expression          = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
 
-if-expression           = IF PAREN_OPEN expression PAREN_CLOSE expression
-                          [ELIF PAREN_OPEN expression PAREN_CLOSE expression]*
-                          ELSE expression
+if-expression           = IF PAREN_OPEN expression PAREN_CLOSE
+                          [
+                              // Multiline statements
+                              [BRACES_OPEN statements BRACES_CLOSE
+                                  elif-expression*
+                                  else-expression*
+                              ] |
+
+                              // Single line if expression
+                              [expression
+                                  elif-expression*
+                                  else-expression
+                              ]
+                          ]
+
+elif-expression         = ELIF PAREN_OPEN expression PAREN_CLOSE
+                          [
+                              // Multiline statements
+                              [BRACES_OPEN statements BRACES_CLOSE] |
+
+                              // Single line elif expression
+                              expression
+                          ]
+
+else-expression         = ELSE
+                          [
+                              // Multiline statements
+                              [BRACES_OPEN statements BRACES_CLOSE] |
+
+                              // Single line elif expression
+                              expression
+                          ]
 
 list-expression         = BRACKET_OPEN [expression [COMMA expression]]* BRACKET_CLOSE
 
-atom                    = INT_LITERAL |
-                          FLOAT_LITERAL |
-                          IDENTIFIER |
-                          STRING_LITERAL |
-                          [PAREN_OPEN expression* PAREN_CLOSE] |
-                          [TRUE|FALSE] |
-                          list-expression |
-                          if-expression |
-                          for-expression |
-                          while-expression |
+atom                    = INT_LITERAL                           |
+                          FLOAT_LITERAL                         |
+                          IDENTIFIER                            |
+                          STRING_LITERAL                        |
+                          [PAREN_OPEN expression* PAREN_CLOSE]  |
+                          [TRUE | FALSE]                        |
+                          list-expression                       |
+                          if-expression                         |
+                          for-expression                        |
+                          while-expression                      |
                           fun-definition
 
 increment-decrement     = atom [DOUBLE_PLUS | DOUBLE_MINUS]
