@@ -1,6 +1,6 @@
 package com.iyxan23.eplk.nodes.variable
 
-import com.iyxan23.eplk.errors.runtime.EplkNotDefinedError
+import com.iyxan23.eplk.errors.runtime.EplkDefinitionError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
@@ -21,7 +21,7 @@ class VarAccessNode(
 
         val variable = scope.searchVariable(variableName)
             ?: return result.failure(
-                EplkNotDefinedError(
+                EplkDefinitionError(
                     "Variable $variableName is not defined in this scope",
                     startPosition,
                     endPosition,
