@@ -1,0 +1,10 @@
+var number = 5
+var a_string = "Hello World"
+
+println(a_string)
+
+while (number > 0) {
+    println(a_string)
+    println(number * 2)
+    number--
+}
