@@ -95,11 +95,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             }
         }
 
-        return result.success(ListNode(
-            startPosition,
-            currentToken.endPosition,
-            statements,
-        ))
+        return result.success(StatementsNode(statements.toTypedArray()))
     }
 
     // func-definition = FUN IDENTIFIER PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE ARROW expression
@@ -286,7 +282,7 @@ class Parser(private val tokens: ArrayList<Token>) {
             val statementsResult = result.register(statements())
             if (result.hasError) return result
 
-            val statements = statementsResult as ListNode
+            val statements = statementsResult as StatementsNode
 
             // Now check if there is a close brace '}'
             if (currentToken.token != Tokens.BRACES_CLOSE) {
@@ -318,11 +314,7 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             return result.success(WhileNode(
                 condition,
-                ListNode(
-                    expression.startPosition,
-                    expression.endPosition,
-                    arrayListOf(expression)
-                ),
+                StatementsNode(arrayOf(expression)),
                 startPosition
             ))
         }

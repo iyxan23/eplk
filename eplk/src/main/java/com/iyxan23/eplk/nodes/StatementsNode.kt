@@ -21,12 +21,18 @@ class StatementsNode(
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
+        val results = ArrayList<EplkObject>()
 
+        // Execute each nodes / statements
         statements.forEach { node ->
-            result.register(node.visit(scope))
+            val nodeResult = result.register(node.visit(scope))
             if (result.hasError) return result
+
+            results.add(nodeResult!!)
         }
 
-        return result.success(EplkVoid(scope))
+        // Return void if there is more than 1 statement / node
+        return  if (results.size == 1) result.success(results[0])
+                else result.success(EplkVoid(scope))
     }
 }

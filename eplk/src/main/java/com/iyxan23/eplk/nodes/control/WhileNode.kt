@@ -5,6 +5,7 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
+import com.iyxan23.eplk.nodes.StatementsNode
 import com.iyxan23.eplk.nodes.types.ListNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
@@ -12,7 +13,7 @@ import com.iyxan23.eplk.objects.EplkVoid
 
 class WhileNode(
     val condition: Node,
-    val expressions: ListNode,
+    val expressions: StatementsNode,
     override val startPosition: Position
 ) : Node() {
 
