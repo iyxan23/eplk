@@ -18,16 +18,9 @@ object StandardDefinitions {
           endPosition: Position ->
 
             val result = RealtimeResult<EplkObject>()
-            val text = arguments[0]
+            val `object` = arguments[0]
 
-            if (text !is EplkString) {
-                return@EplkNativeFunction result.failure(EplkTypeError(
-                    "First argument must be a string, got ${text.objectName} instead",
-                    startPosition, endPosition, functionScope
-                ))
-            }
-
-            println(text.value)
+            println(`object`.toString())
 
             return@EplkNativeFunction result.success(EplkVoid(functionScope))
         }
