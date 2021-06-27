@@ -19,6 +19,8 @@ class VarDeclarationNode(
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
+        /*
+        // TODO: Add this later
         if (scope.symbolTable.variables.containsKey(variableName)) {
             return result.failure(
                 EplkDefinitionError(
@@ -27,6 +29,7 @@ class VarDeclarationNode(
                 )
             )
         }
+         */
 
         val visitValue = result.register(variableValue.visit(scope))
 
