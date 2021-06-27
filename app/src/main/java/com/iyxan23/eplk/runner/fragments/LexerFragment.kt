@@ -81,7 +81,7 @@ class LexerFragment : Fragment() {
 
             val builder = AlertDialog.Builder(context)
                 .setTitle("Error")
-                .setMessage(error.generateString(code))
+                .setMessage(error.generateString())
                 .setCancelable(false)
                 .setPositiveButton("Ok") { dialog, _ ->
                     dialog.dismiss()
