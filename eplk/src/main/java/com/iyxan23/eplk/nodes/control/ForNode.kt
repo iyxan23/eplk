@@ -5,6 +5,7 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
+import com.iyxan23.eplk.nodes.StatementsNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
@@ -14,10 +15,10 @@ class ForNode(
     val firstExpression: Node,
     val secondExpression: Node,
     val thirdExpression: Node,
-    val expression: Node,
+    val statements: StatementsNode,
 ) : Node() {
 
-    override val endPosition: Position = expression.endPosition
+    override val endPosition: Position = statements.endPosition
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         // Evaluate the first expression first
@@ -41,7 +42,7 @@ class ForNode(
             if (result.hasError) return result
 
             // Then evaluate the expression!
-            result.register(expression.visit(scope))
+            result.register(statements.visit(scope))
             if (result.hasError) return result
         }
 

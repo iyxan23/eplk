@@ -86,8 +86,8 @@ object Utils {
                 result.appendLine(prettyPrintNode(node.secondExpression, indentation + indentationAmount, indentationAmount))
                 result.appendLine(strIndentation + "Third expression:")
                 result.appendLine(prettyPrintNode(node.thirdExpression, indentation + indentationAmount, indentationAmount))
-                result.appendLine(strIndentation + "Expression:")
-                result.appendLine(prettyPrintNode(node.expression, indentation + indentationAmount, indentationAmount))
+                result.appendLine(strIndentation + "Statement(s):")
+                result.appendLine(prettyPrintNode(node.statements, indentation + indentationAmount, indentationAmount))
             }
 
             is WhileNode -> {

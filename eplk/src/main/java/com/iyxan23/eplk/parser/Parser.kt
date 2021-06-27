@@ -370,7 +370,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // for-expression = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE expression
+    // for-expression = FOR PAREN_OPEN expression1 SEMICOLON expression2 SEMICOLON expression3 PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
     private fun forExpression(): ParseResult {
         val result = ParseResult()
 
@@ -455,14 +455,59 @@ class Parser(private val tokens: ArrayList<Token>) {
         advance()
         // ===========================================================
 
-        val expressionResult = result.register(expression())
-        if (result.hasError) return result
+        // Check if this is a multiline or a single expression for loop
+        if (currentToken.token == Tokens.BRACES_OPEN) {
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
 
-        val expression = expressionResult as Node
+            // Multiline for loop
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
 
-        return result.success(
-            ForNode(startPosition, firstExpression, secondExpression, thirdExpression, expression)
-        )
+            val statements = statementsResult as StatementsNode
+
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected a close braces '}' after statements",
+                    currentToken.startPosition,
+                    currentToken.endPosition
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            return result.success(
+                ForNode(
+                    startPosition,
+                    firstExpression,
+                    secondExpression,
+                    thirdExpression,
+                    statements
+                )
+            )
+
+        } else {
+            // Single expression for loop
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            return result.success(
+                ForNode(
+                    startPosition,
+                    firstExpression,
+                    secondExpression,
+                    thirdExpression,
+                    StatementsNode(arrayOf(expression))
+                )
+            )
+        }
     }
 
     // if-expression = IF PAREN_OPEN expression PAREN_CLOSE expression
