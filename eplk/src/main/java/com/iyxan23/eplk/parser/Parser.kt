@@ -65,34 +65,40 @@ class Parser(private val tokens: ArrayList<Token>) {
         val result = ParseResult()
         val statements = ArrayList<Node>()
 
-        val startPosition = currentToken.startPosition.copy()
-
-        // Skip the first newline(s)
         while (currentToken.token == Tokens.NEWLINE) {
             result.registerAdvancement()
             advance()
         }
 
+        val firstStatement = result.register(expression())
+        if (result.hasError) return result
+
+        statements.add(firstStatement as Node)
+
+        var moreStatements = true
+
         while (true) {
-            // Try parsing an expression
-            val statement = result.tryRegister(expression())
-
-            // Check if there is a problem here, this might not be an expression we're expecting
-            if (statement == null) {
-                // Go back
-                reverse(result.reverseCount)
-
-                // then break
-                break
-
-            } else {
-                statements.add(statement)
-            }
+            var newlineCount = 0
 
             while (currentToken.token == Tokens.NEWLINE) {
                 result.registerAdvancement()
                 advance()
+                newlineCount += 1
             }
+
+            if (newlineCount == 0) moreStatements = false
+
+            if (!moreStatements) break
+
+            val statement = result.tryRegister(expression())
+
+            if (statement == null) {
+                reverse(result.reverseCount)
+                moreStatements = false
+                continue
+            }
+
+            statements.add(statement as Node)
         }
 
         return result.success(StatementsNode(statements.toTypedArray()))

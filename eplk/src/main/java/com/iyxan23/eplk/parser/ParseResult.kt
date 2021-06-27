@@ -35,13 +35,13 @@ class ParseResult() {
         return result.node
     }
 
-    fun tryRegister(result: ParseResult): Node? {
+    fun tryRegister(result: ParseResult): Any? {
         if (result.hasError) {
             reverseCount = result.advancementCount
             return null
         }
 
-        return result.node
+        return register(result)
     }
 
     fun success(node: Node): ParseResult {
