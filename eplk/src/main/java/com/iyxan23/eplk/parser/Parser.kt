@@ -4,6 +4,7 @@ import com.iyxan23.eplk.Tokens
 import com.iyxan23.eplk.errors.SyntaxError
 import com.iyxan23.eplk.lexer.models.Token
 import com.iyxan23.eplk.nodes.*
+import com.iyxan23.eplk.nodes.control.ElifNode
 import com.iyxan23.eplk.nodes.control.ForNode
 import com.iyxan23.eplk.nodes.control.IfNode
 import com.iyxan23.eplk.nodes.control.WhileNode
@@ -510,13 +511,13 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // if-expression = IF PAREN_OPEN expression PAREN_CLOSE expression
+    // if-expression = IF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE elif-expression* else-expression*] | [expression elif-expression* else-expression]]
     private fun ifExpression(): ParseResult {
         val result = ParseResult()
 
         val startPosition = currentToken.startPosition
-
-        val statements = ArrayList<Pair<Node, Node>>()
+        val statements = ArrayList<Node>()
+        var isSingleLine = false
 
         //////////////////////////////////////////////////////////////
         // IF STATEMENT
@@ -567,66 +568,38 @@ class Parser(private val tokens: ArrayList<Token>) {
         advance()
         // ===========================================================
 
-        // Parse the expression
-        val expressionResult = result.register(expression())
-        if (result.hasError) return result
+        // Check if this if statement has a brace open in it
+        if (currentToken.token == Tokens.BRACES_OPEN) {
+            // Parse the statement(s)
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
 
-        val expression = expressionResult as Node
+            val statementsIf = statementsResult as StatementsNode
 
-        // Save that to the statements
-        statements.add(Pair(conditionExpression, expression))
+            // Save that to the statements
+            statements.add(statementsIf)
+        } else {
+            // Parse the expression
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            // Save that to the statements
+            statements.add(expression)
+
+            // We're doing single line
+            isSingleLine = true
+        }
+
+        val elifNodes = ArrayList<ElifNode>()
 
         // Now check for elif(s)
         while (currentToken.token == Tokens.ELIF) {
-            //////////////////////////////////////////////////////////////
-            // ELIF STATEMENT
-            //////////////////////////////////////////////////////////////
-
-            // ===========================================================
-            result.registerAdvancement()
-            advance()
-            // ===========================================================
-
-            if (currentToken.token != Tokens.PAREN_OPEN) {
-                return result.failure(SyntaxError(
-                    "Expected an open parentheses '(' after 'elif'",
-                    currentToken.startPosition,
-                    currentToken.endPosition,
-                ))
-            }
-
-            // ===========================================================
-            result.registerAdvancement()
-            advance()
-            // ===========================================================
-
-            // Parse the condition
-            val conditionExpressionResultElif = result.register(expression())
+            val elifNode = result.register(elifExpression())
             if (result.hasError) return result
 
-            val conditionExpressionElif = conditionExpressionResultElif as Node
-
-            if (currentToken.token != Tokens.PAREN_CLOSE) {
-                return result.failure(SyntaxError(
-                    "Expected a close parentheses ')' after an expression",
-                    currentToken.startPosition,
-                    currentToken.endPosition,
-                ))
-            }
-
-            // ===========================================================
-            result.registerAdvancement()
-            advance()
-            // ===========================================================
-
-            // Parse the expression
-            val expressionResultElif = result.register(expression())
-            if (result.hasError) return result
-
-            val expressionElif = expressionResultElif as Node
-
-            // Save it to statements
-            statements.add(Pair(conditionExpressionElif, expressionElif))
+            elifNodes.add(elifNode as ElifNode)
         }
 
         // Finally, check the else statement
@@ -663,14 +636,91 @@ class Parser(private val tokens: ArrayList<Token>) {
         // Done
         // -----------------------------------------------------------
 
-        return result.success(
-            IfNode(
-            statements.toTypedArray(),
-            expressionElse,
+        return result.success(IfNode(
+            conditionExpression,
+            StatementsNode(statements.toTypedArray()),
+            elifNodes.toTypedArray(),
+            TODO(),
+            isSingleLine,
             startPosition,
-            expression.endPosition
-        )
-        )
+            currentToken.endPosition
+        ))
+    }
+
+    private fun elifExpression(): ParseResult {
+        val result = ParseResult()
+        val startPosition = currentToken.startPosition.copy()
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        if (currentToken.token != Tokens.PAREN_OPEN) {
+            return result.failure(SyntaxError(
+                "Expected an open parentheses '(' after 'elif'",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // Parse the condition
+        val conditionExpressionResultElif = result.register(expression())
+        if (result.hasError) return result
+
+        val conditionExpressionElif = conditionExpressionResultElif as Node
+
+        if (currentToken.token != Tokens.PAREN_CLOSE) {
+            return result.failure(SyntaxError(
+                "Expected a close parentheses ')' after an expression",
+                currentToken.startPosition,
+                currentToken.endPosition,
+            ))
+        }
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        // Check if this elif statement has a brace open in it
+        if (currentToken.token == Tokens.BRACES_OPEN) {
+            // Parse the statement(s)
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
+
+            val statements = statementsResult as StatementsNode
+
+            return result.success(
+                ElifNode(
+                    conditionExpressionElif,
+                    statements,
+                    startPosition,
+                    currentToken.endPosition
+                )
+            )
+
+        } else {
+            // Parse the expression
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            return result.success(
+                ElifNode(
+                    conditionExpressionElif,
+                    StatementsNode(arrayOf(expression)),
+                    startPosition,
+                    currentToken.endPosition
+                )
+            )
+        }
     }
 
     // list-expression = BRACKET_OPEN [expression [COMMA expression]]* BRACKET_CLOSE
