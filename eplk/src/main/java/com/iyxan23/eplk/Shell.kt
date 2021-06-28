@@ -63,7 +63,6 @@ fun main() {
 
         // Don't print void objects
         if (interpreterResult.value !is EplkVoid) {
-            println()
             println(interpreterResult.value)
         }
 

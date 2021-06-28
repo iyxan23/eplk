@@ -21,6 +21,9 @@ class Lexer(
     private val position = Position(-1, 0, 0, filename, code)
     private var currentChar: Char? = null
 
+    // This variable is used to skip a line (for example, when there is a comment)
+    private var skipLine = false
+
     private var errorThrown: EplkError? = null
 
     private val tokens: ArrayList<Token> = ArrayList()
@@ -39,6 +42,17 @@ class Lexer(
             // Ignore spaces
             if (spaces.contains(currentChar)) {
                 advance()
+                continue
+            }
+
+            // Skip line
+            if (skipLine) {
+                advance()
+
+                if (currentChar == '\n') {
+                    skipLine = false
+                }
+
                 continue
             }
 
@@ -115,6 +129,10 @@ class Lexer(
                     if (currentChar == '=') {
                         tokenToAdd = Tokens.DIV_EQUAL
                         advance()
+                    } else if (currentChar == '/') {
+                        // Skip this line because this is a comment
+                        skipLine = true
+                        continue
                     }
 
                     tokens.add(Token(tokenToAdd, null, beforePosition, position.copy()))
