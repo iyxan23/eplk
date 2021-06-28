@@ -583,6 +583,20 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             // Save that to the statements
             statements.add(statementsIf)
+
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(SyntaxError(
+                    "Expected a close brace '}' after statements",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                ))
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
         } else {
             // Parse the expression
             val expressionResult = result.register(expression())
@@ -710,6 +724,21 @@ class Parser(private val tokens: ArrayList<Token>) {
 
             val statements = statementsResult as StatementsNode
 
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(
+                    SyntaxError(
+                        "Expected a close brace '}' after statements in elif",
+                        currentToken.startPosition,
+                        currentToken.endPosition,
+                    )
+                )
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
             return result.success(
                 ElifNode(
                     conditionExpressionElif,
@@ -758,6 +787,21 @@ class Parser(private val tokens: ArrayList<Token>) {
             if (result.hasError) return result
 
             val statements = statementsResult as StatementsNode
+
+            if (currentToken.token != Tokens.BRACES_CLOSE) {
+                return result.failure(
+                    SyntaxError(
+                        "Expected a close brace '}' after statements in else",
+                        currentToken.startPosition,
+                        currentToken.endPosition,
+                    )
+                )
+            }
+
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
 
             return result.success(statements)
 
