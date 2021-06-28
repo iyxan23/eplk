@@ -11,7 +11,7 @@ import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
 import java.lang.IllegalArgumentException
 
-class BaseIfNode(
+open class BaseIfNode(
     val condition: Node,
     val statements: StatementsNode,
 

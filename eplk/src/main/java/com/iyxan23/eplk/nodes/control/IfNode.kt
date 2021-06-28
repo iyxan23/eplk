@@ -1,112 +1,64 @@
 package com.iyxan23.eplk.nodes.control
 
-import com.iyxan23.eplk.errors.runtime.EplkTypeError
 import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.nodes.StatementsNode
-import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
-import java.lang.IllegalArgumentException
 
 class IfNode(
-    /**
-     * Array<Pair<condition: Node, expression(s): StatementsNode>>
-     */
-    val statements: Array<Pair<Node, StatementsNode>>,
-    val elseExpression: Node?,
-    val isMultiline: Boolean,
-
-    // elseExpression mustn't be null if isMultiline is false as expression ifs are required to have an else branch
+    condition: Node,
+    statements: StatementsNode,
+    val elifNodes: Array<ElifNode>,
+    val elseNode: StatementsNode?,
+    val isSingleLine: Boolean = false,
 
     override val startPosition: Position,
-    override val endPosition: Position,
-) : Node() {
+    override val endPosition: Position
+
+) : BaseIfNode(condition, statements, startPosition, endPosition) {
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
-        if (!isMultiline && elseExpression == null) throw IllegalArgumentException("Inline if statement should have an else case")
+        val conditionResult = super.visit(scope)
 
-        statements.forEach {
-            val condition = it.first
-            val statements = it.second
+        result.register(conditionResult)
+        if (result.hasError) return result
 
-            val conditionResult = result.register(evaluateCondition(scope, condition))
-            if (result.hasError) return result
-
-            val evaluatedCondition = conditionResult as EplkBoolean
-
-            // Now check if the evaluated condition is true
-            if (evaluatedCondition.value) {
-                // Check if this is a multiline statement
-                if (isMultiline) {
-                    // Then execute the statement(s)
-                    result.register(statements.visit(scope))
-                    if (result.hasError) return result
-
-                    return result.success(EplkVoid(scope))
-
-                } else {
-                    // then let's evaluate the expression and return it
-                    val expressionResult = result.register(statements.visit(scope))
-                    if (result.hasError) return result
-
-                    return result.success(expressionResult!!)
-                }
+        when {
+            conditionResult.passedData["condition_result"] == "if" -> {
+                // Alright then let's just return what BaseIfNode gave us
+                return result.success(conditionResult.value!!)
             }
-        }
 
-        // Looks like none of the conditions were true, let's go to the else branch
+            conditionResult.passedData["condition_result"] == "else" -> {
+                // Execute elif statements, if any
+                elifNodes.forEach { node ->
+                    val elifResult = node.visit(scope)
 
-        // Check if this is a multiline if statement
-        if (isMultiline) {
-            // Is there any else branch?
-            if (elseExpression != null) {
-                // Alright then execute it
-                result.register(elseExpression.visit(scope))
-                if (result.hasError) return result
+                    result.register(elifResult)
+                    if (result.hasError) return result
+
+                    if (elifResult.passedData["condition_result"] == "if") {
+                        // alright this elif statement succeed, let's return it's value if we're an expression
+                        return result.success(if (isSingleLine) elifResult.value!! else EplkVoid(scope))
+                    }
+                }
+
+                // looks like none of the elif statements are true, check if we have else
+                if (elseNode != null) {
+                    // then execute the else node and get out
+                    result.register(elseNode.visit(scope))
+                    if (result.hasError) return result
+                }
 
                 return result.success(EplkVoid(scope))
             }
 
-            // nope there isn't, let's just get out
-            return result.success(EplkVoid(scope))
-
-        } else {
-            // Looks like no statements are true, let's evaluate the else block instead
-            val elseResult = result.register(elseExpression!!.visit(scope))
-            if (result.hasError) return result
-
-            return result.success(elseResult!!)
+            else -> throw IllegalStateException("condition_result is neither if nor else")
         }
-    }
-
-    /**
-     * This function evaluates the condition given and returns the EplkBoolean output of it
-     */
-    private fun evaluateCondition(scope: Scope, condition: Node): RealtimeResult<EplkObject> {
-        val result = RealtimeResult<EplkObject>()
-
-        // First, let's evaluate the condition
-        val conditionResult = result.register(condition.visit(scope))
-        if (result.hasError) return result
-
-        val evaluatedCondition = conditionResult as EplkObject
-
-        // Must check for the type
-        if (evaluatedCondition !is EplkBoolean) {
-            return result.failure(
-                EplkTypeError(
-                "Condition for an if statement should've evaluated into a boolean, got ${evaluatedCondition.objectName} instead",
-                condition.startPosition,
-                condition.endPosition,
-                scope,
-            ))
-        }
-
-        return result.success(evaluatedCondition)
     }
 }
