@@ -16,14 +16,22 @@ class RealtimeResult<T> {
 
     val hasError get() = error != null
 
+    // This is used to pass data between nodes
+    val passedData: HashMap<String, String> by lazy { HashMap() }
+
     fun register(result: RealtimeResult<T>): T? {
         if (result.hasError) error = result.error
         value = result.value
         return value
     }
 
-    fun success(value: T): RealtimeResult<T> {
+    fun success(value: T, dataToPass: Map<String, String>? = null): RealtimeResult<T> {
         this.value = value
+
+        if (dataToPass != null) {
+            passedData.putAll(dataToPass)
+        }
+
         return this
     }
 
