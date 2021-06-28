@@ -647,6 +647,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         ))
     }
 
+    // elif-expression = ELIF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
     private fun elifExpression(): ParseResult {
         val result = ParseResult()
         val startPosition = currentToken.startPosition.copy()
@@ -720,6 +721,42 @@ class Parser(private val tokens: ArrayList<Token>) {
                     currentToken.endPosition
                 )
             )
+        }
+    }
+
+    // else-expression = ELSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
+    private fun elseExpression(): ParseResult {
+        val result = ParseResult()
+        val startPosition = currentToken.startPosition.copy()
+
+        // ===========================================================
+        result.registerAdvancement()
+        advance()
+        // ===========================================================
+
+        if (currentToken.token == Tokens.BRACES_OPEN) {
+            
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
+            // Parse the statement(s)
+            val statementsResult = result.register(statements())
+            if (result.hasError) return result
+
+            val statements = statementsResult as StatementsNode
+
+            return result.success(statements)
+
+        } else {
+            // Parse the expression
+            val expressionResult = result.register(expression())
+            if (result.hasError) return result
+
+            val expression = expressionResult as Node
+
+            return result.success(StatementsNode(arrayOf(expression)))
         }
     }
 
