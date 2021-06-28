@@ -594,6 +594,10 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         val elifNodes = ArrayList<ElifNode>()
 
+        //////////////////////////////////////////////////////////////
+        // ELIF STATEMENT
+        //////////////////////////////////////////////////////////////
+
         // Now check for elif(s)
         while (currentToken.token == Tokens.ELIF) {
             val elifNode = result.register(elifExpression())
@@ -610,22 +614,23 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         var elseStatements: StatementsNode? = null
 
-        if (isSingleLine) {
-            if (currentToken.token != Tokens.ELSE) {
-                return result.failure(
-                    SyntaxError(
-                        "Expected 'else'. An else block is required in an expression if",
-                        currentToken.startPosition,
-                        currentToken.endPosition,
-                    )
-                )
-            }
-
+        // else is optional on multiline statement
+        if (currentToken.token == Tokens.ELSE) {
             // Parse the else's statements
             val expressionResultElse = result.register(elseExpression())
             if (result.hasError) return result
 
             elseStatements = expressionResultElse as StatementsNode
+
+        // whilst else is mandatory on single line if statement
+        } else if (isSingleLine) {
+            return result.failure(
+                SyntaxError(
+                    "Expected 'else'. An else block is required in an expression if",
+                    currentToken.startPosition,
+                    currentToken.endPosition,
+                )
+            )
         }
 
         // -----------------------------------------------------------
