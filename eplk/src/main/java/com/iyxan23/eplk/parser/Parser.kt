@@ -570,6 +570,11 @@ class Parser(private val tokens: ArrayList<Token>) {
 
         // Check if this if statement has a brace open in it
         if (currentToken.token == Tokens.BRACES_OPEN) {
+            // ===========================================================
+            result.registerAdvancement()
+            advance()
+            // ===========================================================
+
             // Parse the statement(s)
             val statementsResult = result.register(statements())
             if (result.hasError) return result
