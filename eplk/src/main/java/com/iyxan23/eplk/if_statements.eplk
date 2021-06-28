@@ -1,15 +1,12 @@
-var number = if (true) 10 else 11
+var number = random(0, 100)
 
-number--
-number--
+if (number < 50) {
+    println("Hmm it's less than 50")
 
-if (number == 10) {
-    println("What just happened")
-
-} elif (number == 9) {
-    println("Hmm it's nine")
+} elif (number < 75) {
+    println("hmmmmm, higher than 50 and less than 75")
 
 } else {
-    println("cool it's")
-    println(number)
+    println("Cool, we got a number higher than 75! ")
+    print(number)
 }
