@@ -515,7 +515,7 @@ class Parser(private val tokens: ArrayList<Token>) {
     private fun ifExpression(): ParseResult {
         val result = ParseResult()
 
-        val startPosition = currentToken.startPosition
+        val startPosition = currentToken.startPosition.copy()
         val statements = ArrayList<Node>()
         var isSingleLine = false
 
@@ -608,43 +608,41 @@ class Parser(private val tokens: ArrayList<Token>) {
         // ELSE STATEMENT
         //////////////////////////////////////////////////////////////
 
-        if (currentToken.token != Tokens.ELSE) {
-            return result.failure(SyntaxError(
-                "Expected 'else'. An else block is required in an expression if",
-                currentToken.startPosition,
-                currentToken.endPosition,
-            ))
+        var elseStatements: StatementsNode? = null
+
+        if (isSingleLine) {
+            if (currentToken.token != Tokens.ELSE) {
+                return result.failure(
+                    SyntaxError(
+                        "Expected 'else'. An else block is required in an expression if",
+                        currentToken.startPosition,
+                        currentToken.endPosition,
+                    )
+                )
+            }
+
+            // Parse the else's statements
+            val expressionResultElse = result.register(elseExpression())
+            if (result.hasError) return result
+
+            elseStatements = expressionResultElse as StatementsNode
         }
-
-        // ===========================================================
-        result.registerAdvancement()
-        advance()
-        // ===========================================================
-
-        // Parse the expression
-        val expressionResultElse = result.register(expression())
-        if (result.hasError) return result
-
-        val expressionElse = expressionResultElse as Node
-
-        // ===========================================================
-        result.registerAdvancement()
-        advance()
-        // ===========================================================
 
         // -----------------------------------------------------------
         // Done
         // -----------------------------------------------------------
 
-        return result.success(IfNode(
-            conditionExpression,
-            StatementsNode(statements.toTypedArray()),
-            elifNodes.toTypedArray(),
-            TODO(),
-            isSingleLine,
-            startPosition,
-            currentToken.endPosition
-        ))
+        return result.success(
+            IfNode(
+                conditionExpression,                        // If's condition
+                StatementsNode(statements.toTypedArray()),  // If's statements
+                elifNodes.toTypedArray(),                   // Elif(s) condition & statements
+                elseStatements,                             // Else's statements (if present)
+                isSingleLine,                               // Is an expression
+                startPosition,                              // Start position
+                currentToken.endPosition                    // End Position
+            )
+        )
     }
 
     // elif-expression = ELIF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
@@ -732,7 +730,6 @@ class Parser(private val tokens: ArrayList<Token>) {
     // else-expression = ELSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
     private fun elseExpression(): ParseResult {
         val result = ParseResult()
-        val startPosition = currentToken.startPosition.copy()
 
         // ===========================================================
         result.registerAdvancement()
@@ -740,7 +737,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         // ===========================================================
 
         if (currentToken.token == Tokens.BRACES_OPEN) {
-            
+
             // ===========================================================
             result.registerAdvancement()
             advance()
