@@ -64,18 +64,22 @@ object Utils {
             }
 
             is IfNode -> {
-                node.statements.forEachIndexed { index, pair ->
-                    val condition = pair.first
-                    val expression = pair.second
+                result.appendLine(strIndentation + "If condition: ")
+                result.appendLine(prettyPrintNode(node.condition, indentation + indentationAmount, indentationAmount))
+                result.appendLine(strIndentation + "statements: ")
+                result.appendLine(prettyPrintNode(node.statements, indentation + indentationAmount, indentationAmount))
 
-                    result.appendLine(strIndentation + (if (index == 0) "If condition:" else "Elif condition:"))
-                    result.appendLine(prettyPrintNode(condition, indentation + indentationAmount, indentationAmount))
-                    result.appendLine(strIndentation + "Expression:")
-                    result.appendLine(prettyPrintNode(expression, indentation + indentationAmount, indentationAmount))
+                node.elifNodes.forEach { elifNode ->
+                    result.appendLine(strIndentation + "Elif condition: ")
+                    result.appendLine(prettyPrintNode(elifNode.condition, indentation + indentationAmount, indentationAmount))
+                    result.appendLine(strIndentation + "statements: ")
+                    result.appendLine(prettyPrintNode(elifNode.statements, indentation + indentationAmount, indentationAmount))
                 }
 
-                result.appendLine(strIndentation + "Else expression: ")
-                result.appendLine(prettyPrintNode(node.elseExpression, indentation + indentationAmount, indentationAmount))
+                if (node.elseNode != null) {
+                    result.appendLine(strIndentation + "Else statements: ")
+                    result.appendLine(prettyPrintNode(node.elseNode, indentation + indentationAmount, indentationAmount))
+                }
             }
 
             is ForNode -> {
