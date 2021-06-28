@@ -1,0 +1,15 @@
+var number = if (true) 10 else 11
+
+number--
+number--
+
+if (number == 10) {
+    println("What just happened")
+
+} elif (number == 9) {
+    println("Hmm it's nine")
+
+} else {
+    println("cool it's")
+    println(number)
+}
