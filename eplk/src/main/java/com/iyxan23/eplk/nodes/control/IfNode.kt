@@ -50,9 +50,12 @@ class IfNode(
 
                 // looks like none of the elif statements are true, check if we have else
                 if (elseNode != null) {
-                    // then execute the else node and get out
-                    result.register(elseNode.visit(scope))
+                    // then execute the else node
+                    val elseResult = result.register(elseNode.visit(scope))
                     if (result.hasError) return result
+
+                    // check if we're in single line, if yes, then return the value right away
+                    if (isSingleLine) return result.success(elseResult!!)
                 }
 
                 return result.success(EplkVoid(scope))
