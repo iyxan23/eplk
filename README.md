@@ -7,6 +7,47 @@ Epic programming language named Eplk, short for Extensible Programming Language 
 
 Created with the help of CodePulse's "Make YOUR OWN Programming Language" series, many thanks to him! Here is his [playlist](https://www.youtube.com/watch?v=r46EONXC1i0). Also, check his [github repository](https://github.com/davidcallanan/py-myopl-code) and [profile](https://github.com/davidcallanan)
 
+## How to run
+Go to [`eplk/src/main/java/com/iyxan23/eplk`](https://github.com/Iyxan23/eplk/tree/main/eplk/src/main/java/com/iyxan23/eplk). Run `Runner.kt` to run .eplk files, and `Shell.kt` to run the eplk shell
+
+## Syntax
+Syntax is derived mostly from python, java and kotlin (major languages I personally use). Note that this syntax can change overtime as I progress the language further.
+```
+// Hello comments!
+var number = 10
+var string = "Hello World"
+var myList = ["hello", 1, -1, 50 * 50, 10 + 10 * 2]
+
+fun greet(name) -> "Hello, " + name + "!"
+
+println(string)
+println(greet("Iyxan23"))
+
+if (number > 50) {
+    println("Broken!")
+} elif (number > 30) {
+    println("Also Broken!")
+} else {
+    println("Yes!")
+}
+
+number--
+number++
+
+for (var index = 0; index < 5; index++) {
+    number++
+    print("Loop at index ")
+    println(index)
+}
+
+while (number > 0) {
+    println(myList[number])
+    number--
+}
+
+println(if (true) "Of course true!" else "What just happened")
+```
+
 ## FAQs
 
 ### Why make an interpreted language in kotlin?
