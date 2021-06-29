@@ -1323,7 +1323,9 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // expression = KEYWORD:VAR IDENTIFIER [EQUAL expression]? | IDENTIFIER EQUAL expression | comparison-expression [[AND|OR] comparison-expression]*
+    val equalOperations = arrayOf(Tokens.PLUS_EQUAL, Tokens.MINUS_EQUAL, Tokens.MUL_EQUAL, Tokens.DIV_EQUAL)
+
+    // expression = KEYWORD:VAR IDENTIFIER [EQUAL expression]? | IDENTIFIER EQUAL expression | IDENTIFIER [PLUS_EQUAL | MINUS_EQUAL | MUL_EQUAL | DIV_EQUAL] | comparison-expression [[AND|OR] comparison-expression]*
     private fun expression(): ParseResult {
         val result = ParseResult()
 
@@ -1385,9 +1387,10 @@ class Parser(private val tokens: ArrayList<Token>) {
         } else if (currentToken.token == Tokens.IDENTIFIER) {
             val identifierToken = currentToken.copy()
 
-            // Also check if the next token is equal
+            // Peek the next token
             advance()
 
+            // Check if this is a variable assignment
             if (currentToken.token == Tokens.EQUAL) {
                 // Yes this is a variable assignment
                 // Don't forget to register the advancement we did earlier
@@ -1410,6 +1413,47 @@ class Parser(private val tokens: ArrayList<Token>) {
                     variableValue,
                     identifierToken.startPosition
                 ))
+
+            // Check if this is one of the equal operators
+            } else if (equalOperations.contains(currentToken.token)) {
+                val startPosition = currentToken.startPosition.copy()
+
+                // Alright then register the advancement
+                result.registerAdvancement()
+
+                // Parse the equal operation to default operations like PLUS, MINUS, etc
+                val equalOperation: Token = when (currentToken.token) {
+                    Tokens.PLUS_EQUAL   -> currentToken.copy(token = Tokens.PLUS    )
+                    Tokens.MINUS_EQUAL  -> currentToken.copy(token = Tokens.MINUS   )
+                    Tokens.MUL_EQUAL    -> currentToken.copy(token = Tokens.MUL     )
+                    Tokens.DIV_EQUAL    -> currentToken.copy(token = Tokens.DIV     )
+
+                    else -> throw RuntimeException("Unknown equal operator ${currentToken.token.name}")
+                }
+
+                // ===========================================================
+                advance()
+                result.registerAdvancement()
+                // ===========================================================
+
+                // And parse the expression next to it
+                val valueResult = result.register(expression())
+                if (result.hasError) return result
+
+                val value = valueResult as Node
+
+                // Return nodes equal to "identifierToken = identifierToken OPERATOR value"
+                return result.success(
+                    VarAssignNode(
+                        identifierToken.value!!,
+                        BinOpNode(
+                            VarAccessNode(identifierToken),
+                            equalOperation,
+                            value
+                        ),
+                        startPosition
+                    )
+                )
             }
 
             // Not a variable assignment, go back and do a comparison expression instead then
