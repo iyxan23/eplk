@@ -74,7 +74,8 @@ arithmetic-expression   = term [[PLUS|MINUS] term]*
 comparison-expression   = NOT comparison-expression |
                           arithmetic-expression [[comparison operators] arithmetic-expression]*
 
-expression              = KEYWORD:VAR IDENTIFIER EQUAL expression |
+expression              = KEYWORD:VAR IDENTIFIER [EQUAL expression]? |
+                          IDENTIFIER EQUAL expression |
                           comparison-expression [[AND|OR] comparison-expression]*
 
 statements              = NEWLINE* expression [NEWLINE+ expression]* NEWLINE*
