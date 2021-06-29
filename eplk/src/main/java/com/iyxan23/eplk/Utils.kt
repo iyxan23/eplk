@@ -8,6 +8,7 @@ import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.types.*
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
+import com.iyxan23.eplk.nodes.variable.VarAssignNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
 object Utils {
@@ -55,8 +56,18 @@ object Utils {
             is VarDeclarationNode -> {
                 result.appendLine(strIndentation + "Variable declaration:")
                 result.appendLine(strIndentation + "Variable name: ${node.variableName}")
+
+                if (node.variableValue != null) {
+                    result.appendLine(strIndentation + "Variable value:")
+                    result.appendLine(prettyPrintNode(node.variableValue, indentation + indentationAmount, indentationAmount))
+                }
+            }
+
+            is VarAssignNode -> {
+                result.appendLine(strIndentation + "Variable Assign:")
+                result.appendLine(strIndentation + "Variable name: ${node.variableName}")
                 result.appendLine(strIndentation + "Variable value:")
-                result.appendLine(prettyPrintNode(node.variableValue, indentation + indentationAmount, indentationAmount))
+                result.appendLine(prettyPrintNode(node.value, indentation + indentationAmount, indentationAmount))
             }
 
             is VarAccessNode -> {
