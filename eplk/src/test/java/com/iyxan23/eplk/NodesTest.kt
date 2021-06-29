@@ -36,7 +36,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 1)
     }
@@ -51,7 +51,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkBoolean)
         assert(!(resultVisit.value as EplkBoolean).value)
     }
@@ -66,7 +66,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 2)
     }
@@ -81,7 +81,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkFloat)
         println((resultVisit.value as EplkFloat).value)
         assert((resultVisit.value as EplkFloat).value == 2.5f)
@@ -97,7 +97,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkFloat)
         println((resultVisit.value as EplkFloat).value)
         assert((resultVisit.value as EplkFloat).value == 27f)
@@ -113,7 +113,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkFloat)
         println((resultVisit.value as EplkFloat).value)
         assert((resultVisit.value as EplkFloat).value == 27f)
@@ -129,7 +129,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkBoolean)
         assert(!(resultVisit.value as EplkBoolean).value)
     }
@@ -144,7 +144,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkBoolean)
         assert(!(resultVisit.value as EplkBoolean).value)
     }
@@ -159,7 +159,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 9)
     }
@@ -181,7 +181,7 @@ class NodesTest {
         assert(scope.symbolTable.variables["hello_world"] is EplkFloat)
         assert((scope.symbolTable.variables["hello_world"] as EplkFloat).value == 11f)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkFloat)
         assert((resultVisit.value as EplkFloat).value == 11f)
     }
@@ -201,7 +201,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 20)
     }
@@ -216,7 +216,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 5)
     }
@@ -231,7 +231,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 7)
     }
@@ -246,7 +246,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 9)
     }
@@ -261,14 +261,14 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(Scope(filename))
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 0)
     }
 
     @Test
     fun forTest() {
-        val lexerResult = Lexer(filename, "for (var index = 0; index < 10; var index = index + 1) var number = number + 10").doLexicalAnalysis()
+        val lexerResult = Lexer(filename, "for (var index = 0; index < 10; index++) number = number + 10").doLexicalAnalysis()
         val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
@@ -280,7 +280,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkVoid)
 
         assert((scope.symbolTable.variables["number"] as EplkInteger).value == 100)
@@ -288,7 +288,7 @@ class NodesTest {
 
     @Test
     fun whileTest() {
-        val lexerResult = Lexer(filename, "while (number < 100) var number = number ^ 2").doLexicalAnalysis()
+        val lexerResult = Lexer(filename, "while (number < 100) number = number ^ 2").doLexicalAnalysis()
         val parseResult = Parser(lexerResult.tokens!!).parse().node as Node
 
         println("Lexer result: $lexerResult")
@@ -300,7 +300,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkVoid)
 
         assert((scope.symbolTable.variables["number"] as EplkFloat).value == 256f)
@@ -318,7 +318,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkVoid)
 
         assert(scope.symbolTable.variables.containsKey("hello"))
@@ -343,7 +343,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkString)
         assert((resultVisit.value as EplkString).value == "Hello World World World")
     }
@@ -360,7 +360,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkList)
         assert((resultVisit.value as EplkList).toString() == "[1, 2, hi, hi world]")
     }
@@ -379,7 +379,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 15)
 
@@ -402,7 +402,7 @@ class NodesTest {
 
         val resultVisit = parseResult.visit(scope)
 
-        assert(!resultVisit.hasError) { println(resultVisit.error) }
+        assert(!resultVisit.hasError) { println(resultVisit.error!!.generateString()) }
         assert(resultVisit.value is EplkInteger)
         assert((resultVisit.value as EplkInteger).value == 15)
 

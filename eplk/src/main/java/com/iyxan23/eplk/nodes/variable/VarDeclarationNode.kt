@@ -19,6 +19,7 @@ class VarDeclarationNode(
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
+        // we only need to check the variable in the local scope, we can't declare variables on the parent scope while we're in a child scope
         if (scope.symbolTable.variables.containsKey(variableName)) {
             return result.failure(
                 EplkDefinitionError(
