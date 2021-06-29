@@ -12,6 +12,7 @@ import com.iyxan23.eplk.nodes.operation.BinOpNode
 import com.iyxan23.eplk.nodes.operation.UnaryOpNode
 import com.iyxan23.eplk.nodes.types.*
 import com.iyxan23.eplk.nodes.variable.VarAccessNode
+import com.iyxan23.eplk.nodes.variable.VarAssignNode
 import com.iyxan23.eplk.nodes.variable.VarDeclarationNode
 
 /**
@@ -1322,7 +1323,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // expression = KEYWORD:VAR IDENTIFIER EQUAL expression | comparison-expression [[AND|OR] comparison-expression]*
+    // expression = KEYWORD:VAR IDENTIFIER [EQUAL expression]? | IDENTIFIER EQUAL expression | comparison-expression [[AND|OR] comparison-expression]*
     private fun expression(): ParseResult {
         val result = ParseResult()
 
@@ -1372,7 +1373,8 @@ class Parser(private val tokens: ArrayList<Token>) {
                     VarDeclarationNode(
                         identifierToken.value!!,
                         expression,
-                        varToken.startPosition
+                        varToken.startPosition,
+                        currentToken.endPosition.copy()
                     )
                 )
 
@@ -1380,28 +1382,60 @@ class Parser(private val tokens: ArrayList<Token>) {
                 throw NotImplementedError("Keyword ${currentToken.value} is not implemented")
             }
 
-        } else {
-            // do a comparison expression, very similar to term and factor
-            val comparisonExpressionResult = result.register(comparisonExpression()) as Node?
+        } else if (currentToken.token == Tokens.IDENTIFIER) {
+            val identifierToken = currentToken.copy()
+
+            // Also check if the next token is equal
+            advance()
+
+            if (currentToken.token == Tokens.EQUAL) {
+                // Yes this is a variable assignment
+                // Don't forget to register the advancement we did earlier
+                result.registerAdvancement()
+
+                // pass over the equal token
+                // ===========================================================
+                advance()
+                result.registerAdvancement()
+                // ===========================================================
+
+                // then parse the value as an expression
+                val variableValueResult = result.register(expression())
+                if (result.hasError) return result
+
+                val variableValue = variableValueResult as Node
+
+                return result.success(VarAssignNode(
+                    identifierToken.value!!,
+                    variableValue,
+                    identifierToken.startPosition
+                ))
+            }
+
+            // Not a variable assignment, go back and do a comparison expression instead then
+            reverse(1)
+        }
+
+        // do a comparison expression, very similar to term and factor
+        val comparisonExpressionResult = result.register(comparisonExpression()) as Node?
+
+        if (result.hasError) return result
+
+        var leftNode = comparisonExpressionResult as Node
+
+        while (currentToken.token == Tokens.AND || currentToken.token == Tokens.OR) {
+            val operatorToken = currentToken.copy()
+
+            result.registerAdvancement()
+            advance()
+
+            val rightNode = result.register(comparisonExpression()) as Node?
 
             if (result.hasError) return result
 
-            var leftNode = comparisonExpressionResult as Node
-
-            while (currentToken.token == Tokens.AND || currentToken.token == Tokens.OR) {
-                val operatorToken = currentToken.copy()
-
-                result.registerAdvancement()
-                advance()
-
-                val rightNode = result.register(comparisonExpression()) as Node?
-
-                if (result.hasError) return result
-
-                leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
-            }
-
-            return result.success(leftNode)
+            leftNode = BinOpNode(leftNode, operatorToken, rightNode!!)
         }
+
+        return result.success(leftNode)
     }
 }
