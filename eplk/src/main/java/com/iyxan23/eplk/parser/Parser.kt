@@ -1009,6 +1009,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
+    // increment-decrement = atom [DOUBLE_PLUS | DOUBLE_MINUS]
     private fun incrementDecrement(): ParseResult {
         val result = ParseResult()
 

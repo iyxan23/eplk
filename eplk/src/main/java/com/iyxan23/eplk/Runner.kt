@@ -11,11 +11,8 @@ val scope = StandardDefinitions.generateScope("<SHELL>")
 fun main() {
     print("Filepath: ")
     val filepath: String = readLine() ?: return
-
     val code = File(filepath).readText()
-
     val lexerResult = Lexer("<SHELL>", code).doLexicalAnalysis()
-
 
     if (lexerResult.error != null) {
         println(lexerResult.error.generateString())
