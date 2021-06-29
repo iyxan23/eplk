@@ -12,6 +12,23 @@ data class Scope(
     val parent: Scope? = null,
     val parentPosition: Position? = null,
 ) {
+    // Assigns a variable to a value depending on the scope
+    fun assignVariable(name: String, value: EplkObject) {
+        // always prefer local scope
+        if (symbolTable.variables.containsKey(name)) {
+            symbolTable.variables[name] = value
+
+        } else {
+            // Then do set variable on the parent scope, if exists
+            if (parent != null) {
+                parent.assignVariable(name, value)
+            } else {
+                // then this variable doesn't exist wth, this shouldn't happen
+                throw RuntimeException("Variable with the name $name doesn't exist in current scope while trying to assign a value to it")
+            }
+        }
+    }
+
     // TODO: 6/26/21 Learn more about static scoping
     fun searchVariable(name: String): EplkObject? {
         // First search it on the local scope
