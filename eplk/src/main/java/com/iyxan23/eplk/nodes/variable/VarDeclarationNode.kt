@@ -6,21 +6,19 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.objects.EplkObject
+import com.iyxan23.eplk.objects.EplkVoid
 
 class VarDeclarationNode(
     val variableName: String,
-    val variableValue: Node,
-    override val startPosition: Position
-) : Node() {
+    val variableValue: Node?,
 
-    override val endPosition: Position
-        get() = variableValue.endPosition
+    override val startPosition: Position,
+    override val endPosition: Position,
+) : Node() {
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
 
-        /*
-        // TODO: Add this later
         if (scope.symbolTable.variables.containsKey(variableName)) {
             return result.failure(
                 EplkDefinitionError(
@@ -29,14 +27,18 @@ class VarDeclarationNode(
                 )
             )
         }
-         */
 
-        val visitValue = result.register(variableValue.visit(scope))
+        if (variableValue != null) {
+            val visitValue = result.register(variableValue.visit(scope))
+            if (result.hasError) return result
 
-        if (result.hasError) return result
+            scope.symbolTable.variables[variableName] = visitValue as EplkObject
 
-        scope.symbolTable.variables[variableName] = visitValue as EplkObject
+            return result.success(visitValue)
+        } else {
+            scope.symbolTable.variables[variableName] = EplkVoid(scope)
 
-        return result.success(visitValue)
+            return result.success(EplkVoid(scope))
+        }
     }
 }
