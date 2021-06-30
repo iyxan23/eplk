@@ -37,6 +37,20 @@ object StandardDefinitions {
             return@EplkNativeFunction result.success(EplkVoid(functionScope))
         }
 
+        scope.symbolTable.variables["typeof"] = EplkNativeFunction(scope, "typeof", arrayOf("obj"))
+        { functionScope: Scope,
+          arguments: Array<EplkObject>,
+          _: Position,
+          _: Position ->
+
+            val result = RealtimeResult<EplkObject>()
+            val obj = arguments[0]
+
+            println(obj.objectName)
+
+            return@EplkNativeFunction result.success(EplkVoid(functionScope))
+        }
+
         scope.symbolTable.variables["random"] = EplkNativeFunction(scope, "random", arrayOf("min", "max"))
         { functionScope: Scope,
           arguments: Array<EplkObject>,
