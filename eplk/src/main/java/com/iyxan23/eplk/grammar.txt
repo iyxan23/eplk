@@ -79,4 +79,9 @@ expression              = VAR IDENTIFIER [EQUAL expression]? |
                           IDENTIFIER [PLUS_EQUAL | MINUS_EQUAL | MUL_EQUAL | DIV_EQUAL] |
                           comparison-expression [[AND|OR] comparison-expression]*
 
-statements              = NEWLINE* expression [NEWLINE+ expression]* NEWLINE*
+statement               = RETURN expression? |
+                          CONTINUE |
+                          BREAK |
+                          expression
+
+statements              = NEWLINE* statement [NEWLINE+ statement]* NEWLINE*
