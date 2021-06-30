@@ -466,7 +466,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // if-expression = IF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE elif-expression* else-expression*] | [expression elif-expression* else-expression]]
+    // if-expression = IF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE elif-expression* else-expression*] | [statement elif-expression* else-expression]]
     private fun ifExpression(): ParseResult {
         val result = ParseResult()
 
@@ -553,8 +553,8 @@ class Parser(private val tokens: ArrayList<Token>) {
             // ===========================================================
 
         } else {
-            // Parse the expression
-            val expressionResult = result.register(expression())
+            // Parse the expression / statement
+            val expressionResult = result.register(statement())
             if (result.hasError) return result
 
             val expression = expressionResult as Node
@@ -624,7 +624,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         )
     }
 
-    // elif-expression = ELIF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
+    // elif-expression = ELIF PAREN_OPEN expression PAREN_CLOSE [[BRACES_OPEN statements BRACES_CLOSE] | statement]
     private fun elifExpression(): ParseResult {
         val result = ParseResult()
         val startPosition = currentToken.startPosition.copy()
@@ -704,8 +704,8 @@ class Parser(private val tokens: ArrayList<Token>) {
             )
 
         } else {
-            // Parse the expression
-            val expressionResult = result.register(expression())
+            // Parse the expression / statement
+            val expressionResult = result.register(statement())
             if (result.hasError) return result
 
             val expression = expressionResult as Node
@@ -721,7 +721,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // else-expression = ELSE [[BRACES_OPEN statements BRACES_CLOSE] | expression]
+    // else-expression = ELSE [[BRACES_OPEN statements BRACES_CLOSE] | statement]
     private fun elseExpression(): ParseResult {
         val result = ParseResult()
 
@@ -761,8 +761,8 @@ class Parser(private val tokens: ArrayList<Token>) {
             return result.success(statements)
 
         } else {
-            // Parse the expression
-            val expressionResult = result.register(expression())
+            // Parse the expression / statement
+            val expressionResult = result.register(statement())
             if (result.hasError) return result
 
             val expression = expressionResult as Node

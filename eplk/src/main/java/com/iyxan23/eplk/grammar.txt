@@ -21,8 +21,8 @@ if-expression           = IF PAREN_OPEN expression PAREN_CLOSE
                                   else-expression*
                               ] |
 
-                              // Single line if expression
-                              [expression
+                              // Single line expression / statement
+                              [statements
                                   elif-expression*
                                   else-expression
                               ]
@@ -33,8 +33,8 @@ elif-expression         = ELIF PAREN_OPEN expression PAREN_CLOSE
                               // Multiline statements
                               [BRACES_OPEN statements BRACES_CLOSE] |
 
-                              // Single line elif expression
-                              expression
+                              // Single line expression / statement
+                              statement
                           ]
 
 else-expression         = ELSE
@@ -42,8 +42,8 @@ else-expression         = ELSE
                               // Multiline statements
                               [BRACES_OPEN statements BRACES_CLOSE] |
 
-                              // Single line elif expression
-                              expression
+                              // Single line expression / statement
+                              statement
                           ]
 
 list-expression         = BRACKET_OPEN [expression [COMMA expression]]* BRACKET_CLOSE
