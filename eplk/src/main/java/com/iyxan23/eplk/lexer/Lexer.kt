@@ -441,6 +441,10 @@ class Lexer(
 
                 "fun" -> Tokens.FUN
 
+                "return" -> Tokens.RETURN
+                "continue" -> Tokens.CONTINUE
+                "break" -> Tokens.BREAK
+
                 else -> {
                     addValue = true
                     if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
