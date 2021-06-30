@@ -1323,7 +1323,7 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    val equalOperations = arrayOf(Tokens.PLUS_EQUAL, Tokens.MINUS_EQUAL, Tokens.MUL_EQUAL, Tokens.DIV_EQUAL)
+    private val equalOperations = arrayOf(Tokens.PLUS_EQUAL, Tokens.MINUS_EQUAL, Tokens.MUL_EQUAL, Tokens.DIV_EQUAL)
 
     // expression = KEYWORD:VAR IDENTIFIER [EQUAL expression]? | IDENTIFIER EQUAL expression | IDENTIFIER [PLUS_EQUAL | MINUS_EQUAL | MUL_EQUAL | DIV_EQUAL] | comparison-expression [[AND|OR] comparison-expression]*
     private fun expression(): ParseResult {
@@ -1352,33 +1352,39 @@ class Parser(private val tokens: ArrayList<Token>) {
                 result.registerAdvancement()
                 advance()
 
-                // And the next one an equal
+                // Check if this variable is initialized early
                 if (currentToken.token != Tokens.EQUAL) {
-                    return result.failure(SyntaxError(
-                        "Expected '='",
-                        currentToken.startPosition,
-                        currentToken.endPosition
-                    ))
-                }
-
-                result.registerAdvancement()
-                advance()
-
-                // Ok, now we're setup, let's parse the expression
-                val expressionResult = result.register(expression()) as Node?
-                if (result.hasError) return result
-
-                val expression = expressionResult as Node
-
-                // return a VarDeclarationNode
-                return result.success(
-                    VarDeclarationNode(
-                        identifierToken.value!!,
-                        expression,
-                        varToken.startPosition,
-                        currentToken.endPosition.copy()
+                    // Alright, we're going to declare the variable but without initializing it
+                    return result.success(
+                        VarDeclarationNode(
+                            identifierToken.value!!,
+                            null,
+                            varToken.startPosition,
+                            currentToken.endPosition.copy()
+                        )
                     )
-                )
+
+                } else {
+                    // Nope, it's an equal sign, means we need to initialize the variable
+                    result.registerAdvancement()
+                    advance()
+
+                    // Ok, now we're setup, let's parse the expression
+                    val expressionResult = result.register(expression()) as Node?
+                    if (result.hasError) return result
+
+                    val expression = expressionResult as Node
+
+                    // return a VarDeclarationNode
+                    return result.success(
+                        VarDeclarationNode(
+                            identifierToken.value!!,
+                            expression,
+                            varToken.startPosition,
+                            currentToken.endPosition.copy()
+                        )
+                    )
+                }
 
             } else {
                 throw NotImplementedError("Keyword ${currentToken.value} is not implemented")
