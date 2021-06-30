@@ -16,6 +16,8 @@ enum class Tokens {
     DOUBLE_PLUS,
     DOUBLE_MINUS,
 
+    VAR,
+
     // Comparison tokens
     DOUBLE_EQUALS,
     GREATER_THAN,

@@ -164,7 +164,7 @@ class LexerTest {
         expectTokens(
             "var",
             arrayListOf(
-                Tokens.KEYWORD, "var",
+                Tokens.VAR, null,
                 Tokens.EOF, null
             ) as ArrayList<Any>
         )
@@ -175,7 +175,7 @@ class LexerTest {
         expectTokens(
             "var hello_world = 1 + 1",
             arrayListOf(
-                Tokens.KEYWORD, "var",
+                Tokens.VAR, null,
                 Tokens.IDENTIFIER, "hello_world",
                 Tokens.EQUAL, null,
                 Tokens.INT_LITERAL, "1",
@@ -273,7 +273,7 @@ class LexerTest {
 
                 Tokens.PAREN_OPEN, null,
 
-                Tokens.KEYWORD, "var",
+                Tokens.VAR, null,
                 Tokens.IDENTIFIER, "a",
                 Tokens.EQUAL, null,
                 Tokens.INT_LITERAL, "0",
@@ -286,7 +286,7 @@ class LexerTest {
 
                 Tokens.SEMICOLON, null,
 
-                Tokens.KEYWORD, "var",
+                Tokens.VAR, null,
                 Tokens.IDENTIFIER, "a",
                 Tokens.EQUAL, null,
                 Tokens.IDENTIFIER, "a",

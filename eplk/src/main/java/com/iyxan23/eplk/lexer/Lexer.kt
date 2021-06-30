@@ -394,14 +394,26 @@ class Lexer(
         throwError(SyntaxError("EOL while reading a string literal", stringStartPosition, position.copy()))
     }
 
-    companion object {
-        /**
-         * A list of keywords
-         */
-        val keywords = arrayOf(
-            "var"
-        )
-    }
+    private val keywords = mapOf(
+        "true" to Tokens.TRUE,
+        "false" to Tokens.FALSE,
+
+        "if" to Tokens.IF,
+        "elif" to Tokens.ELIF,
+        "else" to Tokens.ELSE,
+
+        "for" to Tokens.FOR,
+
+        "while" to Tokens.WHILE,
+
+        "fun" to Tokens.FUN,
+
+        "return" to Tokens.RETURN,
+        "continue" to Tokens.CONTINUE,
+        "break" to Tokens.BREAK,
+
+        "var" to Tokens.VAR,
+    )
 
     private fun parseIdentifier() {
         val identifierStartPosition = position.copy()
@@ -425,36 +437,12 @@ class Lexer(
         }
 
         val identifier = identifierBuilder.toString()
-        var addValue = false
-        val tokenToAdd =
-            when (identifier) {
-                "true" -> Tokens.TRUE
-                "false" -> Tokens.FALSE
-
-                "if" -> Tokens.IF
-                "elif" -> Tokens.ELIF
-                "else" -> Tokens.ELSE
-
-                "for" -> Tokens.FOR
-
-                "while" -> Tokens.WHILE
-
-                "fun" -> Tokens.FUN
-
-                "return" -> Tokens.RETURN
-                "continue" -> Tokens.CONTINUE
-                "break" -> Tokens.BREAK
-
-                else -> {
-                    addValue = true
-                    if (keywords.contains(identifier)) Tokens.KEYWORD else Tokens.IDENTIFIER
-                }
-            }
+        val tokenToAdd = if (keywords.containsKey(identifier)) keywords[identifier] else Tokens.IDENTIFIER
 
         tokens.add(
             Token(
-                tokenToAdd,
-                if (addValue) identifier else null,
+                tokenToAdd!!,
+                if (tokenToAdd == Tokens.IDENTIFIER) identifier else null,
                 identifierStartPosition,
                 position.copy()
             )
