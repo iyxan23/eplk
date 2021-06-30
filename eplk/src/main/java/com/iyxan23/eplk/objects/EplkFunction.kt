@@ -5,9 +5,7 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.interpreter.SymbolTable
 import com.iyxan23.eplk.lexer.models.Position
-import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.nodes.StatementsNode
-import kotlin.math.exp
 
 class EplkFunction(
     scope: Scope,
@@ -57,7 +55,7 @@ class EplkFunction(
 
         // Alright let's execute the expression
         val expressionResult = result.register(statements.visit(functionScope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         return result.success(expressionResult!!)
     }

@@ -24,10 +24,10 @@ data class BinOpNode(
         val result = RealtimeResult<EplkObject>()
 
         val leftResult = result.register(leftNode.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val rightResult = result.register(rightNode.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val leftObject = leftResult as EplkObject
         val rightObject = rightResult as EplkObject

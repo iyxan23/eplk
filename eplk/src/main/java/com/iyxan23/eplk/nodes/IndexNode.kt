@@ -18,13 +18,13 @@ class IndexNode(
 
         // Get the value
         val valueResult = result.register(indexValue.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val value = valueResult!!
 
         // And the object that is to be indexed
         val nodeToIndexResult = result.register(nodeToIndex.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val objectToIndex = nodeToIndexResult!!
 
@@ -35,7 +35,7 @@ class IndexNode(
             endPosition
         ))
 
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         // And return it
         return result.success(indexResult!!)

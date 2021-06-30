@@ -22,19 +22,19 @@ class IncrementOrDecrementNode(
         val result = RealtimeResult<EplkObject>()
 
         val nodeToIncDecResult = result.register(nodeToIncDec.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         when (incDecToken.token) {
             Tokens.DOUBLE_PLUS -> {
                 result.register(nodeToIncDecResult!!.increment(startPosition, endPosition))
-                if (result.hasError) return result
+                if (result.shouldReturn) return result
 
                 return result.success(nodeToIncDecResult)
             }
 
             Tokens.DOUBLE_MINUS -> {
                 result.register(nodeToIncDecResult!!.decrement(startPosition, endPosition))
-                if (result.hasError) return result
+                if (result.shouldReturn) return result
 
                 return result.success(nodeToIncDecResult)
             }

@@ -9,7 +9,6 @@ import com.iyxan23.eplk.nodes.StatementsNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
-import java.lang.IllegalArgumentException
 
 open class BaseIfNode(
     val condition: Node,
@@ -23,7 +22,7 @@ open class BaseIfNode(
         val result = RealtimeResult<EplkObject>()
 
         val conditionResult = result.register(evaluateCondition(scope, condition))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val conditionValue = conditionResult as EplkBoolean
 
@@ -31,7 +30,7 @@ open class BaseIfNode(
         if (conditionValue.value) {
             // Yep run the statement
             val statementsResult = result.register(statements.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             return result.success(statementsResult!!, mapOf(
                 "condition_result" to "if"
@@ -52,7 +51,7 @@ open class BaseIfNode(
 
         // First, let's evaluate the condition
         val conditionResult = result.register(condition.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         val evaluatedCondition = conditionResult as EplkObject
 

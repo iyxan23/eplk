@@ -21,7 +21,7 @@ class ListNode(
 
         items.forEach { node ->
             val nodeResult = result.register(node.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             resultItems.add(nodeResult!!)
         }

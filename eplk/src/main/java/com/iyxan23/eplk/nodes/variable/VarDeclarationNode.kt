@@ -31,7 +31,7 @@ class VarDeclarationNode(
 
         if (variableValue != null) {
             val visitValue = result.register(variableValue.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             scope.symbolTable.variables[variableName] = visitValue as EplkObject
 

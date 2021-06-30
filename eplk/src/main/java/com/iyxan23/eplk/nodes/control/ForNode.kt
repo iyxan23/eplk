@@ -24,7 +24,7 @@ class ForNode(
         // Evaluate the first expression first
         val result = RealtimeResult<EplkObject>()
         result.register(evalFirstExpression(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         // Now
         while (true) {
@@ -39,11 +39,11 @@ class ForNode(
 
             // Evaluate the third expression
             result.register(evalThirdExpression(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             // Then evaluate the expression!
             result.register(statements.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
         }
 
         // For loop finished
@@ -53,7 +53,7 @@ class ForNode(
     private fun evalFirstExpression(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
         val firstExpressionResult = result.register(firstExpression.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         return result.success(firstExpressionResult!!)
     }
@@ -82,7 +82,7 @@ class ForNode(
     private fun evalThirdExpression(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
         val thirdExpressionResult = result.register(thirdExpression.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         return result.success(thirdExpressionResult!!)
     }

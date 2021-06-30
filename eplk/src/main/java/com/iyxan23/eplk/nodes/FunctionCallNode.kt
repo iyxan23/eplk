@@ -16,14 +16,14 @@ class FunctionCallNode(
         val result = RealtimeResult<EplkObject>()
 
         val nodeToCallResult = result.register(nodeToCall.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         // evaluate the arguments
         val evaluatedArguments = ArrayList<EplkObject>()
 
         arguments.forEach {
             val argumentResult = result.register(it.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             evaluatedArguments.add(argumentResult as EplkObject)
         }
@@ -33,7 +33,7 @@ class FunctionCallNode(
             nodeToCallResult!!.call(evaluatedArguments.toTypedArray(), startPosition, endPosition)
         )
 
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         return result.success(functionResult as EplkObject)
     }

@@ -6,7 +6,6 @@ import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.nodes.Node
 import com.iyxan23.eplk.nodes.StatementsNode
-import com.iyxan23.eplk.nodes.types.ListNode
 import com.iyxan23.eplk.objects.EplkBoolean
 import com.iyxan23.eplk.objects.EplkObject
 import com.iyxan23.eplk.objects.EplkVoid
@@ -33,7 +32,7 @@ class WhileNode(
 
             // Alright execute the expression(s)
             result.register(evalExpressions(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
         }
 
         // While loop finished
@@ -62,7 +61,7 @@ class WhileNode(
     private fun evalExpressions(scope: Scope): RealtimeResult<EplkObject> {
         val result = RealtimeResult<EplkObject>()
         val thirdExpressionResult = result.register(expressions.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         return result.success(thirdExpressionResult!!)
     }

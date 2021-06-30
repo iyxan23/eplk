@@ -25,7 +25,7 @@ data class UnaryOpNode(
         val result = RealtimeResult<EplkObject>()
 
         val visitResult = node.visit(scope)
-        if (visitResult.hasError) return result
+        if (visitResult.shouldReturn) return result
 
         // Check if the node result is a integer or a float
         when (visitResult.value) {

@@ -31,7 +31,7 @@ class VarAssignNode(
 
         // then visit the variable value, and set the value to it
         val visitValue = result.register(value.visit(scope))
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         scope.assignVariable(variableName, visitValue!!)
 

@@ -26,7 +26,7 @@ class StatementsNode(
         // Execute each nodes / statements
         statements.forEach { node ->
             val nodeResult = result.register(node.visit(scope))
-            if (result.hasError) return result
+            if (result.shouldReturn) return result
 
             results.add(nodeResult!!)
         }

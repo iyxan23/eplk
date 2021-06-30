@@ -26,7 +26,7 @@ class IfNode(
         val conditionResult = super.visit(scope)
 
         result.register(conditionResult)
-        if (result.hasError) return result
+        if (result.shouldReturn) return result
 
         when {
             conditionResult.passedData["condition_result"] == "if" -> {
@@ -40,7 +40,7 @@ class IfNode(
                     val elifResult = node.visit(scope)
 
                     result.register(elifResult)
-                    if (result.hasError) return result
+                    if (result.shouldReturn) return result
 
                     if (elifResult.passedData["condition_result"] == "if") {
                         // alright this elif statement succeed, let's return it's value if we're an expression
@@ -52,7 +52,7 @@ class IfNode(
                 if (elseNode != null) {
                     // then execute the else node
                     val elseResult = result.register(elseNode.visit(scope))
-                    if (result.hasError) return result
+                    if (result.shouldReturn) return result
 
                     // check if we're in single line, if yes, then return the value right away
                     if (isSingleLine) return result.success(elseResult!!)
