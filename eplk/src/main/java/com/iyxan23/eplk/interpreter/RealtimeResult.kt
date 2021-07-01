@@ -21,7 +21,7 @@ class RealtimeResult<T> {
         error != null       ||
         isBreaking          ||
         isContinuing        ||
-        returnValue != null
+        isReturning
 
     // This is used to pass data between nodes
     val passedData: HashMap<String, String> by lazy { HashMap() }
@@ -29,6 +29,7 @@ class RealtimeResult<T> {
     // variables used to determine if the node is doing return, continue, or break
     private var isBreaking = false
     private var isContinuing = false
+    private var isReturning = false
     private var returnValue: EplkObject? = null
 
     fun register(result: RealtimeResult<T>): T? {
@@ -57,8 +58,9 @@ class RealtimeResult<T> {
         return this
     }
 
-    fun returnValue(value: EplkObject): RealtimeResult<T> {
+    fun returnValue(value: EplkObject?): RealtimeResult<T> {
         returnValue = value
+        isReturning = true
         return this
     }
 
