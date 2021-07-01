@@ -43,7 +43,10 @@ class ForNode(
 
             // Then evaluate the expression!
             result.register(statements.visit(scope))
-            if (result.shouldReturn) return result
+            if (result.hasError) return result
+
+            if (result.isContinuing) continue
+            if (result.isBreaking) break
         }
 
         // For loop finished

@@ -32,7 +32,10 @@ class WhileNode(
 
             // Alright execute the expression(s)
             result.register(evalExpressions(scope))
-            if (result.shouldReturn) return result
+            if (result.hasError) return result
+
+            if (result.isContinuing) continue
+            if (result.isBreaking) break
         }
 
         // While loop finished
