@@ -11,7 +11,6 @@ class BreakNode(
     override val endPosition: Position
 ) : Node() {
 
-    override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        TODO("Not yet implemented")
-    }
+    override fun visit(scope: Scope): RealtimeResult<EplkObject>
+        = RealtimeResult<EplkObject>().successBreak()
 }

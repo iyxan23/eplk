@@ -14,6 +14,12 @@ class ReturnNode(
 ) : Node() {
 
     override fun visit(scope: Scope): RealtimeResult<EplkObject> {
-        TODO("Not yet implemented")
+        val result = RealtimeResult<EplkObject>()
+        if (returnValue == null) return result.returnValue(null)
+
+        val returnValueResult = result.register(returnValue.visit(scope))
+        if (result.shouldReturn) return result
+
+        return result.returnValue(returnValueResult)
     }
 }
