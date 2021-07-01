@@ -60,13 +60,13 @@ atom                    = INT_LITERAL                           |
                           while-expression                      |
                           fun-definition
 
-increment-decrement     = atom [DOUBLE_PLUS | DOUBLE_MINUS]
-
-func-call               = increment-decrement [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
+func-call               = atom [PAREN_OPEN [expression [COMMA expression]*] PAREN_CLOSE]
 
 index                   = func-call [BRACKET_OPEN expression BRACKET_CLOSE]
 
-power                   = index [POW factor]*
+increment-decrement     = index [DOUBLE_PLUS | DOUBLE_MINUS]
+
+power                   = increment-decrement [POW factor]*
 factor                  = [[PLUS|MINUS] factor] | power
 term                    = factor [[MUL|DIV] factor]*
 arithmetic-expression   = term [[PLUS|MINUS] term]*

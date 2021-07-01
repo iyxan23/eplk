@@ -963,48 +963,12 @@ class Parser(private val tokens: ArrayList<Token>) {
         }
     }
 
-    // increment-decrement = atom [DOUBLE_PLUS | DOUBLE_MINUS]
-    private fun incrementDecrement(): ParseResult {
-        val result = ParseResult()
-
-        val atomNodeResult = result.register(atom()) as Node?
-        if (result.hasError) return result
-
-        when (currentToken.token) {
-            // Check if the next token is a double plus or a double minus
-            Tokens.DOUBLE_PLUS -> {
-                val doublePlusToken = currentToken.copy()
-
-                // ===========================================================
-                result.registerAdvancement()
-                advance()
-                // ===========================================================
-
-                return result.success(IncrementOrDecrementNode(doublePlusToken, atomNodeResult!!))
-            }
-
-            Tokens.DOUBLE_MINUS -> {
-                val doubleMinusToken = currentToken.copy()
-
-                // ===========================================================
-                result.registerAdvancement()
-                advance()
-                // ===========================================================
-
-                return result.success(IncrementOrDecrementNode(doubleMinusToken, atomNodeResult!!))
-            }
-
-            // Nope, just return
-            else -> return result.success(atomNodeResult!!)
-        }
-    }
-
-    // increment-decrement [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
+    // atom [PAREN_OPEN IDENTIFIER [COMMA IDENTIFIER]* PAREN_CLOSE]
     private fun funcCall(): ParseResult {
         val result = ParseResult()
         val startPosition = currentToken.startPosition.copy()
 
-        val incDecResult = result.register(incrementDecrement()) as Node?
+        val incDecResult = result.register(atom()) as Node?
         if (result.hasError) return result
 
         val incDecNode = incDecResult as Node
@@ -1122,10 +1086,47 @@ class Parser(private val tokens: ArrayList<Token>) {
         return result.success(leftNode)
     }
 
-    // power = index [POW factor]*
+
+    // increment-decrement = index [DOUBLE_PLUS | DOUBLE_MINUS]
+    private fun incrementDecrement(): ParseResult {
+        val result = ParseResult()
+
+        val atomNodeResult = result.register(index()) as Node?
+        if (result.hasError) return result
+
+        when (currentToken.token) {
+            // Check if the next token is a double plus or a double minus
+            Tokens.DOUBLE_PLUS -> {
+                val doublePlusToken = currentToken.copy()
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                return result.success(IncrementOrDecrementNode(doublePlusToken, atomNodeResult!!))
+            }
+
+            Tokens.DOUBLE_MINUS -> {
+                val doubleMinusToken = currentToken.copy()
+
+                // ===========================================================
+                result.registerAdvancement()
+                advance()
+                // ===========================================================
+
+                return result.success(IncrementOrDecrementNode(doubleMinusToken, atomNodeResult!!))
+            }
+
+            // Nope, just return
+            else -> return result.success(atomNodeResult!!)
+        }
+    }
+
+    // power = increment-decrement [POW factor]*
     private fun power(): ParseResult {
         val result = ParseResult()
-        val leftNodeResult = result.register(index()) as Node?
+        val leftNodeResult = result.register(incrementDecrement()) as Node?
 
         if (result.hasError) return result
 
