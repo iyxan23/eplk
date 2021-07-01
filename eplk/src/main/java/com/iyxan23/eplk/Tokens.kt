@@ -60,7 +60,6 @@ enum class Tokens {
     BRACKET_CLOSE, // ]
 
     IDENTIFIER,
-    KEYWORD,
 
     RETURN,
     CONTINUE,
