@@ -65,6 +65,8 @@ enum class Tokens {
     CONTINUE,
     BREAK,
 
+    DOT,
+
     NEWLINE,
 
     EOF, // End Of File

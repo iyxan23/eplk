@@ -128,6 +128,11 @@ class Lexer(
                     advance()
                 }
 
+                currentChar == '.' -> {
+                    tokens.add(Token(Tokens.DOT, null, position.copy()))
+                    advance()
+                }
+
                 currentChar == '!' -> {
                     var tokenToAdd = Tokens.NOT
                     val beforePosition = position.copy()
