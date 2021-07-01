@@ -27,18 +27,34 @@ class RealtimeResult<T> {
     val passedData: HashMap<String, String> by lazy { HashMap() }
 
     // variables used to determine if the node is doing return, continue, or break
-    private var isBreaking = false
-    private var isContinuing = false
-    private var isReturning = false
-    private var returnValue: EplkObject? = null
+    var isBreaking = false
+    var isContinuing = false
+    var isReturning = false
+    var returnValue: EplkObject? = null
+
+    private fun reset() {
+        isBreaking = false
+        isContinuing = false
+        isReturning = false
+        error = null
+        returnValue = null
+    }
 
     fun register(result: RealtimeResult<T>): T? {
-        if (result.shouldReturn) error = result.error
+        if (result.hasError) error = result.error
+
         value = result.value
+        isBreaking = result.isBreaking
+        isContinuing = result.isContinuing
+        isReturning = result.isReturning
+        returnValue = result.returnValue
+
         return value
     }
 
     fun success(value: T, dataToPass: Map<String, String>? = null): RealtimeResult<T> {
+        reset()
+
         this.value = value
 
         if (dataToPass != null) {
@@ -49,22 +65,26 @@ class RealtimeResult<T> {
     }
 
     fun successContinue(): RealtimeResult<T> {
+        reset()
         isContinuing = true
         return this
     }
 
     fun successBreak(): RealtimeResult<T> {
+        reset()
         isBreaking = true
         return this
     }
 
     fun returnValue(value: EplkObject?): RealtimeResult<T> {
+        reset()
         returnValue = value
         isReturning = true
         return this
     }
 
     fun failure(error: EplkError): RealtimeResult<T> {
+        reset()
         this.error = error
         return this
     }

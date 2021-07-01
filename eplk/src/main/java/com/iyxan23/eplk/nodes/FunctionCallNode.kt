@@ -4,6 +4,7 @@ import com.iyxan23.eplk.interpreter.RealtimeResult
 import com.iyxan23.eplk.interpreter.Scope
 import com.iyxan23.eplk.lexer.models.Position
 import com.iyxan23.eplk.objects.EplkObject
+import com.iyxan23.eplk.objects.EplkVoid
 
 class FunctionCallNode(
     val nodeToCall: Node,
@@ -32,6 +33,8 @@ class FunctionCallNode(
         val functionResult = result.register(
             nodeToCallResult!!.call(evaluatedArguments.toTypedArray(), startPosition, endPosition)
         )
+
+        if (result.isReturning) return result.success(result.returnValue ?: EplkVoid(scope))
 
         if (result.shouldReturn) return result
 
