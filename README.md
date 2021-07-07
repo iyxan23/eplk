@@ -7,6 +7,9 @@ Epic programming language named Eplk, short for Extensible Programming Language 
 
 Created with the help of CodePulse's "Make YOUR OWN Programming Language" series, many thanks to him! Here is his [playlist](https://www.youtube.com/watch?v=r46EONXC1i0). Also, check his [github repository](https://github.com/davidcallanan/py-myopl-code) and [profile](https://github.com/davidcallanan)
 
+## Notice
+Project halted because Iyxan23 decides to move on to something else instead, feel free to fork this
+
 ## How to run
 Go to [`eplk/src/main/java/com/iyxan23/eplk`](https://github.com/Iyxan23/eplk/tree/main/eplk/src/main/java/com/iyxan23/eplk). Run `Runner.kt` to run .eplk files, and `Shell.kt` to run the eplk shell
 
